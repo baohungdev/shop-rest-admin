@@ -1,19 +1,15 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
   Box,
   Button,
   Container,
-  Grid,
-  Link,
   TextField,
   Typography,
   makeStyles
 } from '@material-ui/core';
-import FacebookIcon from 'src/icons/Facebook';
-import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +28,7 @@ const LoginView = () => {
   return (
     <Page
       className={classes.root}
-      title="Login"
+      title="Đăng nhập"
     >
       <Box
         display="flex"
@@ -43,12 +39,12 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
+              email: 'example@gmail.com',
               password: 'Password123'
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
+              email: Yup.string().email('Email không hợp lệ').max(255).required('Email bắt buộc'),
+              password: Yup.string().max(255).required('Mật khẩu bắt buộc')
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
@@ -69,69 +65,21 @@ const LoginView = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Đăng nhập
                   </Typography>
                   <Typography
                     color="textSecondary"
                     gutterBottom
                     variant="body2"
                   >
-                    Sign in on the internal platform
-                  </Typography>
-                </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Box
-                  mt={3}
-                  mb={1}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
+                    Sử dụng email và mật khẩu của bản
                   </Typography>
                 </Box>
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
                   helperText={touched.email && errors.email}
-                  label="Email Address"
+                  label="Tài khoản đăng nhập"
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
@@ -144,7 +92,7 @@ const LoginView = () => {
                   error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
-                  label="Password"
+                  label="Mật khẩu"
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
@@ -162,23 +110,9 @@ const LoginView = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in now
+                    Tiếp tục
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
               </form>
             )}
           </Formik>
