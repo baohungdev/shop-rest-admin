@@ -2,6 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as API from '../../../../apis/auth';
 import { save } from '../../../../services/localStoredService';
+import { takeAction } from '../../../../services/forkActionSagas';
 
 function* handleEmailLogin(action) {
   try {
@@ -11,7 +12,7 @@ function* handleEmailLogin(action) {
     save('accessToken', accessToken);
     save('userInfo', userInfo);
 
-    yield put(actions.emailLoginSuccess(response.data));
+    yield put(actions.emailLoginSuccess(response));
     // yield put(wrapperActions.saveToken(accessToken));
     action.payload.history.push('/');
   } catch (err) {
@@ -19,4 +20,8 @@ function* handleEmailLogin(action) {
   }
 }
 
-export default [handleEmailLogin];
+function* emailLogin() {
+  yield takeAction(actions.emailLogin, handleEmailLogin);
+}
+
+export default [emailLogin];

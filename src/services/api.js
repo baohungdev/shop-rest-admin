@@ -117,7 +117,8 @@ export const request = async ({
 
     return null;
   } catch (ex) {
+    console.log(ex);
     await handleRequestError(ex);
-    return null;
+    return ex;
   }
 };

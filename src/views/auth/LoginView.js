@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -10,7 +10,10 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Page from 'src/components/Page';
+import { name, actions as viewActions } from './redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginView = () => {
+const LoginView = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -46,8 +49,8 @@ const LoginView = () => {
               email: Yup.string().email('Email không hợp lệ').max(255).required('Email bắt buộc'),
               password: Yup.string().max(255).required('Mật khẩu bắt buộc')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={(values) => {
+              props.actions.emailLogin({ data: { username: values.email, password: values.password } });
             }}
           >
             {({
@@ -122,4 +125,15 @@ const LoginView = () => {
   );
 };
 
-export default LoginView;
+function mapStateToProps(state) {
+  return {
+    ...state[name],
+  };
+}
+function mapDispatchToProps(dispatch) {
+  const actions = {
+    ...viewActions,
+  };
+  return { actions: bindActionCreators(actions, dispatch) };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
