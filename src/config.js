@@ -2,7 +2,7 @@ import { get } from 'lodash-es';
 
 const env = {
   dev: {
-    apiBaseURL: 'https://blackpingstore.azurewebsites.net',
+    apiBaseURL: 'https://blackping.azurewebsites.net'
   }
 };
 

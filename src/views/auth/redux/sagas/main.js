@@ -7,13 +7,19 @@ import { takeAction } from '../../../../services/forkActionSagas';
 function* handleEmailLogin(action) {
   try {
     const response = yield call(API.emailLogin, action.payload.data);
+
+    if (!response.success) {
+      yield put(actions.emailLoginFail(response));
+      return;
+    }
+
     const { accessToken, refreshToken, userInfo } = response.data;
     save('refreshToken', refreshToken);
     save('accessToken', accessToken);
     save('userInfo', userInfo);
 
     yield put(actions.emailLoginSuccess(response));
-    // yield put(wrapperActions.saveToken(accessToken));
+    // TODO: check history exist in action
     action.payload.history.push('/');
   } catch (err) {
     yield put(actions.emailLoginFail(err));

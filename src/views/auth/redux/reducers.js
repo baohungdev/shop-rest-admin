@@ -6,9 +6,11 @@ export const name = 'Login';
 
 const initialStates = freeze({
   emailError: false,
+  snackbarOpen: false,
   isLoading: false,
   loginError: false,
-  data: {},
+  errorMessage: '',
+  data: {}
 });
 
 export default handleActions(
@@ -17,13 +19,26 @@ export default handleActions(
       return freeze({ ...state, isLoading: true });
     },
     [actions.emailLoginSuccess]: (state, action) => {
-      console.log(action);
       return freeze({ ...state, isLoading: false });
     },
     [actions.emailLoginFail]: (state, action) => {
-      console.log(action);
-      return freeze({ ...state, isLoading: false });
+      const { payload } = action;
+      return freeze({
+        ...state,
+        isLoading: false,
+        snackbarOpen: true,
+        loginError: true,
+        errorMessage: payload.message
+      });
     },
+    [actions.closeSnackbar]: (state, action) => {
+      return freeze({
+        ...state,
+        snackbarOpen: false,
+        loginError: false,
+        errorMessage: ''
+      });
+    }
   },
   initialStates
 );

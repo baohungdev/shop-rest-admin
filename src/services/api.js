@@ -4,26 +4,39 @@ import { save, get, clearAll } from './localStoredService';
 import { history } from '../AppRenderer';
 import config from '../config';
 
-export const refresh = async (requestData, refreshToken, autoRequest = true) => {
+export const refresh = async (
+  requestData,
+  refreshToken,
+  autoRequest = true
+) => {
   try {
     const response = await axios({
       method: 'POST',
       url: `${config.apiBaseURL}/users/refreshToken`,
-      headers: { authorization: refreshToken, 'Content-Type': 'application/json' },
+      headers: {
+        authorization: refreshToken,
+        'Content-Type': 'application/json'
+      }
     });
 
-    const { accessToken, refreshToken: newRefreshToken, userInfo } = response.data.payload;
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      userInfo
+    } = response.data.payload;
     save('accessToken', accessToken);
     save('refreshToken', newRefreshToken);
     save('userInfo', userInfo);
 
     if (autoRequest) {
-      const {
-        endpoint, method, data, headerInput
-      } = requestData;
+      const { endpoint, method, data, headerInput } = requestData;
       // eslint-disable-next-line no-use-before-define
       return await request({
-        endpoint, method, data, headerInput, accessToken
+        endpoint,
+        method,
+        data,
+        headerInput,
+        accessToken
       });
     }
 
@@ -37,7 +50,7 @@ export const refresh = async (requestData, refreshToken, autoRequest = true) => 
 export const handleRequestError = async (requestError, requestData) => {
   const errorStatusCode = _.get(requestError, 'response.status');
   const refreshToken = get('refreshToken');
-  const message = _.get(requestError, 'response.data.message');
+  const responseData = _.get(requestError, 'response.data');
 
   if (errorStatusCode < 500 && errorStatusCode >= 400) {
     if (errorStatusCode === 404) {
@@ -57,10 +70,10 @@ export const handleRequestError = async (requestError, requestData) => {
 
     if (errorStatusCode === 403) {
       clearAll();
-      return message;
+      return responseData;
     }
 
-    return message;
+    return responseData;
   }
 
   if (errorStatusCode === 500) {
@@ -68,21 +81,25 @@ export const handleRequestError = async (requestError, requestData) => {
     return window.location.reload();
   }
 
-  return message;
+  return responseData;
 };
 
 export const request = async ({
-  endpoint, method, data, headerInput, accessToken = null
+  endpoint,
+  method,
+  data,
+  headerInput,
+  accessToken = null
 }) => {
   try {
     let isDownloadFile = false;
 
-    const getHeaders = (input) => {
+    const getHeaders = input => {
       const token = accessToken || get('accessToken');
       const header = {
         authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        ...input,
+        ...input
       };
 
       return header;
@@ -93,7 +110,7 @@ export const request = async ({
       url: endpoint,
       headers: getHeaders(headerInput),
       data: method !== 'GET' ? data : null,
-      params: method === 'GET' ? data : null,
+      params: method === 'GET' ? data : null
     };
 
     if (endpoint.includes('download')) {
@@ -117,8 +134,6 @@ export const request = async ({
 
     return null;
   } catch (ex) {
-    console.log(ex);
-    await handleRequestError(ex);
-    return ex;
+    return handleRequestError(ex);
   }
 };
