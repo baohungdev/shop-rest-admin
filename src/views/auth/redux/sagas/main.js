@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import * as actions from '../actions';
 import * as API from '../../../../apis/auth';
 import { save } from '../../../../services/localStoredService';
@@ -13,14 +14,14 @@ function* handleEmailLogin(action) {
       return;
     }
 
-    const { accessToken, refreshToken, userInfo } = response.data;
+    const { accessToken, refreshToken, expiredAt } = response.data;
     save('refreshToken', refreshToken);
     save('accessToken', accessToken);
-    save('userInfo', userInfo);
+    save('expiredAt', expiredAt);
 
     yield put(actions.emailLoginSuccess(response));
     // TODO: check history exist in action
-    action.payload.history.push('/');
+    action.payload.data.push('/');
   } catch (err) {
     yield put(actions.emailLoginFail(err));
   }

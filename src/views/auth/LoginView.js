@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useNavigate } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import Page from 'src/components/Page';
 import { name, actions as viewActions } from './redux';
@@ -49,7 +50,7 @@ const LoginView = props => {
             onClose={props.actions.closeSnackbar}
             variant="filled"
           >
-            {props.errorMessage}
+            {props.message}
           </MuiAlert>
         </Snackbar>
         <Container maxWidth="sm">
@@ -69,7 +70,7 @@ const LoginView = props => {
             })}
             onSubmit={async values => {
               props.actions.emailLogin({
-                data: { email: values.email, password: values.password }
+                data: { email: values.email, password: values.password, push }
               });
             }}
           >
@@ -149,7 +150,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   const actions = {
-    ...viewActions
+    ...viewActions,
+    push
   };
   return { actions: bindActionCreators(actions, dispatch) };
 }
