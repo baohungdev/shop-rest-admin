@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -8,11 +8,16 @@ import {
   Container,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
+  Snackbar
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Page from 'src/components/Page';
+import { name, actions as viewActions } from './redux';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     height: '100%',
@@ -21,21 +26,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginView = () => {
+const LoginView = props => {
   const classes = useStyles();
   const navigate = useNavigate();
 
   return (
-    <Page
-      className={classes.root}
-      title="Đăng nhập"
-    >
+    <Page className={classes.root} title="Đăng nhập">
       <Box
         display="flex"
         flexDirection="column"
         height="100%"
         justifyContent="center"
       >
+        <Snackbar
+          open={props.snackbarOpen}
+          autoHideDuration={6000}
+          onClose={props.actions.closeSnackbar}
+        >
+          <MuiAlert
+            severity={props.loginError ? 'error' : 'success'}
+            elevation={6}
+            onClose={props.actions.closeSnackbar}
+            variant="filled"
+          >
+            {props.errorMessage}
+          </MuiAlert>
+        </Snackbar>
         <Container maxWidth="sm">
           <Formik
             initialValues={{
@@ -43,11 +59,18 @@ const LoginView = () => {
               password: 'Password123'
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Email không hợp lệ').max(255).required('Email bắt buộc'),
-              password: Yup.string().max(255).required('Mật khẩu bắt buộc')
+              email: Yup.string()
+                .email('Email không hợp lệ')
+                .max(255)
+                .required('Email bắt buộc'),
+              password: Yup.string()
+                .max(255)
+                .required('Mật khẩu bắt buộc')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async values => {
+              props.actions.emailLogin({
+                data: { email: values.email, password: values.password }
+              });
             }}
           >
             {({
@@ -61,10 +84,7 @@ const LoginView = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <Box mb={3}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
+                  <Typography color="textPrimary" variant="h2">
                     Đăng nhập
                   </Typography>
                   <Typography
@@ -122,4 +142,15 @@ const LoginView = () => {
   );
 };
 
-export default LoginView;
+function mapStateToProps(state) {
+  return {
+    ...state[name]
+  };
+}
+function mapDispatchToProps(dispatch) {
+  const actions = {
+    ...viewActions
+  };
+  return { actions: bindActionCreators(actions, dispatch) };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
