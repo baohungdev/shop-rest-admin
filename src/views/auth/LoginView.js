@@ -12,7 +12,6 @@ import {
   Snackbar
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { useNavigate } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import Page from 'src/components/Page';
@@ -29,7 +28,6 @@ const useStyles = makeStyles(theme => ({
 
 const LoginView = props => {
   const classes = useStyles();
-  const navigate = useNavigate();
 
   return (
     <Page className={classes.root} title="Đăng nhập">

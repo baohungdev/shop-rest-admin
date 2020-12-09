@@ -21,7 +21,7 @@ function* handleEmailLogin(action) {
 
     yield put(actions.emailLoginSuccess(response));
     // TODO: check history exist in action
-    action.payload.data.push('/');
+    yield put(push('/'));
   } catch (err) {
     yield put(actions.emailLoginFail(err));
   }
