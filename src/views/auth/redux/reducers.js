@@ -9,7 +9,7 @@ const initialStates = freeze({
   snackbarOpen: false,
   isLoading: false,
   loginError: false,
-  errorMessage: '',
+  message: '',
   data: {}
 });
 
@@ -28,7 +28,7 @@ export default handleActions(
         isLoading: false,
         snackbarOpen: true,
         loginError: true,
-        errorMessage: payload.message
+        message: payload.message
       });
     },
     [actions.closeSnackbar]: (state, action) => {
@@ -36,7 +36,7 @@ export default handleActions(
         ...state,
         snackbarOpen: false,
         loginError: false,
-        errorMessage: ''
+        message: ''
       });
     }
   },

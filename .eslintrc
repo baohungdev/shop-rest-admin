@@ -7,18 +7,14 @@
   "extends": [
     "airbnb",
     "airbnb/hooks",
-    "eslint:recommended"
+    "eslint:recommended",
+    "prettier:recommended"
   ],
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "paths": ["src"],
+        "extensions": [".js", ".jsx"]
       }
     }
   },
