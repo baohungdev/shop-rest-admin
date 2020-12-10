@@ -1,7 +1,8 @@
 import axios from 'axios';
 import _ from 'lodash-es';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { save, get, clearAll } from './localStoredService';
-import { history } from '../AppRenderer';
+import { history, store } from '../AppRenderer';
 import config from '../config';
 
 export const refresh = async (
@@ -92,6 +93,9 @@ export const request = async ({
   accessToken = null
 }) => {
   try {
+    if (`${method}`.toUpperCase() === 'GET') {
+      store.dispatch(showLoading());
+    }
     let isDownloadFile = false;
 
     const getHeaders = input => {
@@ -135,5 +139,7 @@ export const request = async ({
     return null;
   } catch (ex) {
     return handleRequestError(ex);
+  } finally {
+    store.dispatch(hideLoading());
   }
 };
