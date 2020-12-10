@@ -1,14 +1,13 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import { BrowserRouter as Router } from 'react-router-dom';
 // eslint-disable-next-line import/no-cycle
 import App, { store, history } from './App';
+import Loading from 'src/components/Loading';
 
 ReactDOM.render(
   <Provider store={store}>
-    <Suspense fallback={<div className="loading" />}>
+    <Suspense fallback={<Loading />}>
       <App />
     </Suspense>
   </Provider>,
