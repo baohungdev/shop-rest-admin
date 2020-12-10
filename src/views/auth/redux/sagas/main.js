@@ -11,6 +11,7 @@ function* handleEmailLogin(action) {
 
     if (!response.success) {
       yield put(actions.emailLoginFail(response));
+      action.payload.updateStateOnFinish.map(o => o());
       return;
     }
 

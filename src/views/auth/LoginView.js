@@ -53,10 +53,12 @@ const LoginView = props => {
         </Snackbar>
         <Container maxWidth="sm">
           <Formik
-            initialValues={{
-              email: 'example@gmail.com',
-              password: 'Password123'
-            }}
+            initialValues={
+              {
+                // email: 'example@gmail.com',
+                // password: 'Password123'
+              }
+            }
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .email('Email không hợp lệ')
@@ -66,12 +68,17 @@ const LoginView = props => {
                 .max(255)
                 .required('Mật khẩu bắt buộc')
             })}
-            onSubmit={async values => {
+            onSubmit={(values, { setSubmitting }) => {
               props.actions.emailLogin({
                 data: {
                   email: values.email,
                   password: values.password
-                }
+                },
+                updateStateOnFinish: [
+                  () => {
+                    setSubmitting(false);
+                  }
+                ]
               });
             }}
           >
