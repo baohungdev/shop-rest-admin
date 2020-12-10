@@ -1,9 +1,9 @@
 import { call, put } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import * as actions from 'src/views/auth/redux/actions';
 import * as API from 'src/apis/auth';
 import { save } from 'src/services/localStoredService';
 import { takeAction } from 'src/services/forkActionSagas';
-import { push } from 'connected-react-router';
 
 function* handleEmailLogin(action) {
   try {

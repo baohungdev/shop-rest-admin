@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import LoadingBar from 'react-redux-loading-bar';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -24,20 +25,13 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TopBar = ({
-  className,
-  onMobileNavOpen,
-  ...rest
-}) => {
+const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
 
   return (
-    <AppBar
-      className={clsx(classes.root, className)}
-      elevation={0}
-      {...rest}
-    >
+    <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
+      <LoadingBar style={{ backgroundColor: 'white' }} />
       <Toolbar>
         <RouterLink to="/">
           <Logo />
@@ -58,10 +52,7 @@ const TopBar = ({
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
+          <IconButton color="inherit" onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>

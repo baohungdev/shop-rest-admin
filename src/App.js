@@ -1,4 +1,3 @@
-import 'react-perfect-scrollbar/dist/css/styles.css';
 import React, { lazy } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
@@ -19,7 +18,8 @@ const App = () => {
       <GlobalStyles />
       <ConnectedRouter history={history}>
         <Switch>
-          <DashboarLayout path="/app" />
+          {/* <DashboarLayout path="/app" /> */}
+          <Route path="/app" component={DashboarLayout} />
           <MainLayout path="/" />
         </Switch>
       </ConnectedRouter>
