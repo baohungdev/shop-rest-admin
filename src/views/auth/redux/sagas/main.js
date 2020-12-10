@@ -15,10 +15,11 @@ function* handleEmailLogin(action) {
       return;
     }
 
-    const { accessToken, refreshToken, expiredAt } = response.data;
+    const { accessToken, refreshToken, expiredAt, userInfo } = response.data;
     save('refreshToken', refreshToken);
     save('accessToken', accessToken);
     save('expiredAt', expiredAt);
+    save('userInfo', userInfo);
 
     yield put(actions.emailLoginSuccess(response));
     yield put(push('/'));

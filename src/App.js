@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
 import GlobalStyles from 'src/components/GlobalStyles';
 import 'src/mixins/chartjs';
@@ -18,8 +18,7 @@ const App = () => {
       <GlobalStyles />
       <ConnectedRouter history={history}>
         <Switch>
-          {/* <DashboarLayout path="/app" /> */}
-          <Route path="/app" component={DashboarLayout} />
+          <DashboarLayout path="/app" />
           <MainLayout path="/" />
         </Switch>
       </ConnectedRouter>

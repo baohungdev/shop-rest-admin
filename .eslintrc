@@ -4,12 +4,7 @@
     "es6": true,
     "browser": true
   },
-  "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "eslint:recommended",
-    "prettier:recommended"
-  ],
+  "extends": ["eslint:recommended", "prettier:recommended"],
   "settings": {
     "import/resolver": {
       "node": {

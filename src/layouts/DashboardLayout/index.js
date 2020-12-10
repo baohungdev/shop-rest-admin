@@ -1,8 +1,9 @@
 import React, { useState, lazy } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
+import checkForLoggedIn from 'src/utils/checkForLoggedIn';
 
 const AccountView = lazy(() => import('src/views/account/AccountView'));
 const CustomerListView = lazy(() =>
@@ -55,13 +56,17 @@ const DashboardLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Switch>
-              <AccountView path="/app/account" exact />
-              <CustomerListView path="/app/customers" exact />
-              <DashboardView path="/app/dashboard" exact />
-              <ProductListView path="/app/products" exact />
-              <SettingsView path="/app/settings" exact />
-            </Switch>
+            {checkForLoggedIn() ? (
+              <Switch>
+                <AccountView path="/app/account" exact />
+                <CustomerListView path="/app/customers" exact />
+                <DashboardView path="/app/dashboard" exact />
+                <ProductListView path="/app/products" exact />
+                <SettingsView path="/app/settings" exact />
+              </Switch>
+            ) : (
+              <Redirect to="/login" />
+            )}
           </div>
         </div>
       </div>
