@@ -12,9 +12,9 @@ import {
   Snackbar
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { useNavigate } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Page from 'src/components/Page';
 import { name, actions as viewActions } from './redux';
 
@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
 
 const LoginView = props => {
   const classes = useStyles();
-  const navigate = useNavigate();
 
   return (
     <Page className={classes.root} title="Đăng nhập">
@@ -70,7 +69,10 @@ const LoginView = props => {
             })}
             onSubmit={async values => {
               props.actions.emailLogin({
-                data: { email: values.email, password: values.password, push }
+                data: {
+                  email: values.email,
+                  password: values.password
+                }
               });
             }}
           >
@@ -155,4 +157,6 @@ function mapDispatchToProps(dispatch) {
   };
   return { actions: bindActionCreators(actions, dispatch) };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(LoginView)
+);

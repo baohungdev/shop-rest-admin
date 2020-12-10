@@ -4,20 +4,15 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 // eslint-disable-next-line import/no-cycle
-import { configureStore } from './redux/store';
-import App from './App';
-
-export const { store, history } = configureStore();
+import App, { store, history } from './App';
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Suspense fallback={<div className="loading" />}>
-        <Router>
-          <App />
-        </Router>
-      </Suspense>
-    </ConnectedRouter>
+    <Suspense fallback={<div className="loading" />}>
+      <App />
+    </Suspense>
   </Provider>,
   document.getElementById('root')
 );
+
+export { store, history };
