@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
+import React, { useState, lazy } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
 
-import AccountView from 'src/views/account/AccountView';
-import CustomerListView from 'src/views/customer/CustomerListView';
-import ProductListView from 'src/views/product/ProductListView';
-import SettingsView from 'src/views/settings/SettingsView';
-import DashboardView from 'src/views/reports/DashboardView';
+const AccountView = lazy(() => import('src/views/account/AccountView'));
+const CustomerListView = lazy(() =>
+  import('src/views/customer/CustomerListView')
+);
+const ProductListView = lazy(() => import('src/views/product/ProductListView'));
+const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
+const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,11 +55,13 @@ const DashboardLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Route path="/app/account" exact component={AccountView} />
-            <Route path="/app/customers" exact component={CustomerListView} />
-            <Route path="/app/dashboard" exact component={DashboardView} />
-            <Route path="/app/products" exact component={ProductListView} />
-            <Route path="/app/settings" exact component={SettingsView} />
+            <Switch>
+              <AccountView path="/app/account" exact />
+              <CustomerListView path="/app/customers" exact />
+              <DashboardView path="/app/dashboard" exact />
+              <ProductListView path="/app/products" exact />
+              <SettingsView path="/app/settings" exact />
+            </Switch>
           </div>
         </div>
       </div>

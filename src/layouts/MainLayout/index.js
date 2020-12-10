@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import TopBar from './TopBar';
-import LoginView from 'src/views/auth/LoginView';
+
+const LoginView = lazy(() => import('src/views/auth/LoginView'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +41,7 @@ const MainLayout = () => {
         <div className={classes.contentContainer}>
           <div className={classes.content}>
             <Switch>
-              <Route path="/login" exact component={LoginView} />
+              <LoginView path="/login" exact />
               <Redirect path="/" exact to="/app/dashboard" />
             </Switch>
           </div>

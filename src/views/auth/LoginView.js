@@ -12,7 +12,6 @@ import {
   Snackbar
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Page from 'src/components/Page';
@@ -152,8 +151,7 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   const actions = {
-    ...viewActions,
-    push
+    ...viewActions
   };
   return { actions: bindActionCreators(actions, dispatch) };
 }
