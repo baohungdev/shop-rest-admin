@@ -1,9 +1,9 @@
 import { call, put } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 import * as actions from '../actions';
 import * as API from '../../../../apis/auth';
 import { save } from '../../../../services/localStoredService';
 import { takeAction } from '../../../../services/forkActionSagas';
+import { push } from 'connected-react-router';
 
 function* handleEmailLogin(action) {
   try {
@@ -20,7 +20,6 @@ function* handleEmailLogin(action) {
     save('expiredAt', expiredAt);
 
     yield put(actions.emailLoginSuccess(response));
-    // TODO: check history exist in action
     yield put(push('/'));
   } catch (err) {
     yield put(actions.emailLoginFail(err));

@@ -18,12 +18,10 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <ConnectedRouter history={history}>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/app" component={DashboardLayout} />
-            <Route path="/" component={MainLayout} />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route path="/app" component={DashboardLayout} />
+          <Route path="/" component={MainLayout} />
+        </Switch>
       </ConnectedRouter>
     </ThemeProvider>
   );

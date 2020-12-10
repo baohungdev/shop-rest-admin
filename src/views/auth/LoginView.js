@@ -14,6 +14,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Page from 'src/components/Page';
 import { name, actions as viewActions } from './redux';
 
@@ -68,7 +69,10 @@ const LoginView = props => {
             })}
             onSubmit={async values => {
               props.actions.emailLogin({
-                data: { email: values.email, password: values.password, push }
+                data: {
+                  email: values.email,
+                  password: values.password
+                }
               });
             }}
           >
@@ -153,4 +157,6 @@ function mapDispatchToProps(dispatch) {
   };
   return { actions: bindActionCreators(actions, dispatch) };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(LoginView)
+);

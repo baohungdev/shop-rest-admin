@@ -7,19 +7,29 @@ import createSagaMiddleware from 'redux-saga';
 import makeRootReducer from './reducers';
 import sagas from './sagas';
 
-const isServer = !(typeof window !== 'undefined' && window.document && window.document.createElement);
+const isServer = !(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
-export const history = isServer ? createMemoryHistory({ initialEntries: ['/'] }) : createBrowserHistory();
+export const history = isServer
+  ? createMemoryHistory({ initialEntries: ['/'] })
+  : createBrowserHistory();
 
 const sagaMiddleware = createSagaMiddleware();
 
-const middlewares = [sagaMiddleware, routerMiddleware(history), loadingBarMiddleware()];
+const middlewares = [
+  sagaMiddleware,
+  routerMiddleware(history),
+  loadingBarMiddleware()
+];
 
 const createSagaInjector = (runSaga, rootSaga) => {
   // Create a dictionary to keep track of injected sagas
   const injectedSagas = new Map();
 
-  const isInjected = (key) => injectedSagas.has(key);
+  const isInjected = key => injectedSagas.has(key);
   const injectSaga = (key, saga) => {
     if (isInjected(key)) return;
     const task = runSaga(saga);
@@ -33,11 +43,18 @@ const createSagaInjector = (runSaga, rootSaga) => {
   return injectSaga;
 };
 
-export const configureStore = (initialState) => {
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+      })
+    : compose;
+
+export const configureStore = initialState => {
   const store = createStore(
     connectRouter(history)(makeRootReducer(history)),
     initialState,
-    compose(applyMiddleware(...middlewares))
+    composeEnhancers(applyMiddleware(...middlewares))
   );
 
   store.asyncReducers = {};
