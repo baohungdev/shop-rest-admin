@@ -5,7 +5,7 @@ const baseEndpoint = `${config.apiBaseURL}`;
 
 // eslint-disable-next-line import/prefer-default-export
 export const fetchUserInfo = async data => {
-  const endpoint = `${baseEndpoint}/user/login`;
-  const response = await request({ endpoint, method: 'POST', data });
+  const endpoint = `${baseEndpoint}/user/me`;
+  const response = await request({ endpoint, method: 'GET', data });
   return response;
 };

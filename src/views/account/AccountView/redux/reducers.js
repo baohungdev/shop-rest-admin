@@ -11,7 +11,10 @@ const initialStates = freeze({
   userInfo: {
     name: '',
     email: '',
-    avatar: ''
+    avatar: '',
+    gender: 1,
+    birthDate: Date.now(),
+    roles: []
   }
 });
 
@@ -30,9 +33,12 @@ export default handleActions(
         ...state,
         isLoading: false,
         userInfo: {
-          name: action.payload.name,
-          email: action.payload.email,
-          avatar: action.payload.avatar
+          name: action.payload.data.name,
+          email: action.payload.data.email,
+          avatar: action.payload.data.avatar,
+          gender: action.payload.data.gender,
+          birthDate: action.payload.data.birthDate,
+          roles: action.payload.data.roles
         }
       });
     }

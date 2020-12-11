@@ -7,18 +7,16 @@ import { takeAction } from 'src/services/forkActionSagas';
 
 function* handleFetchUserInfo(action) {
   try {
-    const response = yield call(API.fetchUserInfo, action.payload.data);
+    const response = yield call(API.fetchUserInfo);
 
     if (!response.success) {
-      yield put(actions.fetchUserInfo(response));
-      action.payload.updateStateOnFinish.map(o => o());
+      yield put(actions.fetchUserInfoFail(response));
       return;
     }
 
-    yield put(actions.emailLoginSuccess(response));
-    yield put(push('/'));
+    yield put(actions.fetchUserInfoSuccess(response));
   } catch (err) {
-    yield put(actions.emailLoginFail(err));
+    yield put(actions.fetchUserInfoFail(err));
   }
 }
 

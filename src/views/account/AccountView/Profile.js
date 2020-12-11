@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -15,6 +16,8 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+
+import * as accountActions from 'src/views/account/AccountView/redux/actions';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
@@ -33,26 +36,26 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const Profile = ({ className, userInfo, actions, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
-          <Avatar className={classes.avatar} src={user.avatar} />
+          <Avatar className={classes.avatar} src={userInfo.avatar} />
           <Typography color="textPrimary" gutterBottom variant="h3">
-            {user.name}
+            {userInfo.name}
           </Typography>
           <Typography color="textSecondary" variant="body1">
-            {`${user.city} ${user.country}`}
+            {`${userInfo.email} ${userInfo.roles}`}
           </Typography>
           <Typography
             className={classes.dateText}
             color="textSecondary"
             variant="body1"
           >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
+            {`${moment().format('hh:mm A')} ${userInfo.birthDate}`}
           </Typography>
         </Box>
       </CardContent>
@@ -76,4 +79,15 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Profile));
+const mapDispatchToProps = dispatch => {
+  const actions = {
+    ...accountActions
+  };
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Profile)
+);
