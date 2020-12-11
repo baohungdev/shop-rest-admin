@@ -10,6 +10,11 @@ const initialStates = freeze({
   isLoading: false,
   loginError: false,
   message: '',
+  userInfo: {
+    name: 'John Doe',
+    email: 'example@gmail.com',
+    avatar: ''
+  },
   data: {}
 });
 
@@ -19,7 +24,15 @@ export default handleActions(
       return freeze({ ...state, isLoading: true });
     },
     [actions.emailLoginSuccess]: (state, action) => {
-      return freeze({ ...state, isLoading: false });
+      return freeze({
+        ...state,
+        isLoading: false,
+        userInfo: {
+          name: action.payload.data.userInfo.name,
+          email: action.payload.data.userInfo.email,
+          avatar: action.payload.data.userInfo.avatar
+        }
+      });
     },
     [actions.emailLoginFail]: (state, action) => {
       const { payload } = action;

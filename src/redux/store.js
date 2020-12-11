@@ -3,6 +3,8 @@ import { routerMiddleware, connectRouter } from 'connected-react-router';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import createSagaMiddleware from 'redux-saga';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import makeRootReducer from './reducers';
 import sagas from './sagas';
@@ -50,12 +52,24 @@ const composeEnhancers =
       })
     : compose;
 
+const rootReducer = connectRouter(history)(makeRootReducer(history));
+
+const persistConfig = {
+  key: 'userInfo',
+  storage,
+  whiteList: ['Login']
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const configureStore = initialState => {
   const store = createStore(
-    connectRouter(history)(makeRootReducer(history)),
+    persistedReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
+
+  const persistor = persistStore(store);
 
   store.asyncReducers = {};
   // Create an inject reducer function
@@ -77,5 +91,5 @@ export const configureStore = initialState => {
 
   sagaMiddleware.run(sagas);
 
-  return { store, history };
+  return { store, history, persistor };
 };

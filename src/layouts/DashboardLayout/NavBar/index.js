@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import {
   Avatar,
   Box,
@@ -23,12 +25,6 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
 
 const items = [
   {
@@ -89,7 +85,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const NavBar = ({ onMobileClose, openMobile }) => {
+const NavBar = ({ onMobileClose, openMobile, userInfo }) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -106,14 +102,14 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
+          src={userInfo.avatar}
           to="/app/account"
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          {user.name}
+          {userInfo.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {userInfo.email}
         </Typography>
       </Box>
       <Divider />
@@ -169,4 +165,10 @@ NavBar.defaultProps = {
   openMobile: false
 };
 
-export default NavBar;
+const mapStateToProps = state => {
+  return {
+    ...state['Login']
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(NavBar));
