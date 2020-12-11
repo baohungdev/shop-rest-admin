@@ -19,7 +19,13 @@ export default handleActions(
       return freeze({ ...state, isLoading: true });
     },
     [actions.emailLoginSuccess]: (state, action) => {
-      return freeze({ ...state, isLoading: false });
+      return freeze({
+        ...state,
+        isLoading: false,
+        name: action.payload.data.userInfo.name,
+        email: action.payload.data.userInfo.email,
+        avatar: action.payload.data.userInfo.avatar
+      });
     },
     [actions.emailLoginFail]: (state, action) => {
       const { payload } = action;

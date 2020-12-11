@@ -7,7 +7,15 @@ import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import { configureStore } from './redux/store';
 
-const { store, history } = configureStore();
+const intialStates = {
+  userInfo: {
+    name: 'John Doe',
+    email: 'example@gmail.com',
+    avatar: ''
+  }
+};
+
+const { store, history } = configureStore(intialStates);
 
 const DashboarLayout = lazy(() => import('src/layouts/DashboardLayout'));
 const MainLayout = lazy(() => import('src/layouts/MainLayout'));
