@@ -85,7 +85,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const NavBar = ({ onMobileClose, openMobile, name, avatar, email }) => {
+const NavBar = ({ onMobileClose, openMobile, userInfo }) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -102,14 +102,14 @@ const NavBar = ({ onMobileClose, openMobile, name, avatar, email }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={avatar}
+          src={userInfo.avatar}
           to="/app/account"
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          {name}
+          {userInfo.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {email}
+          {userInfo.email}
         </Typography>
       </Box>
       <Divider />
