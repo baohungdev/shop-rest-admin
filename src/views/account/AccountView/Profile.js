@@ -19,15 +19,6 @@ import {
 
 import * as accountActions from 'src/views/account/AccountView/redux/actions';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
-
 const useStyles = makeStyles(() => ({
   root: {},
   avatar: {
@@ -59,7 +50,7 @@ const Profile = ({ className, userInfo, actions, ...rest }) => {
             color="textSecondary"
             variant="body1"
           >
-            {`${moment().format('hh:mm A')} ${userInfo.birthDate}`}
+            {`${moment(userInfo.birthDate).format('L')}`}
           </Typography>
         </Box>
       </CardContent>

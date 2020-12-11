@@ -13,21 +13,22 @@ export const refresh = async (
   try {
     const response = await axios({
       method: 'POST',
-      url: `${config.apiBaseURL}/users/refreshToken`,
-      headers: {
-        authorization: refreshToken,
-        'Content-Type': 'application/json'
+      url: `${config.apiBaseURL}/user/refresh`,
+      data: {
+        refreshToken,
+        email: get('userInfo').email
       }
     });
 
     const {
       accessToken,
       refreshToken: newRefreshToken,
-      userInfo
+      expiredAt
     } = response.data.payload;
-    save('accessToken', accessToken);
+
     save('refreshToken', newRefreshToken);
-    save('userInfo', userInfo);
+    save('accessToken', accessToken);
+    save('expiredAt', expiredAt);
 
     if (autoRequest) {
       const { endpoint, method, data, headerInput } = requestData;
@@ -41,7 +42,7 @@ export const refresh = async (
       });
     }
 
-    return response.data.payload;
+    return response.data;
   } catch (ex) {
     clearAll();
     return ex;
@@ -55,17 +56,22 @@ export const handleRequestError = async (requestError, requestData) => {
 
   if (errorStatusCode < 500 && errorStatusCode >= 400) {
     if (errorStatusCode === 404) {
-      history.push('/error');
-      return window.location.reload();
+      if (_.isEmpty(responseData)) {
+        history.push('/error');
+        return window.location.reload();
+      }
     }
 
     if (errorStatusCode === 401) {
-      if (refreshToken) {
+      const isTokenExpired =
+        _.get(requestError, 'response.headers.token-expired') === 'true';
+
+      if (refreshToken && isTokenExpired) {
         // eslint-disable-next-line no-return-await
         return await refresh(requestData, refreshToken);
       }
 
-      history.push('/user');
+      history.push('/error');
       return window.location.reload();
     }
 
@@ -138,7 +144,7 @@ export const request = async ({
 
     return null;
   } catch (ex) {
-    return handleRequestError(ex);
+    return await handleRequestError(ex);
   } finally {
     store.dispatch(hideLoading());
   }
