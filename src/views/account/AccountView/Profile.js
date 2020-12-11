@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -14,14 +17,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
+import * as accountActions from 'src/views/account/AccountView/redux/actions';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,53 +27,36 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const Profile = ({ className, userInfo, actions, ...rest }) => {
   const classes = useStyles();
 
+  useEffect(() => {
+    actions.fetchUserInfo();
+  }, [userInfo.name, userInfo.avatar, userInfo.email]);
+
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
-        <Box
-          alignItems="center"
-          display="flex"
-          flexDirection="column"
-        >
-          <Avatar
-            className={classes.avatar}
-            src={user.avatar}
-          />
-          <Typography
-            color="textPrimary"
-            gutterBottom
-            variant="h3"
-          >
-            {user.name}
+        <Box alignItems="center" display="flex" flexDirection="column">
+          <Avatar className={classes.avatar} src={userInfo.avatar} />
+          <Typography color="textPrimary" gutterBottom variant="h3">
+            {userInfo.name}
           </Typography>
-          <Typography
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${user.city} ${user.country}`}
+          <Typography color="textSecondary" variant="body1">
+            {`${userInfo.email} ${userInfo.roles}`}
           </Typography>
           <Typography
             className={classes.dateText}
             color="textSecondary"
             variant="body1"
           >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
+            {`${moment(userInfo.birthDate).format('L')}`}
           </Typography>
         </Box>
       </CardContent>
       <Divider />
       <CardActions>
-        <Button
-          color="primary"
-          fullWidth
-          variant="text"
-        >
+        <Button color="primary" fullWidth variant="text">
           Upload picture
         </Button>
       </CardActions>
@@ -89,4 +68,21 @@ Profile.propTypes = {
   className: PropTypes.string
 };
 
-export default Profile;
+const mapStateToProps = state => {
+  return {
+    ...state['Account']
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = {
+    ...accountActions
+  };
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Profile)
+);
