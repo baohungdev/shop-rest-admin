@@ -57,7 +57,8 @@ const rootReducer = connectRouter(history)(makeRootReducer(history));
 const persistConfig = {
   key: 'userInfo',
   storage,
-  whiteList: ['Login']
+  whiteList: ['Login'],
+  blackList: ['loadingBar']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

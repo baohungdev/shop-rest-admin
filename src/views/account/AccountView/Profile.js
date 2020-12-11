@@ -39,6 +39,10 @@ const useStyles = makeStyles(() => ({
 const Profile = ({ className, userInfo, actions, ...rest }) => {
   const classes = useStyles();
 
+  useEffect(() => {
+    actions.fetchUserInfo();
+  }, [userInfo.name, userInfo.avatar, userInfo.email]);
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
