@@ -63,6 +63,7 @@ export const handleRequestError = async (requestError, requestData) => {
     }
 
     if (errorStatusCode === 401) {
+      console.log(JSON.stringify(requestError, null, 2));
       const isTokenExpired =
         _.get(requestError, 'response.headers.token-expired') === 'true';
 
