@@ -1,14 +1,16 @@
-import React from 'react';
-import {
-  Container,
-  Grid,
-  makeStyles
-} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Container, Grid, makeStyles } from '@material-ui/core';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+
+import * as accountActions from 'src/views/account/AccountView/redux/actions';
+import { name } from 'src/views/account/AccountView/redux';
 import Page from 'src/components/Page';
 import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
@@ -17,33 +19,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Account = () => {
+const Account = ({ userInfo, actions }) => {
   const classes = useStyles();
 
+  useEffect(() => {
+    actions.fetchUserInfo();
+  }, []);
+
   return (
-    <Page
-      className={classes.root}
-      title="Account"
-    >
+    <Page className={classes.root} title="Account">
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xs={12}
-          >
+        <Grid container spacing={3}>
+          <Grid item lg={4} md={6} xs={12}>
             <Profile />
           </Grid>
-          <Grid
-            item
-            lg={8}
-            md={6}
-            xs={12}
-          >
+          <Grid item lg={8} md={6} xs={12}>
             <ProfileDetails />
           </Grid>
         </Grid>
@@ -52,4 +42,21 @@ const Account = () => {
   );
 };
 
-export default Account;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = {
+    ...accountActions
+  };
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Account)
+);

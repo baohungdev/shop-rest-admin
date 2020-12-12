@@ -16,6 +16,7 @@ function* handleFetchUserInfo(action) {
 
     yield put(actions.fetchUserInfoSuccess(response));
   } catch (err) {
+    console.log(err);
     yield put(actions.fetchUserInfoFail(err));
   }
 }

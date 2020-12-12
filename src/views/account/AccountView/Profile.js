@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 
 import * as accountActions from 'src/views/account/AccountView/redux/actions';
+import { name } from 'src/views/account/AccountView/redux';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -29,10 +30,6 @@ const useStyles = makeStyles(() => ({
 
 const Profile = ({ className, userInfo, actions, ...rest }) => {
   const classes = useStyles();
-
-  useEffect(() => {
-    actions.fetchUserInfo();
-  }, [userInfo.name, userInfo.avatar, userInfo.email]);
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
@@ -70,7 +67,7 @@ Profile.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    ...state['Account']
+    ...state[name]
   };
 };
 

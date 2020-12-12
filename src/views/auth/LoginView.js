@@ -15,6 +15,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Page from 'src/components/Page';
+import { Spinner } from 'src/components/Loading';
 import { name, actions as viewActions } from './redux';
 
 const useStyles = makeStyles(theme => ({
@@ -139,7 +140,7 @@ const LoginView = props => {
                     type="submit"
                     variant="contained"
                   >
-                    Tiếp tục
+                    {isSubmitting ? <Spinner small={true} /> : 'Tiếp tục'}
                   </Button>
                 </Box>
               </form>
