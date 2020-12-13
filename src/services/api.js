@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash-es';
+import moment from 'moment';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { save, get, clearAll } from './localStoredService';
 import { history, store } from '../AppRenderer';
@@ -12,30 +13,50 @@ export const refresh = async (
   autoRequest = true
 ) => {
   try {
-    const response = await axios({
-      method: 'POST',
-      url: `${config.apiBaseURL}/user/refresh`,
-      data: {
-        refreshToken,
-        email: get('userInfo').email
+    let newAccessToken, serverResponse;
+    // check for newly-updated session
+    if (moment().isAfter(moment(get('expiredAt')))) {
+      const response = await axios({
+        method: 'POST',
+        url: `${config.apiBaseURL}/user/refresh`,
+        data: {
+          refreshToken,
+          email: get('userInfo').email
+        }
+      });
+
+      const { data: body } = response;
+
+      if (!body.success) {
+        throw new Error(body.message);
       }
-    });
 
-    const { data: body } = response;
+      const {
+        accessToken,
+        refreshToken: newRefreshToken,
+        expiredAt
+      } = response.data.payload;
 
-    if (!body.success) {
-      throw new Error(body.message);
+      newAccessToken = accessToken;
+      serverResponse = response;
+
+      save('refreshToken', newRefreshToken);
+      save('accessToken', accessToken);
+      save('expiredAt', expiredAt);
+    } else {
+      newAccessToken = get('accessToken');
+      // fake response from server
+      serverResponse = {
+        data: {
+          payload: {
+            accessToken: get('accessToken'),
+            refreshToken: get('refreshToken'),
+            expiredAt: get('expiredAt')
+          },
+          success: true
+        }
+      };
     }
-
-    const {
-      accessToken,
-      refreshToken: newRefreshToken,
-      expiredAt
-    } = response.data.payload;
-
-    save('refreshToken', newRefreshToken);
-    save('accessToken', accessToken);
-    save('expiredAt', expiredAt);
 
     if (autoRequest) {
       const { endpoint, method, data, headerInput } = requestData;
@@ -45,11 +66,11 @@ export const refresh = async (
         method,
         data,
         headerInput,
-        accessToken
+        accessToken: newAccessToken
       });
     }
 
-    return response.data;
+    return serverResponse.data;
   } catch (ex) {
     clearAll();
     history.push('/');
