@@ -1,9 +1,7 @@
-import { call, put } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import * as actions from 'src/views/account/AccountView/redux/actions';
+import * as CONST from 'src/views/account/AccountView/redux/constants';
 import * as API from 'src/apis/account';
-import { save } from 'src/services/localStoredService';
-import { takeAction } from 'src/services/forkActionSagas';
 
 function* handleFetchUserInfo(action) {
   try {
@@ -22,7 +20,7 @@ function* handleFetchUserInfo(action) {
 }
 
 function* onFetchUserInfo() {
-  yield takeAction(actions.fetchUserInfo, handleFetchUserInfo);
+  yield takeEvery(CONST.HANDLE_FETCH_USER_INFO, handleFetchUserInfo);
 }
 
 export default [onFetchUserInfo];

@@ -4,6 +4,7 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { save, get, clearAll } from './localStoredService';
 import { history, store } from '../AppRenderer';
 import config from '../config';
+import ApiErrorCode from 'src/constants/apiErrorCode';
 
 export const refresh = async (
   requestData,
@@ -19,6 +20,12 @@ export const refresh = async (
         email: get('userInfo').email
       }
     });
+
+    const { data: body } = response;
+
+    if (!body.success) {
+      throw new Error(body.message);
+    }
 
     const {
       accessToken,
@@ -45,12 +52,18 @@ export const refresh = async (
     return response.data;
   } catch (ex) {
     clearAll();
+    history.push('/');
     return ex;
   }
 };
 
 export const handleRequestError = async (requestError, requestData) => {
   const errorStatusCode = _.get(requestError, 'response.status');
+  console.log('errorStatusCode', errorStatusCode);
+  console.log(
+    'header',
+    _.get(requestError, 'response.headers')['token-expired']
+  );
   const refreshToken = get('refreshToken');
   const responseData = _.get(requestError, 'response.data');
 
@@ -63,10 +76,9 @@ export const handleRequestError = async (requestError, requestData) => {
     }
 
     if (errorStatusCode === 401) {
-      console.log(JSON.stringify(requestError, null, 2));
       const isTokenExpired =
         _.get(requestError, 'response.headers.token-expired') === 'true';
-
+      console.log('isTokenExpired', isTokenExpired);
       if (refreshToken && isTokenExpired) {
         // eslint-disable-next-line no-return-await
         return await refresh(requestData, refreshToken);
