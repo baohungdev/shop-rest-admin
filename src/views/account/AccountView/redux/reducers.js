@@ -14,7 +14,9 @@ const initialStates = freeze({
     avatar: '',
     gender: 1,
     birthDate: Date.now(),
-    roles: []
+    roles: [],
+    address: '',
+    phone: ''
   }
 });
 
@@ -38,7 +40,9 @@ export default handleActions(
           avatar: action.payload.data.avatar,
           gender: action.payload.data.gender,
           birthDate: action.payload.data.birthDate,
-          roles: action.payload.data.roles
+          roles: action.payload.data.roles,
+          address: action.payload.data.address,
+          phone: action.payload.data.gender
         }
       });
     }

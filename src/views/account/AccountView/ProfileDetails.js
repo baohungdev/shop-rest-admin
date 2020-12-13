@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -12,6 +15,10 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
+import {
+  name,
+  actions as accountActions
+} from 'src/views/account/AccountView/redux';
 
 const states = [
   {
@@ -32,7 +39,7 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const ProfileDetails = ({ className, ...rest }) => {
+const ProfileDetails = ({ className, userInfo, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     firstName: 'Katarina',
@@ -43,7 +50,7 @@ const ProfileDetails = ({ className, ...rest }) => {
     country: 'USA'
   });
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
@@ -58,37 +65,23 @@ const ProfileDetails = ({ className, ...rest }) => {
       {...rest}
     >
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
+        <CardHeader subheader="The information can be edited" title="Profile" />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+          <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
+                helperText="Vui lòng điền tên đầy đủ"
+                label="Họ và tên"
+                name="fullName"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={userInfo.name}
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Last name"
@@ -99,11 +92,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Email Address"
@@ -114,11 +103,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Phone Number"
@@ -129,11 +114,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Country"
@@ -144,11 +125,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Select State"
@@ -160,11 +137,8 @@ const ProfileDetails = ({ className, ...rest }) => {
                 value={values.state}
                 variant="outlined"
               >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
+                {states.map(option => (
+                  <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
@@ -173,15 +147,8 @@ const ProfileDetails = ({ className, ...rest }) => {
           </Grid>
         </CardContent>
         <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+        <Box display="flex" justifyContent="flex-end" p={2}>
+          <Button color="primary" variant="contained">
             Save details
           </Button>
         </Box>
@@ -194,4 +161,20 @@ ProfileDetails.propTypes = {
   className: PropTypes.string
 };
 
-export default ProfileDetails;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = {
+    ...accountActions
+  };
+
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProfileDetails)
+);
