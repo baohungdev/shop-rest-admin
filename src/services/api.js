@@ -43,11 +43,7 @@ export const refresh = async (
         };
       }
 
-      const {
-        accessToken,
-        refreshToken: newRefreshToken,
-        expiredAt
-      } = response.data.payload;
+      const { accessToken, refreshToken: newRefreshToken, expiredAt } = body;
 
       newAccessToken = accessToken;
       serverResponse = response;
@@ -92,11 +88,6 @@ export const refresh = async (
 
 export const handleRequestError = async (requestError, requestData) => {
   const errorStatusCode = _.get(requestError, 'response.status');
-  console.log('errorStatusCode', errorStatusCode);
-  console.log(
-    'header',
-    _.get(requestError, 'response.headers')['token-expired']
-  );
   const refreshToken = get('refreshToken');
   const responseData = _.get(requestError, 'response.data');
 
@@ -111,7 +102,6 @@ export const handleRequestError = async (requestError, requestData) => {
     if (errorStatusCode === 401) {
       const isTokenExpired =
         _.get(requestError, 'response.headers.token-expired') === 'true';
-      console.log('isTokenExpired', isTokenExpired);
       if (refreshToken && isTokenExpired) {
         // eslint-disable-next-line no-return-await
         return await refresh(requestData, refreshToken);
@@ -190,7 +180,12 @@ export const request = async ({
 
     return null;
   } catch (ex) {
-    return await handleRequestError(ex);
+    return await handleRequestError(ex, {
+      endpoint,
+      method,
+      data,
+      headerInput
+    });
   } finally {
     store.dispatch(hideLoading());
   }

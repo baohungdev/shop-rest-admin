@@ -19,5 +19,7 @@ export const updateUserInfoSuccess = createAction(
 
 export const closeSnackbar = createAction(CONST.HANDLE_CLOSE_SNACKBAR);
 export const uploadImage = createAction(CONST.HANDLE_UPLOAD_IMAGE);
-export const uploadImageSuccess = createAction(CONST.HANDLE_UPLOAD_IMAGE_FAIL);
-export const uploadImageFail = createAction(CONST.HANDLE_UPLOAD_IMAGE_SUCCESS);
+export const uploadImageSuccess = createAction(
+  CONST.HANDLE_UPLOAD_IMAGE_SUCCESS
+);
+export const uploadImageFail = createAction(CONST.HANDLE_UPLOAD_IMAGE_FAIL);

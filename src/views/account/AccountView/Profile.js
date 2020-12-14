@@ -45,7 +45,6 @@ const Profile = ({ className, userInfo, actions, ...rest }) => {
           open={isOpenModalUpload}
           onClose={() => setOpenModalUpload(false)}
           onSave={files => {
-            console.log('Files:', files);
             setOpenModalUpload(false);
             actions.uploadImage(files[0]);
           }}

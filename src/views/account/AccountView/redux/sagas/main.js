@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { save } from 'src/services/localStoredService';
 import * as actions from 'src/views/account/AccountView/redux/actions';
@@ -39,7 +39,6 @@ function* handleUpdateUserInfo(action) {
 
 function* handleUploadImage(action) {
   try {
-    console.log(action);
     const response = yield call(API.uploadImage, action.payload);
 
     if (!response.success) {
@@ -48,7 +47,21 @@ function* handleUploadImage(action) {
     }
 
     yield put(actions.uploadImageSuccess(response));
+    const userInfo = yield select(state => state.Account.userInfo); // <-- get the project
+    yield put(
+      actions.updateUserInfo({
+        data: {
+          name: userInfo.name,
+          birthDate: userInfo.birthDate,
+          gender: userInfo.gender,
+          address: userInfo.address,
+          phone: userInfo.phone,
+          avatar: userInfo.avatar
+        }
+      })
+    );
   } catch (err) {
+    console.log(err);
     yield put(actions.uploadImageFail(err));
   }
 }
