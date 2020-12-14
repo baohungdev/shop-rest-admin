@@ -16,19 +16,31 @@ export const refresh = async (
     let newAccessToken, serverResponse;
     // check for newly-updated session
     if (moment().isAfter(moment(get('expiredAt')))) {
-      const response = await axios({
-        method: 'POST',
-        url: `${config.apiBaseURL}/user/refresh`,
-        data: {
-          refreshToken,
-          email: get('userInfo').email
-        }
-      });
+      let response;
+      try {
+        response = await axios({
+          method: 'POST',
+          url: `${config.apiBaseURL}/user/refresh`,
+          data: {
+            refreshToken,
+            email: get('userInfo').email
+          }
+        });
+      } catch (err) {
+        response = err.response;
+      }
 
       const { data: body } = response;
 
       if (!body.success) {
-        throw new Error(body.message);
+        if (moment().isAfter(moment(get('expiredAt')))) {
+          throw new Error(body.message);
+        }
+        body.payload = {
+          accessToken: get('accessToken'),
+          refreshToken: get('refreshToken'),
+          expiredAt: get('expiredAt')
+        };
       }
 
       const {
