@@ -20,24 +20,36 @@ function* handleFetchUserInfo(action) {
   }
 }
 
-function* onFetchUserInfo() {
-  yield takeEvery(CONST.HANDLE_FETCH_USER_INFO, handleFetchUserInfo);
-}
-
 function* handleUpdateUserInfo(action) {
   try {
     const response = yield call(API.updateUserInfo, action.payload.data);
 
     if (!response.success) {
-      yield put(actions.updateUserInfoSuccess(response));
-      save('userInfo', response.data);
-      push('/app/account');
+      yield put(actions.updateUserInfoFail(response));
       return;
     }
 
-    yield put(actions.updateUserInfoFail(response));
+    yield put(actions.updateUserInfoSuccess(response));
+    save('userInfo', response.data);
+    yield put(push('/app/account'));
   } catch (err) {
     yield put(actions.updateUserInfoFail(err));
+  }
+}
+
+function* handleUploadImage(action) {
+  try {
+    console.log(action);
+    const response = yield call(API.uploadImage, action.payload);
+
+    if (!response.success) {
+      yield put(actions.uploadImageFail(response));
+      return;
+    }
+
+    yield put(actions.uploadImageSuccess(response));
+  } catch (err) {
+    yield put(actions.uploadImageFail(err));
   }
 }
 
@@ -45,4 +57,12 @@ function* onUpdateUserInfo() {
   yield takeEvery(CONST.HANDLE_UPDATE_USER_INFO, handleUpdateUserInfo);
 }
 
-export default [onFetchUserInfo, onUpdateUserInfo];
+function* onFetchUserInfo() {
+  yield takeEvery(CONST.HANDLE_FETCH_USER_INFO, handleFetchUserInfo);
+}
+
+function* onUploadImage() {
+  yield takeEvery(CONST.HANDLE_UPLOAD_IMAGE, handleUploadImage);
+}
+
+export default [onFetchUserInfo, onUpdateUserInfo, onUploadImage];

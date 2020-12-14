@@ -16,8 +16,10 @@ import {
   Divider,
   Grid,
   TextField,
-  MenuItem
+  MenuItem,
+  Snackbar
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -28,13 +30,14 @@ import {
   actions as accountActions
 } from 'src/views/account/AccountView/redux';
 
-import { Spinner } from 'src/components/Loading';
-
 const useStyles = makeStyles(theme => ({}));
 
 const ProfileDetails = ({
   isLoading,
   className,
+  updateFinish,
+  updateError,
+  updateMessage,
   userInfo,
   actions,
   ...rest
@@ -171,11 +174,25 @@ const ProfileDetails = ({
                 })
               }
             >
-              {isLoading ? <Spinner small={true} /> : null} Lưu
+              {isLoading ? 'Đang lưu' : 'Lưu'}
             </Button>
           </Box>
         </Card>
       </form>
+      <Snackbar
+        open={updateFinish}
+        autoHideDuration={6000}
+        onClose={() => actions.closeSnackbar('updateFinish')}
+      >
+        <MuiAlert
+          severity={updateError ? 'error' : 'success'}
+          elevation={6}
+          onClose={() => actions.closeSnackbar('updateFinish')}
+          variant="filled"
+        >
+          {updateMessage}
+        </MuiAlert>
+      </Snackbar>
     </MuiPickersUtilsProvider>
   );
 };

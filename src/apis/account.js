@@ -14,3 +14,16 @@ export const updateUserInfo = async data => {
   const response = await request({ endpoint, method: 'PUT', data });
   return response;
 };
+
+export const uploadImage = async data => {
+  const endpoint = `${baseEndpoint}/upload`;
+  const response = await request({
+    endpoint,
+    method: 'POST',
+    data: { file: data },
+    headerInput: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+  return response;
+};
