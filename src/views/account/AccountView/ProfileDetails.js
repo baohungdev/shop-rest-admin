@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import {
   Box,
   Button,
@@ -15,7 +16,7 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  MenuItem
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -27,46 +28,22 @@ import {
   actions as accountActions
 } from 'src/views/account/AccountView/redux';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
+const useStyles = makeStyles(theme => ({}));
 
-const useStyles = makeStyles(() => ({
-  root: {}
-}));
-
-const ProfileDetails = ({ className, userInfo, ...rest }) => {
+const ProfileDetails = ({ className, userInfo, actions, ...rest }) => {
   const classes = useStyles();
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
-  });
 
   const [birthDate, changeBirthDate] = useState(
     moment(userInfo.birthDate).toDate()
   );
 
-  const handleChange = event => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+  const [name, changeName] = useState(userInfo.name);
+
+  const [phone, changePhone] = useState(userInfo.phone);
+
+  const [address, changeAddress] = useState(userInfo.address);
+
+  const [gender, changeGender] = useState(userInfo.gender);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -78,8 +55,8 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
       >
         <Card>
           <CardHeader
-            subheader="The information can be edited"
-            title="Profile"
+            subheader="Cập nhật thông tin của bạn ở form dưới"
+            title="Thông tin cá nhân"
           />
           <Divider />
           <CardContent>
@@ -90,9 +67,9 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
                   helperText="Vui lòng điền tên đầy đủ"
                   label="Họ và tên"
                   name="fullName"
-                  onChange={handleChange}
+                  onChange={event => changeName(event.target.value)}
                   required
-                  value={userInfo.name}
+                  value={name}
                   variant="outlined"
                 />
               </Grid>
@@ -126,7 +103,8 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
                   fullWidth
                   label="Số điện thoại"
                   name="phone"
-                  value={userInfo.phone}
+                  onChange={event => changePhone(event.target.value)}
+                  value={phone}
                   variant="outlined"
                 />
               </Grid>
@@ -135,9 +113,9 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
                   fullWidth
                   label="Địa chỉ"
                   name="address"
-                  onChange={handleChange}
+                  onChange={event => changeAddress(event.target.value)}
                   required
-                  value={userInfo.address}
+                  value={address}
                   variant="outlined"
                 />
               </Grid>
@@ -146,10 +124,12 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
                   fullWidth
                   label="Giới tính"
                   name="gender"
-                  onChange={handleChange}
+                  onChange={event => {
+                    changeGender(event.target.value);
+                  }}
                   select
                   SelectProps={{ native: false }}
-                  value={userInfo.gender}
+                  value={gender}
                   variant="outlined"
                 >
                   {[
@@ -157,9 +137,9 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
                     { value: 1, text: 'Nữ' },
                     { value: 2, text: 'Khác' }
                   ].map(option => (
-                    <option key={option.value} value={option.value}>
+                    <MenuItem key={option.value} value={option.value}>
                       {option.text}
-                    </option>
+                    </MenuItem>
                   ))}
                 </TextField>
               </Grid>
@@ -167,7 +147,22 @@ const ProfileDetails = ({ className, userInfo, ...rest }) => {
           </CardContent>
           <Divider />
           <Box display="flex" justifyContent="flex-end" p={2}>
-            <Button color="primary" variant="contained">
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                actions.updateUserInfo({
+                  data: {
+                    name,
+                    birthDate,
+                    gender,
+                    address,
+                    phone,
+                    avatar: userInfo.avatar
+                  }
+                })
+              }
+            >
               Lưu
             </Button>
           </Box>
