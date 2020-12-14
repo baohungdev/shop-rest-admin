@@ -42,7 +42,7 @@ export default handleActions(
           birthDate: action.payload.data.birthDate,
           roles: action.payload.data.roles,
           address: action.payload.data.address,
-          phone: action.payload.data.gender
+          phone: action.payload.data.phone
         }
       });
     }

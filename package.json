@@ -26,14 +26,17 @@
         ]
     },
     "dependencies": {
+        "@date-io/date-fns": "1.x",
         "@material-ui/core": "^4.11.0",
         "@material-ui/icons": "^4.9.1",
         "@material-ui/lab": "^4.0.0-alpha.56",
+        "@material-ui/pickers": "^3.2.10",
         "@material-ui/styles": "^4.10.0",
         "axios": "^0.21.0",
         "chart.js": "^2.9.3",
         "clsx": "^1.1.1",
         "connected-react-router": "^6.7.0",
+        "date-fns": "^2.16.1",
         "deep-freeze": "^0.0.1",
         "formik": "^2.1.5",
         "history": "^4.7.2",
