@@ -21,7 +21,10 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  Package as PackageIcon,
+  Truck as TruckIcon,
+  Shield as ShieldIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -29,42 +32,42 @@ const items = [
   {
     href: '/app/dashboard',
     icon: BarChartIcon,
-    title: 'Dashboard'
+    title: 'Tổng quan'
   },
   {
     href: '/app/customers',
     icon: UsersIcon,
-    title: 'Customers'
+    title: 'Khách hàng'
   },
   {
     href: '/app/products',
+    icon: PackageIcon,
+    title: 'Sản phẩm'
+  },
+  {
+    href: '/app/warehouse',
+    icon: TruckIcon,
+    title: 'Kho hàng'
+  },
+  {
+    href: '/app/basket',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Đơn hàng'
+  },
+  {
+    href: '/app/admin',
+    icon: ShieldIcon,
+    title: 'Nâng cao'
   },
   {
     href: '/app/account',
     icon: UserIcon,
-    title: 'Account'
+    title: 'Tài khoản'
   },
   {
     href: '/app/settings',
     icon: SettingsIcon,
-    title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    title: 'Thiết lập'
   }
 ];
 

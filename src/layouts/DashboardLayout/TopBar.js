@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Logo from 'src/components/Logo';
 
 const useStyles = makeStyles(() => ({
@@ -47,8 +47,8 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
+          <IconButton color="inherit" onClick={null}>
+            <ExitToAppIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>

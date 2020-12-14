@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, makeStyles, Box } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -9,6 +9,7 @@ import { name } from 'src/views/account/AccountView/redux';
 import Page from 'src/components/Page';
 import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
+import Password from './Password';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +36,13 @@ const Account = ({ userInfo, actions }) => {
           </Grid>
           <Grid item lg={8} md={6} xs={12}>
             <ProfileDetails />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item lg={12} md={12} xs={12}>
+            <Box mt={3}>
+              <Password />
+            </Box>
           </Grid>
         </Grid>
       </Container>
