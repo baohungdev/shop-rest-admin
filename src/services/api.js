@@ -43,7 +43,11 @@ export const refresh = async (
         };
       }
 
-      const { accessToken, refreshToken: newRefreshToken, expiredAt } = body;
+      const {
+        accessToken,
+        refreshToken: newRefreshToken,
+        expiredAt
+      } = body.data;
 
       newAccessToken = accessToken;
       serverResponse = response;
@@ -73,8 +77,7 @@ export const refresh = async (
         endpoint,
         method,
         data,
-        headerInput,
-        accessToken: newAccessToken
+        headerInput
       });
     }
 
