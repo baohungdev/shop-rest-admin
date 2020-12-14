@@ -8,6 +8,9 @@ const initialStates = freeze({
   fetchError: false,
   isLoading: false,
   data: {},
+  updateFinish: false,
+  updateError: false,
+  updateMessage: '',
   userInfo: {
     name: '',
     email: '',
@@ -53,6 +56,9 @@ export default handleActions(
       return freeze({
         ...state,
         isLoading: false,
+        updateFinish: true,
+        updateError: false,
+        updateMessage: 'Đã cập nhật thông tin tài khoản',
         userInfo: {
           name: action.payload.data.name,
           email: action.payload.data.email,
@@ -63,6 +69,46 @@ export default handleActions(
           address: action.payload.data.address,
           phone: action.payload.data.phone
         }
+      });
+    },
+    [actions.updateUserInfoFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isLoading: false,
+        updateFinish: true,
+        updateError: true,
+        updateMessage: 'Cập nhật thất bại'
+      });
+    },
+
+    [actions.uploadImage]: (state, action) => {
+      return freeze({
+        ...state
+      });
+    },
+
+    [actions.uploadImageFail]: (state, action) => {
+      return freeze({
+        ...state
+      });
+    },
+
+    [actions.uploadImageSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          avatar: action.payload.data.url
+        }
+      });
+    },
+
+    [actions.closeSnackbar]: (state, action) => {
+      return freeze({
+        ...state,
+        updateFinish: false,
+        updateError: false,
+        updateMessage: ''
       });
     }
   },
