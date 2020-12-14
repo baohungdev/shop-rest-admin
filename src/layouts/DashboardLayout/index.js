@@ -4,8 +4,18 @@ import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
 import checkForLoggedIn from 'src/utils/checkForLoggedIn';
+import { store } from 'src/AppRenderer';
+import {
+  name as nameOfAccount,
+  sagas as accountSagas
+} from 'src/views/account/AccountView/redux';
 
-const AccountView = lazy(() => import('src/views/account/AccountView'));
+const AccountView = lazy(() =>
+  import('../../views/account/AccountView').then((module) => {
+    store.injectSaga(nameOfAccount, accountSagas);
+    return module;
+  })
+);
 const CustomerListView = lazy(() =>
   import('src/views/customer/CustomerListView')
 );

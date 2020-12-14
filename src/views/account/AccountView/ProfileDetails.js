@@ -28,9 +28,17 @@ import {
   actions as accountActions
 } from 'src/views/account/AccountView/redux';
 
+import { Spinner } from 'src/components/Loading';
+
 const useStyles = makeStyles(theme => ({}));
 
-const ProfileDetails = ({ className, userInfo, actions, ...rest }) => {
+const ProfileDetails = ({
+  isLoading,
+  className,
+  userInfo,
+  actions,
+  ...rest
+}) => {
   const classes = useStyles();
 
   const [birthDate, changeBirthDate] = useState(
@@ -163,7 +171,7 @@ const ProfileDetails = ({ className, userInfo, actions, ...rest }) => {
                 })
               }
             >
-              Lưu
+              {isLoading ? <Spinner small={true} /> : null} Lưu
             </Button>
           </Box>
         </Card>
