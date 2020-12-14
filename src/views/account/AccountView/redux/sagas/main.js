@@ -66,6 +66,21 @@ function* handleUploadImage(action) {
   }
 }
 
+function* handleUpdatePassword(action) {
+  try {
+    const response = yield call(API.updatePassword, action.payload);
+
+    if (!response.success) {
+      yield put(actions.updatePasswordFail(response));
+      return;
+    }
+
+    yield put(actions.updatePasswordSuccess(response));
+  } catch (err) {
+    yield put(actions.updatePasswordFail(err));
+  }
+}
+
 function* onUpdateUserInfo() {
   yield takeEvery(CONST.HANDLE_UPDATE_USER_INFO, handleUpdateUserInfo);
 }
@@ -78,4 +93,13 @@ function* onUploadImage() {
   yield takeEvery(CONST.HANDLE_UPLOAD_IMAGE, handleUploadImage);
 }
 
-export default [onFetchUserInfo, onUpdateUserInfo, onUploadImage];
+function* onUpdatePassword() {
+  yield takeEvery(CONST.HANDLE_UPDATE_PASSWORD, handleUpdatePassword);
+}
+
+export default [
+  onFetchUserInfo,
+  onUpdateUserInfo,
+  onUploadImage,
+  onUpdatePassword
+];

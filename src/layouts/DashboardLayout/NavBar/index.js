@@ -63,11 +63,6 @@ const items = [
     href: '/app/account',
     icon: UserIcon,
     title: 'Tài khoản'
-  },
-  {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Thiết lập'
   }
 ];
 

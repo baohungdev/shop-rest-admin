@@ -23,3 +23,11 @@ export const uploadImageSuccess = createAction(
   CONST.HANDLE_UPLOAD_IMAGE_SUCCESS
 );
 export const uploadImageFail = createAction(CONST.HANDLE_UPLOAD_IMAGE_FAIL);
+
+export const updatePassword = createAction(CONST.HANDLE_UPDATE_PASSWORD);
+export const updatePasswordSuccess = createAction(
+  CONST.HANDLE_UPDATE_PASSWORD_SUCCESS
+);
+export const updatePasswordFail = createAction(
+  CONST.HANDLE_UPDATE_PASSWORD_FAIL
+);

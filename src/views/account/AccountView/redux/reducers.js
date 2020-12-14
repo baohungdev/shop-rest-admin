@@ -7,12 +7,13 @@ export const name = 'Account';
 const initialStates = freeze({
   fetchError: false,
   isLoading: false,
+  isPasswordLoading: false,
   data: {},
   updateFinish: false,
   updateError: false,
   updateMessage: '',
   userInfo: {
-    name: '',
+    name: 'sdsad',
     email: '',
     avatar: '',
     gender: 1,
@@ -100,6 +101,33 @@ export default handleActions(
           ...state.userInfo,
           avatar: action.payload.data.url
         }
+      });
+    },
+
+    [actions.updatePassword]: (state, action) => {
+      return freeze({
+        ...state,
+        isPasswordLoading: true
+      });
+    },
+
+    [actions.updatePasswordSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isPasswordLoading: false,
+        updateFinish: true,
+        updateError: false,
+        updateMessage: 'Cập nhật mật khẩu thành công'
+      });
+    },
+
+    [actions.updatePasswordFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isPasswordLoading: false,
+        updateFinish: true,
+        updateError: true,
+        updateMessage: action.payload.message
       });
     },
 

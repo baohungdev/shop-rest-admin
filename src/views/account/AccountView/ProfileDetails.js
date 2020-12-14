@@ -161,6 +161,7 @@ const ProfileDetails = ({
             <Button
               color="primary"
               variant="contained"
+              disabled={isLoading}
               onClick={() =>
                 actions.updateUserInfo({
                   data: {

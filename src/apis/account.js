@@ -29,3 +29,9 @@ export const uploadImage = async data => {
   });
   return response;
 };
+
+export const updatePassword = async data => {
+  const endpoint = `${baseEndpoint}/user/me/password`;
+  const response = await request({ endpoint, method: 'POST', data });
+  return response;
+};
