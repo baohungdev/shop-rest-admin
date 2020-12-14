@@ -5,6 +5,7 @@ import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import createSagaMiddleware from 'redux-saga';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { createLogger } from 'redux-logger';
 
 import makeRootReducer from './reducers';
 import sagas from './sagas';
@@ -20,8 +21,12 @@ export const history = isServer
   : createBrowserHistory();
 
 const sagaMiddleware = createSagaMiddleware();
+const loggerMiddleware = createLogger({
+  predicate: () => process.env.NODE_ENV === 'development'
+});
 
 const middlewares = [
+  loggerMiddleware,
   sagaMiddleware,
   routerMiddleware(history),
   loadingBarMiddleware()
@@ -31,7 +36,7 @@ const createSagaInjector = (runSaga, rootSaga) => {
   // Create a dictionary to keep track of injected sagas
   const injectedSagas = new Map();
 
-  const isInjected = key => injectedSagas.has(key);
+  const isInjected = (key) => injectedSagas.has(key);
   const injectSaga = (key, saga) => {
     if (isInjected(key)) return;
     const task = runSaga(saga);
@@ -63,7 +68,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const configureStore = initialState => {
+export const configureStore = (initialState) => {
   const store = createStore(
     persistedReducer,
     initialState,

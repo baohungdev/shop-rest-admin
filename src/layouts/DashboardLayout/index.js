@@ -1,5 +1,5 @@
 import React, { useState, lazy } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
@@ -13,7 +13,7 @@ const ProductListView = lazy(() => import('src/views/product/ProductListView'));
 const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
 const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     display: 'flex',

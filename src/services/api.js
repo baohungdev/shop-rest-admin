@@ -5,7 +5,7 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { save, get, clearAll } from './localStoredService';
 import { history, store } from '../AppRenderer';
 import config from '../config';
-import ApiErrorCode from 'src/constants/apiErrorCode';
+// import ApiErrorCode from 'src/constants/apiErrorCode';
 
 export const refresh = async (
   requestData,

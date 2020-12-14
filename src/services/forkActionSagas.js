@@ -1,4 +1,4 @@
-import { call, take, fork, takeLeading } from 'redux-saga/effects';
+import { call, take, fork } from 'redux-saga/effects';
 
 // eslint-disable-next-line import/prefer-default-export
 export function* takeAction(pattern, saga, ...args) {

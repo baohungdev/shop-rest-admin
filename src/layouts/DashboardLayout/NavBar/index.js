@@ -6,7 +6,6 @@ import { withRouter } from 'react-router';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,

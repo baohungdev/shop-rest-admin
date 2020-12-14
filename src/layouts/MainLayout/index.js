@@ -1,11 +1,18 @@
 import React, { lazy } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import TopBar from './TopBar';
+import { store } from 'src/AppRenderer';
+import { name, sagas } from 'src/views/auth/redux';
 
-const LoginView = lazy(() => import('src/views/auth/LoginView'));
+const LoginView = lazy(() =>
+  import('src/views/auth/LoginView').then((module) => {
+    store.injectSaga(name, sagas);
+    return module;
+  })
+);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     display: 'flex',
