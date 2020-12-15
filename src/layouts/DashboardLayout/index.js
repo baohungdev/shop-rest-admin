@@ -10,8 +10,13 @@ import {
   sagas as accountSagas
 } from 'src/views/account/AccountView/redux';
 
+import {
+  name as nameOfProduct,
+  sagas as productSagas
+} from 'src/views/product/ProductListView/redux';
+
 const AccountView = lazy(() =>
-  import('../../views/account/AccountView').then((module) => {
+  import('../../views/account/AccountView').then(module => {
     store.injectSaga(nameOfAccount, accountSagas);
     return module;
   })
@@ -19,11 +24,18 @@ const AccountView = lazy(() =>
 const CustomerListView = lazy(() =>
   import('src/views/customer/CustomerListView')
 );
-const ProductListView = lazy(() => import('src/views/product/ProductListView'));
+
+const ProductListView = lazy(() =>
+  import('../../views/product/ProductListView').then(module => {
+    store.injectSaga(nameOfProduct, productSagas);
+    return module;
+  })
+);
+
 const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
 const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
