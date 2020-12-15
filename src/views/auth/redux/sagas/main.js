@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import * as actions from 'src/views/auth/redux/actions';
 import * as API from 'src/apis/auth';
-import { save } from 'src/services/localStoredService';
+import { save, clearAll } from 'src/services/localStoredService';
 import { takeAction } from 'src/services/forkActionSagas';
 
 function* handleEmailLogin(action) {
@@ -28,8 +28,17 @@ function* handleEmailLogin(action) {
   }
 }
 
-function* emailLogin() {
+function* handleLogout(action) {
+  clearAll();
+  yield put(push('/'));
+}
+
+function* onLogout() {
+  yield takeAction(actions.logout, handleLogout);
+}
+
+function* onEmailLogin() {
   yield takeAction(actions.emailLogin, handleEmailLogin);
 }
 
-export default [emailLogin];
+export default [onEmailLogin, onLogout];
