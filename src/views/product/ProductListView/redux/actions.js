@@ -8,3 +8,9 @@ export const fetchProductListSuccess = createAction(
 export const fetchProductListFail = createAction(
   CONST.HANDLE_FETCH_PRODUCT_LIST_FAIL
 );
+
+export const searchProduct = createAction(CONST.HANDLE_SEARCH_PRODUCT);
+export const searchProductSuccess = createAction(
+  CONST.HANDLE_SEARCH_PRODUCT_SUCCESS
+);
+export const searchProductFail = createAction(CONST.HANDLE_SEARCH_PRODUCT_FAIL);
