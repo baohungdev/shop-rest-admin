@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  makeStyles
-} from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { Box, Container, Grid, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import ProductCard from './ProductCard';
-import data from './data';
 
-const useStyles = makeStyles((theme) => ({
+import {
+  name,
+  actions as productActions
+} from 'src/views/product/ProductListView/redux';
+
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
@@ -23,30 +25,26 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProductList = () => {
+const ProductList = ({ actions, products }) => {
   const classes = useStyles();
-  const [products] = useState(data);
+
+  useEffect(() => {
+    actions.fetchProductList({
+      fetchParams: {
+        page: 1,
+        perpage: 20
+      }
+    });
+  }, []);
 
   return (
-    <Page
-      className={classes.root}
-      title="Products"
-    >
+    <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
         <Toolbar />
         <Box mt={3}>
-          <Grid
-            container
-            spacing={3}
-          >
-            {products.map((product) => (
-              <Grid
-                item
-                key={product.id}
-                lg={4}
-                md={6}
-                xs={12}
-              >
+          <Grid container spacing={3}>
+            {products.map(product => (
+              <Grid item key={product.id} lg={4} md={6} xs={12}>
                 <ProductCard
                   className={classes.productCard}
                   product={product}
@@ -55,20 +53,25 @@ const ProductList = () => {
             ))}
           </Grid>
         </Box>
-        <Box
-          mt={3}
-          display="flex"
-          justifyContent="center"
-        >
-          <Pagination
-            color="primary"
-            count={3}
-            size="small"
-          />
+        <Box mt={3} display="flex" justifyContent="center">
+          <Pagination color="primary" count={3} size="small" />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default ProductList;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...productActions };
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProductList)
+);
