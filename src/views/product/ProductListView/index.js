@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Box, Container, Grid, makeStyles } from '@material-ui/core';
+import _isEmpty from 'lodash/isEmpty';
 import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
@@ -25,22 +26,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductList = ({ actions, products }) => {
+const ProductList = ({ actions, products, search, pagination }) => {
+  const perpage = 20;
   const classes = useStyles();
 
   useEffect(() => {
     actions.fetchProductList({
       fetchParams: {
         page: 1,
-        perpage: 20
-      }
+        perpage
+      },
+      isVariant: false
     });
   }, []);
 
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
-        <Toolbar />
+        <Toolbar actions={actions} search={search} pagination={pagination} />
         <Box mt={3}>
           <Grid container spacing={3}>
             {products.map(product => (
@@ -54,7 +57,22 @@ const ProductList = ({ actions, products }) => {
           </Grid>
         </Box>
         <Box mt={3} display="flex" justifyContent="center">
-          <Pagination color="primary" count={3} size="small" />
+          <Pagination
+            color="primary"
+            count={pagination.total}
+            page={pagination.current}
+            onChange={(e, page) => {
+              if (_isEmpty(search)) {
+                actions.fetchProductList({ fetchParams: { page, perpage } });
+              } else {
+                actions.searchProduct({
+                  search,
+                  fetchParams: { page, perpage }
+                });
+              }
+            }}
+            size="small"
+          />
         </Box>
       </Container>
     </Page>
