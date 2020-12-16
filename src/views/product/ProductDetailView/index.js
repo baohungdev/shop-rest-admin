@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useLocation } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Box, Container, Grid, makeStyles } from '@material-ui/core';
+import { Box, Container, Grid, makeStyles, colors } from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import Page from 'src/components/Page';
+import ProductImage from './components/ProductImage';
+import ProductImageList from './components/ProductImageList';
 
 import {
   name,
@@ -24,11 +26,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductDetail = ({ actions, products, history, search, pagination }) => {
+const ProductDetail = ({ actions, view }) => {
+  const queries = new URLSearchParams(useLocation().search);
+  const productId = queries.get('id') || null;
+
+  useEffect(() => {
+    actions.fetchProductDetail({ id: productId });
+  }, []);
+
   const classes = useStyles();
   return (
     <Page className={classes.root} title="Products">
-      <Container maxWidth={false}></Container>
+      <Container maxWidth={false}>
+        <Grid container spacing={2}>
+          <Grid item lg={3}>
+            <ProductImage />
+          </Grid>
+          <Grid item lg={9}>
+            <ProductImageList images={_get(view, 'imageUrls')} />
+          </Grid>
+        </Grid>
+      </Container>
     </Page>
   );
 };

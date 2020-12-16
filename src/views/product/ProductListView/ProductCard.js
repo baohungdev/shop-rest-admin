@@ -13,13 +13,15 @@ import {
   Typography,
   makeStyles,
   Chip,
-  Button
+  Button,
+  IconButton
 } from '@material-ui/core';
 
 import {
   Tag as TagIcon,
   EyeOff as EyeOffIcon,
-  ShoppingCart as ShoppingCartIcon
+  ShoppingCart as ShoppingCartIcon,
+  Trash as TrashIcon
 } from 'react-feather';
 
 const useStyles = makeStyles(theme => ({
@@ -70,23 +72,27 @@ const ProductCard = ({ className, product, ...rest }) => {
           {product.description}
         </Typography>
       </CardContent>
-      <Box flexGrow={1} padding={1}>
-        <Chip
-          icon={<TagIcon scale={0.5} />}
-          color="primary"
-          variant="default"
-          label={product.categoryText}
-          size="small"
-          variant="outlined"
-        />
-        <Chip
-          icon={<status.icon />}
-          color="default"
-          variant="default"
-          label={status.text}
-          size="small"
-          variant="outlined"
-        />
+      <Box padding={1}>
+        <Grid spacing={1} container justify="center">
+          <Grid item>
+            <Chip
+              color="primary"
+              variant="default"
+              label={product.categoryText}
+              size="small"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item>
+            <Chip
+              color="default"
+              variant="default"
+              label={status.text}
+              size="small"
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
       </Box>
       <Divider />
       <Box p={2}>
@@ -94,10 +100,12 @@ const ProductCard = ({ className, product, ...rest }) => {
           <Grid className={classes.statsItem} item></Grid>
           <Grid className={classes.statsItem} item>
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               onClick={() =>
-                history.push(`${history.location.pathname}/view/${product.id}`)
+                history.push(
+                  `${history.location.pathname}/view?id=${product.id}`
+                )
               }
             >
               <Typography color="inherit" display="inline" variant="body2">
@@ -105,11 +113,13 @@ const ProductCard = ({ className, product, ...rest }) => {
               </Typography>
             </Button>
             <Box m={1} />
-            <Button variant="contained" color="secondary">
-              <Typography color="inherit" display="inline" variant="body2">
-                Xóa
-              </Typography>
-            </Button>
+            <IconButton
+              color="secondary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <TrashIcon />
+            </IconButton>
           </Grid>
         </Grid>
       </Box>

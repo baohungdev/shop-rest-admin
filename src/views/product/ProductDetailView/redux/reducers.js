@@ -8,7 +8,8 @@ const initialStates = freeze({
   isFetchingProduct: false,
   isFetchingProductFail: false,
   fetchProductMessage: '',
-  data: {}
+  data: {},
+  view: {}
 });
 
 export default handleActions(
@@ -27,10 +28,11 @@ export default handleActions(
         isFetchingProduct: false,
         isFetchingProductFail: false,
         fetchProductMessage: '',
-        data: action.payload.data
+        data: action.payload.data,
+        view: action.payload.data
       });
     },
-    [actions.fetchProductDetailSuccess]: (state, action) => {
+    [actions.fetchProductDetailFail]: (state, action) => {
       return freeze({
         ...state,
         isFetchingProduct: false,

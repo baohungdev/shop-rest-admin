@@ -97,7 +97,7 @@ const DashboardLayout = () => {
                 <CustomerListView path="/app/customers" exact />
                 <DashboardView path="/app/dashboard" exact />
                 <ProductListView path="/app/products" exact />
-                <ProductDetailView path="/app/products/view/:id" exact />
+                <ProductDetailView path="/app/products/view" exact />
                 <SettingsView path="/app/settings" exact />
                 <Redirect to="/app/dashboard" />
               </Switch>
