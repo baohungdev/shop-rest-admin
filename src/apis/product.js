@@ -24,3 +24,12 @@ export const searchProduct = async ({ search, fetchParam, ...query }) => {
   });
   return response;
 };
+
+export const fetchProductDetail = async id => {
+  const endpoint = `${baseEndpoint}/product/${id}`;
+  const response = await request({
+    endpoint,
+    method: 'GET'
+  });
+  return response;
+};

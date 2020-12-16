@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 import _get from 'lodash/get';
 import {
   Avatar,
@@ -14,9 +15,6 @@ import {
   Chip,
   Button
 } from '@material-ui/core';
-
-import { withStyles } from '@material-ui/core/styles';
-import { green, red, blue } from '@material-ui/core/colors';
 
 import {
   Tag as TagIcon,
@@ -38,28 +36,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BlueButton = withStyles(theme => ({
-  root: {
-    color: theme.palette.getContrastText(blue[500]),
-    backgroundColor: blue[500],
-    '&:hover': {
-      backgroundColor: blue[700]
-    }
-  }
-}))(Button);
-
-const RedButton = withStyles(theme => ({
-  root: {
-    color: theme.palette.getContrastText(red[500]),
-    backgroundColor: red[500],
-    '&:hover': {
-      backgroundColor: red[700]
-    }
-  }
-}))(Button);
-
 const ProductCard = ({ className, product, ...rest }) => {
   const classes = useStyles();
+
+  const history = useHistory();
 
   const statusToText = status => {
     if (status == 0) return { icon: EyeOffIcon, text: 'Ẩn' };
@@ -113,17 +93,23 @@ const ProductCard = ({ className, product, ...rest }) => {
         <Grid container justify="space-between" spacing={2}>
           <Grid className={classes.statsItem} item></Grid>
           <Grid className={classes.statsItem} item>
-            <BlueButton variant="contained" color="primary">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() =>
+                history.push(`${history.location.pathname}/view/${product.id}`)
+              }
+            >
               <Typography color="inherit" display="inline" variant="body2">
                 Cập nhật
               </Typography>
-            </BlueButton>
+            </Button>
             <Box m={1} />
-            <RedButton variant="contained" color="primary">
+            <Button variant="contained" color="secondary">
               <Typography color="inherit" display="inline" variant="body2">
                 Xóa
               </Typography>
-            </RedButton>
+            </Button>
           </Grid>
         </Grid>
       </Box>

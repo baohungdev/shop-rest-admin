@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Box, Container, Grid, makeStyles } from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
+import _get from 'lodash/get';
 import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductList = ({ actions, products, search, pagination }) => {
+const ProductList = ({ actions, products, history, search, pagination }) => {
   const perpage = 20;
   const classes = useStyles();
 
@@ -49,6 +50,7 @@ const ProductList = ({ actions, products, search, pagination }) => {
             {products.map(product => (
               <Grid item key={product.id} lg={4} md={6} xs={12}>
                 <ProductCard
+                  history={history}
                   className={classes.productCard}
                   product={product}
                 />
