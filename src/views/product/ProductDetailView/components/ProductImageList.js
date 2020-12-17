@@ -17,13 +17,7 @@ import {
   IconButton,
   Typography
 } from '@material-ui/core';
-import {
-  StarBorder as StarBorderIcon,
-  AddAPhoto as AddAPhotoIcon,
-  Delete as DeleteIcon
-} from '@material-ui/icons';
-
-import { Image as ImageIcon } from 'react-feather';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 
 const productsImages = [];
 
@@ -31,7 +25,6 @@ const useStyle = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper
   },
@@ -51,6 +44,12 @@ const useStyle = makeStyles(theme => ({
     },
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)'
+  },
+  gridListTile: {
+    height: '100% !important',
+    maxHeight: 200,
+    maxWidth: 200,
+    width: '100% !important'
   },
   title: {
     color: theme.palette.primary.light
@@ -96,10 +95,10 @@ const ProductImageList = ({ images }) => {
         <div className={classes.root}>
           <GridList className={classes.gridList} cols={4}>
             {_map(images, (src, index) => (
-              <GridListTile key={index}>
+              <GridListTile key={index} className={classes.gridListTile}>
                 <img src={src} alt={'hieu'} draggable={false} />
                 <GridListTileBar
-                  title={`Hình ${index}`}
+                  title={`Hình ${index + 1}`}
                   classes={{
                     root: classes.titleBar,
                     title: classes.title
