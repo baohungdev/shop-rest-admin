@@ -36,3 +36,5 @@ export const fetchCategoriesSuccess = createAction(
 export const fetchCategoriesFail = createAction(
   CONST.HANDLE_FETCH_CATEGORIES_FAIL
 );
+
+export const selectCategory = createAction(CONST.HANDLE_SELECT_CATEGORY);

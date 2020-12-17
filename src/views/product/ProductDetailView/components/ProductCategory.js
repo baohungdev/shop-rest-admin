@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -10,11 +10,16 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 
+import _map from 'lodash/map';
+import _find from 'lodash/find';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
+
+import buildHierachy from 'src/utils/buildHierachy';
 
 const useStyles = makeStyles({
   root: {
@@ -24,17 +29,44 @@ const useStyles = makeStyles({
   }
 });
 
-const ControlledTreeView = () => {
+const buildTreeDom = tree => {
+  return _map(tree, item => {
+    return (
+      <TreeItem nodeId={item.id} label={item.name}>
+        {buildTreeDom(item.children)}
+      </TreeItem>
+    );
+  });
+};
+
+const getPathToSelectedId = (id, data) => {
+  const result = [];
+  while (true) {
+    const item = _find(data, d => d.id === id);
+    if (!item) break;
+    if (!item.parentId) break;
+    result.unshift(item.parentId);
+    id = item.parentId;
+  }
+
+  return result;
+};
+
+const ControlledTreeView = ({ actions, data, categorySelected }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
+  const [expanded, setExpanded] = useState([
+    ...getPathToSelectedId(categorySelected, data)
+  ]);
+  const selected = categorySelected;
+
+  const tree = buildHierachy(JSON.parse(JSON.stringify(data)));
 
   const handleToggle = (event, nodeIds) => {
     setExpanded(nodeIds);
   };
 
   const handleSelect = (event, nodeIds) => {
-    setSelected(nodeIds);
+    actions.selectCategory(nodeIds);
   };
 
   return (
@@ -47,19 +79,7 @@ const ControlledTreeView = () => {
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
-      <TreeItem nodeId="1" label="Applications">
-        <TreeItem nodeId="2" label="Calendar" />
-        <TreeItem nodeId="3" label="Chrome" />
-        <TreeItem nodeId="4" label="Webstorm" />
-      </TreeItem>
-      <TreeItem nodeId="5" label="Documents">
-        <TreeItem nodeId="6" label="Material-UI">
-          <TreeItem nodeId="7" label="src">
-            <TreeItem nodeId="8" label="index.js" />
-            <TreeItem nodeId="9" label="tree-view.js" />
-          </TreeItem>
-        </TreeItem>
-      </TreeItem>
+      {buildTreeDom(tree)}
     </TreeView>
   );
 };
@@ -74,7 +94,11 @@ const ProductCategory = ({ product, actions, categories }) => {
       <CardHeader title="Phân loại" />
       <Divider />
       <CardContent>
-        <ControlledTreeView />
+        <ControlledTreeView
+          data={categories}
+          categorySelected={product.categoryId}
+          actions={actions}
+        />
       </CardContent>
     </Card>
   );

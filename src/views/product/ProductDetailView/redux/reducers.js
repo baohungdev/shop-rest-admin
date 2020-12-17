@@ -22,6 +22,7 @@ const initialStates = freeze({
     description: 'Mô tả sản phẩm',
     price: 0,
     quantity: 0,
+    categoryId: null,
     cost: 0
   }
 });
@@ -120,6 +121,15 @@ export default handleActions(
         isFetchingCategoriesFail: true,
         fetchCategoriesMessage: actions.payload.message,
         categories: []
+      });
+    },
+    [actions.selectCategory]: (state, actions) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          categoryId: actions.payload
+        }
       });
     }
   },
