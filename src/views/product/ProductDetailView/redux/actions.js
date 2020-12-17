@@ -28,3 +28,11 @@ export const uploadImageBatchSuccess = createAction(
 export const uploadImageBatchFail = createAction(
   CONST.HANDLE_UPLOAD_PRODUCT_IMAGES_FAIL
 );
+
+export const fetchCategories = createAction(CONST.HANDLE_FETCH_CATEGORIES);
+export const fetchCategoriesSuccess = createAction(
+  CONST.HANDLE_FETCH_CATEGORIES_SUCCESS
+);
+export const fetchCategoriesFail = createAction(
+  CONST.HANDLE_FETCH_CATEGORIES_FAIL
+);

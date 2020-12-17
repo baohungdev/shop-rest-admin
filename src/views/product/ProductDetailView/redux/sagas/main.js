@@ -33,12 +33,31 @@ function* handleUploadProductImages(action) {
   }
 }
 
+function* handleFetchCategories(action) {
+  try {
+    const response = yield call(API.fetchCategories, action.payload);
+
+    if (!response.success) {
+      yield put(actions.fetchCategoriesFail(response));
+      return;
+    }
+
+    yield put(actions.fetchCategoriesSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchCategoriesFail(err));
+  }
+}
+
 function* onFetchProductDetail() {
   yield takeAction(actions.fetchProductDetail, handleFetchProductDetail);
+}
+
+function* onFetchCategories() {
+  yield takeAction(actions.fetchCategories, handleFetchCategories);
 }
 
 function* onUploadProductImages() {
   yield takeAction(actions.uploadImageBatch, handleUploadProductImages);
 }
 
-export default [onFetchProductDetail, onUploadProductImages];
+export default [onFetchProductDetail, onUploadProductImages, onFetchCategories];

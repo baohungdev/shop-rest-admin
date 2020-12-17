@@ -10,10 +10,19 @@ const initialStates = freeze({
   fetchProductMessage: '',
   isUploadingProductImages: false,
   isUploadingProductImagesFail: false,
+  isFetchingCategories: false,
+  isFetchingCategoriesFail: false,
+  fetchCategoriesMessage: '',
+  categories: [],
   uploadProductImagesMessage: '',
   data: {},
   view: {
-    imageUrls: []
+    imageUrls: [],
+    name: '',
+    description: 'Mô tả sản phẩm',
+    price: 0,
+    quantity: 0,
+    cost: 0
   }
 });
 
@@ -34,7 +43,10 @@ export default handleActions(
         isFetchingProductFail: false,
         fetchProductMessage: '',
         data: action.payload.data,
-        view: action.payload.data
+        view: {
+          ...state.view,
+          ...action.payload.data
+        }
       });
     },
     [actions.fetchProductDetailFail]: (state, action) => {
@@ -82,6 +94,32 @@ export default handleActions(
         isUploadingProductImages: false,
         isUploadingProductImagesFail: true,
         uploadProductImagesMessage: actions.payload.message
+      });
+    },
+    [actions.fetchCategories]: state => {
+      return freeze({
+        ...state,
+        isFetchingCategories: true,
+        isFetchingCategoriesFail: false,
+        fetchCategoriesMessage: ''
+      });
+    },
+    [actions.fetchCategoriesSuccess]: (state, actions) => {
+      return freeze({
+        ...state,
+        isFetchingCategories: false,
+        isFetchingCategoriesFail: false,
+        fetchCategoriesMessage: '',
+        categories: [...actions.payload.data]
+      });
+    },
+    [actions.fetchCategoriesFail]: (state, actions) => {
+      return freeze({
+        ...state,
+        isFetchingCategories: false,
+        isFetchingCategoriesFail: true,
+        fetchCategoriesMessage: actions.payload.message,
+        categories: []
       });
     }
   },

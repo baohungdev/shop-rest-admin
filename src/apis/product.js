@@ -48,3 +48,13 @@ export const uploadProductImages = async files => {
   });
   return response;
 };
+
+export const fetchCategories = async query => {
+  const endpoint = `${baseEndpoint}/categories`;
+  const response = await request({
+    endpoint,
+    method: 'GET',
+    data: {}
+  });
+  return response;
+};

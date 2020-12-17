@@ -8,6 +8,8 @@ import _get from 'lodash/get';
 import Page from 'src/components/Page';
 import ProductImage from './components/ProductImage';
 import ProductImageList from './components/ProductImageList';
+import ProductInfo from './components/ProductInfo';
+import ProductCategory from './components/ProductCategory';
 
 import {
   name,
@@ -40,12 +42,25 @@ const ProductDetail = ({ actions, view, ...rest }) => {
       <Container maxWidth={false}>
         <Grid container spacing={2}>
           <Grid item lg={3}>
-            <ProductImage actions={actions}  {...rest}/>
+            <ProductImage actions={actions} {...rest} />
           </Grid>
           <Grid item lg={9}>
             <ProductImageList
               images={_get(view, 'imageUrls')}
               actions={actions}
+            />
+          </Grid>
+        </Grid>
+        <Box mt={2} />
+        <Grid container spacing={2}>
+          <Grid item lg={8}>
+            <ProductInfo product={view} />
+          </Grid>
+          <Grid item lg={4}>
+            <ProductCategory
+              product={view}
+              actions={actions}
+              categories={rest.categories}
             />
           </Grid>
         </Grid>
