@@ -9,7 +9,9 @@ const initialStates = freeze({
   isFetchingProductFail: false,
   fetchProductMessage: '',
   data: {},
-  view: {}
+  view: {
+    imageUrls: []
+  }
 });
 
 export default handleActions(
@@ -39,6 +41,17 @@ export default handleActions(
         isFetchingProductFail: true,
         fetchProductMessage: action.payload.message,
         data: {}
+      });
+    },
+    [actions.removeProductImage]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          imageUrls: state.view.imageUrls.filter(
+            url => url !== action.payload.url
+          )
+        }
       });
     }
   },

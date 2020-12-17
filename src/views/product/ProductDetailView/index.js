@@ -43,7 +43,10 @@ const ProductDetail = ({ actions, view }) => {
             <ProductImage />
           </Grid>
           <Grid item lg={9}>
-            <ProductImageList images={_get(view, 'imageUrls')} />
+            <ProductImageList
+              images={_get(view, 'imageUrls')}
+              actions={actions}
+            />
           </Grid>
         </Grid>
       </Container>

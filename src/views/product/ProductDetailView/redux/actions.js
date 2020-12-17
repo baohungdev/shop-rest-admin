@@ -12,3 +12,7 @@ export const fetchProductDetailSuccess = createAction(
 export const fetchProductDetailFail = createAction(
   CONST.HANDLE_FETCH_PRODUCT_DETAIL_FAIL
 );
+
+export const removeProductImage = createAction(
+  CONST.HANDLE_REMOVE_PRODUCT_IMAGE
+);

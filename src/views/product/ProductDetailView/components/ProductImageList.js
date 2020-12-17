@@ -60,7 +60,7 @@ const useStyle = makeStyles(theme => ({
   }
 }));
 
-const ProductImageList = ({ images }) => {
+const ProductImageList = ({ images, actions }) => {
   const classes = useStyle();
 
   const NoImage = () => (
@@ -104,7 +104,9 @@ const ProductImageList = ({ images }) => {
                     title: classes.title
                   }}
                   actionIcon={
-                    <IconButton>
+                    <IconButton
+                      onClick={() => actions.removeProductImage({ url: src })}
+                    >
                       <DeleteIcon className={classes.title} />
                     </IconButton>
                   }
