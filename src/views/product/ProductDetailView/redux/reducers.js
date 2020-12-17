@@ -8,6 +8,9 @@ const initialStates = freeze({
   isFetchingProduct: false,
   isFetchingProductFail: false,
   fetchProductMessage: '',
+  isUploadingProductImages: false,
+  isUploadingProductImagesFail: false,
+  uploadProductImagesMessage: '',
   data: {},
   view: {
     imageUrls: []
@@ -52,6 +55,33 @@ export default handleActions(
             url => url !== action.payload.url
           )
         }
+      });
+    },
+    [actions.uploadImageBatch]: state => {
+      return freeze({
+        ...state,
+        isUploadingProductImages: true
+      });
+    },
+    [actions.uploadImageBatchSuccess]: (state, actions) => {
+      console.log(actions.payload.data);
+      return freeze({
+        ...state,
+        isUploadingProductImages: false,
+        isUploadingProductImagesFail: false,
+        uploadProductImagesMessage: '',
+        view: {
+          ...state.view,
+          imageUrls: [...state.view.imageUrls, ...actions.payload.data]
+        }
+      });
+    },
+    [actions.uploadImageBatchFail]: (state, actions) => {
+      return freeze({
+        ...state,
+        isUploadingProductImages: false,
+        isUploadingProductImagesFail: true,
+        uploadProductImagesMessage: actions.payload.message
       });
     }
   },

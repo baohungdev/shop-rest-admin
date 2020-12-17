@@ -33,3 +33,18 @@ export const fetchProductDetail = async id => {
   });
   return response;
 };
+
+export const uploadProductImages = async files => {
+  const endpoint = `${baseEndpoint}/upload/batch`;
+  const fd = new FormData();
+  files.forEach(file => fd.append('files', file));
+  const response = await request({
+    endpoint,
+    method: 'POST',
+    data: fd,
+    headerInput: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+  return response;
+};

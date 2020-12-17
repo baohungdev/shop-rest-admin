@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductDetail = ({ actions, view }) => {
+const ProductDetail = ({ actions, view, ...rest }) => {
   const queries = new URLSearchParams(useLocation().search);
   const productId = queries.get('id') || null;
 
@@ -40,7 +40,7 @@ const ProductDetail = ({ actions, view }) => {
       <Container maxWidth={false}>
         <Grid container spacing={2}>
           <Grid item lg={3}>
-            <ProductImage />
+            <ProductImage actions={actions}  {...rest}/>
           </Grid>
           <Grid item lg={9}>
             <ProductImageList

@@ -16,3 +16,15 @@ export const fetchProductDetailFail = createAction(
 export const removeProductImage = createAction(
   CONST.HANDLE_REMOVE_PRODUCT_IMAGE
 );
+
+export const uploadImageBatch = createAction(
+  CONST.HANDLE_UPLOAD_PRODUCT_IMAGES
+);
+
+export const uploadImageBatchSuccess = createAction(
+  CONST.HANDLE_UPLOAD_PRODUCT_IMAGES_SUCCESS
+);
+
+export const uploadImageBatchFail = createAction(
+  CONST.HANDLE_UPLOAD_PRODUCT_IMAGES_FAIL
+);

@@ -18,8 +18,27 @@ function* handleFetchProductDetail(action) {
   }
 }
 
+function* handleUploadProductImages(action) {
+  try {
+    const response = yield call(API.uploadProductImages, action.payload);
+
+    if (!response.success) {
+      yield put(actions.uploadImageBatchFail(response));
+      return;
+    }
+
+    yield put(actions.uploadImageBatchSuccess(response));
+  } catch (err) {
+    yield put(actions.uploadImageBatchFail(err));
+  }
+}
+
 function* onFetchProductDetail() {
   yield takeAction(actions.fetchProductDetail, handleFetchProductDetail);
 }
 
-export default [onFetchProductDetail];
+function* onUploadProductImages() {
+  yield takeAction(actions.uploadImageBatch, handleUploadProductImages);
+}
+
+export default [onFetchProductDetail, onUploadProductImages];

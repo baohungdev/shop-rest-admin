@@ -6,7 +6,8 @@ import {
   Box,
   makeStyles,
   colors,
-  ButtonBase
+  ButtonBase,
+  CircularProgress,
 } from '@material-ui/core';
 import {
   Image as ImageIcon,
@@ -37,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductImage = ({}) => {
+const ProductImage = ({ actions, isUploadingProductImages }) => {
   const [isOpenModal, setOpenModal] = useState(false);
 
   const classes = useStyles();
@@ -54,7 +55,7 @@ const ProductImage = ({}) => {
           onClose={() => setOpenModal(false)}
           onSave={files => {
             setOpenModal(false);
-            // actions.uploadImage(files[0]);
+            actions.uploadImageBatch(files);
           }}
           showPreviews={true}
           showFileNamesInPreview={true}
@@ -77,11 +78,15 @@ const ProductImage = ({}) => {
             <ButtonBase
               focusRipple
               className={classes.button}
+              disabled={isUploadingProductImages}
               focusVisibleClassName={classes.focusVisible}
               onClick={() => setOpenModal(true)}
             >
               <span className={classes.icon}>
+              {isUploadingProductImages ?
+              <CircularProgress/> :
                 <AddAPhotoIcon />
+              }
               </span>
             </ButtonBase>
           </div>
