@@ -1,5 +1,6 @@
 import freeze from 'deep-freeze';
 import { handleActions } from 'redux-actions';
+import { v4 as uuid } from 'uuid';
 import * as actions from './actions';
 
 export const name = 'ProductDetail';
@@ -195,6 +196,63 @@ export default handleActions(
         view: {
           ...state.view,
           isManageVariant: Boolean(action.payload)
+        }
+      });
+    },
+    [actions.addNewVariant]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          children: [
+            ...state.view.children,
+            {
+              id: uuid(),
+              name: '',
+              price: 0,
+              cost: 0,
+              quantity: 0
+            }
+          ]
+        }
+      });
+    },
+    [actions.deleteVariant]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          children: state.view.children.filter(
+            variant => variant.id !== action.payload.id
+          )
+        }
+      });
+    },
+
+    [actions.changeVariantProperty]: (state, action) => {
+      const matchedIndex = state.view.children.findIndex(
+        variant => variant.id === action.payload.id
+      );
+
+      if (matchedIndex === -1) {
+        return freeze({ ...state });
+      }
+
+      const matchedVariant = state.view.children[matchedIndex];
+
+      const newVariant = {
+        ...matchedVariant,
+        [action.payload.property]: action.payload.value
+      };
+
+      const newChildren = [...state.view.children];
+      newChildren[matchedIndex] = newVariant;
+
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          children: newChildren
         }
       });
     }

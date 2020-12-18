@@ -50,3 +50,10 @@ export const changeProductQuantity = createAction(CONST.HANDLE_CHANGE_QUANTITY);
 export const changeProductManageVariant = createAction(
   CONST.HANDLE_CHANGE_MANAGE_VARIANT
 );
+
+export const addNewVariant = createAction(CONST.HANDLE_ADD_NEW_VARIANT);
+export const deleteVariant = createAction(CONST.HANDLE_DELETE_VARIANT);
+
+export const changeVariantProperty = createAction(
+  CONST.HANDLE_CHANGE_VARIANT_PROPERTY
+);

@@ -188,8 +188,19 @@ const ProductInfo = ({ view: product, actions }) => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 {product.children.map(child => (
-                  <ProductVariant variant={child} />
+                  <ProductVariant key={child.id} variant={child} />
                 ))}
+              </Grid>
+              <Grid item xs={12}>
+                <Box spacing={2} display="flex" justifyContent="flex-end">
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={() => actions.addNewVariant()}
+                  >
+                    <AddIcon /> Thêm biến thể
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </Box>

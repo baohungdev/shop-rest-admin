@@ -12,10 +12,17 @@ import {
 } from '@material-ui/core';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  name,
+  actions as productDetailActions
+} from 'src/views/product/ProductDetailView/redux';
 
 const options = [
   {
     icon: DeleteIcon,
+    action: 'deleteVariant',
     text: 'Xoá'
   }
 ];
@@ -32,6 +39,10 @@ const ProductVariant = ({ actions, variant }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = ({ action, payload }) => {
+    actions[action](payload);
   };
 
   return (
@@ -62,7 +73,15 @@ const ProductVariant = ({ actions, variant }) => {
               {options.map(option => {
                 const Component = option.icon;
                 return (
-                  <MenuItem key={option} onClick={handleClose}>
+                  <MenuItem
+                    key={option}
+                    onClick={e =>
+                      handleMenuItemClick({
+                        action: option.action,
+                        payload: { id: variant.id }
+                      })
+                    }
+                  >
                     <ListItemIcon>
                       <Component />
                     </ListItemIcon>
@@ -79,22 +98,62 @@ const ProductVariant = ({ actions, variant }) => {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <Box padding={3}>
-            <TextField label="Tên biến thể" value={variant.name} />
+            <TextField
+              label="Tên biến thể"
+              value={variant.name}
+              onChange={e =>
+                actions.changeVariantProperty({
+                  id: variant.id,
+                  property: 'name',
+                  value: e.target.value
+                })
+              }
+            />
           </Box>
         </Grid>
         <Grid item xs={3}>
           <Box padding={3}>
-            <TextField label="Giá bán" value={variant.price} />
+            <TextField
+              label="Giá bán"
+              value={variant.price}
+              onChange={e =>
+                actions.changeVariantProperty({
+                  id: variant.id,
+                  property: 'price',
+                  value: e.target.value
+                })
+              }
+            />
           </Box>
         </Grid>
         <Grid item xs={3}>
           <Box padding={3}>
-            <TextField label="Giá vốn" value={variant.cost} />
+            <TextField
+              label="Giá vốn"
+              value={variant.cost}
+              onChange={e =>
+                actions.changeVariantProperty({
+                  id: variant.id,
+                  property: 'cost',
+                  value: e.target.value
+                })
+              }
+            />
           </Box>
         </Grid>
         <Grid item xs={3}>
           <Box padding={3}>
-            <TextField label="Số lượng" value={variant.quantity} />
+            <TextField
+              label="Số lượng"
+              value={variant.quantity}
+              onChange={e =>
+                actions.changeVariantProperty({
+                  id: variant.id,
+                  property: 'quantity',
+                  value: e.target.value
+                })
+              }
+            />
           </Box>
         </Grid>
       </Grid>
@@ -102,4 +161,15 @@ const ProductVariant = ({ actions, variant }) => {
   );
 };
 
-export default ProductVariant;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...productDetailActions };
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductVariant);
