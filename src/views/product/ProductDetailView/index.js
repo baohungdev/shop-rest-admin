@@ -54,7 +54,7 @@ const ProductDetail = ({ actions, view, ...rest }) => {
         <Box mt={2} />
         <Grid container spacing={2}>
           <Grid item lg={8}>
-            <ProductInfo product={view} />
+            <ProductInfo product={view} actions={actions} />
           </Grid>
           <Grid item lg={4}>
             <ProductCategory

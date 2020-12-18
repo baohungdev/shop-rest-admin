@@ -48,6 +48,7 @@ export default handleActions(
           ...state.view,
           ...action.payload.data
         }
+        // view: action.payload.data
       });
     },
     [actions.fetchProductDetailFail]: (state, action) => {
@@ -77,7 +78,6 @@ export default handleActions(
       });
     },
     [actions.uploadImageBatchSuccess]: (state, actions) => {
-      console.log(actions.payload.data);
       return freeze({
         ...state,
         isUploadingProductImages: false,
@@ -102,7 +102,8 @@ export default handleActions(
         ...state,
         isFetchingCategories: true,
         isFetchingCategoriesFail: false,
-        fetchCategoriesMessage: ''
+        fetchCategoriesMessage: '',
+        categories: []
       });
     },
     [actions.fetchCategoriesSuccess]: (state, actions) => {

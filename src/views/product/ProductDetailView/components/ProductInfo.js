@@ -24,8 +24,10 @@ import {
 } from '@material-ui/core';
 
 import MUIRichTextEditor from 'mui-rte';
+import ProductVariant from './ProductVariant';
 
 import textToMuiRteData from 'src/utils/textToMuiRteData';
+import editorStateToText from 'src/utils/editorStateToText';
 
 const muiRteTheme = createMuiTheme();
 
@@ -46,7 +48,38 @@ Object.assign(muiRteTheme, {
   }
 });
 
-const ProductInfo = ({ product }) => {
+const ProductInfo = ({ product, actions }) => {
+  const [productState, setProductState] = useState(product);
+
+  let _editorState = null;
+
+  const handleTextChange = e => {
+    setProductState(previous => {
+      return {
+        ...previous,
+        [e.target.name]: e.target.value
+      };
+    });
+  };
+
+  const handleCheckboxChange = e => {
+    setProductState(previous => {
+      return {
+        ...previous,
+        [e.target.name]: e.target.checked
+      };
+    });
+  };
+
+  const handleDescriptionChange = () => {
+    setProductState(previous => {
+      return {
+        ...previous,
+        description: editorStateToText(_editorState)
+      };
+    });
+  };
+
   return (
     <Card>
       <CardHeader title="Thông tin sản phẩm"></CardHeader>
@@ -56,10 +89,12 @@ const ProductInfo = ({ product }) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
+              name="name"
               variant="outlined"
-              value={product.name}
+              value={productState.name}
               label="Tên sản phẩm"
               required
+              onChange={handleTextChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -67,7 +102,11 @@ const ProductInfo = ({ product }) => {
               <MuiThemeProvider theme={muiRteTheme}>
                 <MUIRichTextEditor
                   label="Type something here..."
-                  defaultValue={textToMuiRteData(product.description)}
+                  defaultValue={textToMuiRteData(productState.description)}
+                  onChange={state => {
+                    _editorState = state;
+                  }}
+                  onSave={() => handleDescriptionChange()}
                 />
               </MuiThemeProvider>
             </Paper>
@@ -82,12 +121,15 @@ const ProductInfo = ({ product }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={product.price}
+                value={productState.price}
+                type="number"
                 labelWidth={60}
                 required
                 endAdornment={
                   <InputAdornment position="end">đồng</InputAdornment>
                 }
+                name="price"
+                onChange={handleTextChange}
               />
             </FormControl>
           </Grid>
@@ -98,9 +140,12 @@ const ProductInfo = ({ product }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={product.cost}
+                value={productState.cost}
                 labelWidth={60}
+                type="number"
                 required
+                name="cost"
+                onChange={handleTextChange}
                 endAdornment={
                   <InputAdornment position="end">đồng</InputAdornment>
                 }
@@ -114,9 +159,12 @@ const ProductInfo = ({ product }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={product.quantity}
+                value={productState.quantity}
                 labelWidth={60}
+                type="number"
                 required
+                name="quantity"
+                onChange={handleTextChange}
                 endAdornment={
                   <InputAdornment position="end">cái</InputAdornment>
                 }
@@ -132,9 +180,9 @@ const ProductInfo = ({ product }) => {
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={true}
-                      onChange={null}
-                      name="variant"
+                      checked={productState.isManageVariant}
+                      onChange={handleCheckboxChange}
+                      name="isManageVariant"
                       color="primary"
                     />
                   }
@@ -142,6 +190,12 @@ const ProductInfo = ({ product }) => {
                 />
               </FormGroup>
             </FormControl>
+          </Grid>
+        </Grid>
+        <Box mt={2} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <ProductVariant variant={productState} />
           </Grid>
         </Grid>
       </CardContent>

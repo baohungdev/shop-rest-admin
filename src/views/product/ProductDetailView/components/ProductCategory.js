@@ -48,21 +48,22 @@ const getPathToSelectedId = (id, data) => {
     result.unshift(item.parentId);
     id = item.parentId;
   }
-
   return result;
 };
 
-const ControlledTreeView = ({ actions, data, categorySelected }) => {
+const ControlledTreeView = ({ actions, data, product }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = useState([
-    ...getPathToSelectedId(categorySelected, data)
-  ]);
-  const selected = categorySelected;
+
+  const [expanded, setExpanded] = useState(
+    getPathToSelectedId(product.categoryId, data)
+  );
+
+  const selected = product.categoryId;
 
   const tree = buildHierachy(JSON.parse(JSON.stringify(data)));
 
   const handleToggle = (event, nodeIds) => {
-    setExpanded(nodeIds);
+    setExpanded(prevousNodeIds => nodeIds);
   };
 
   const handleSelect = (event, nodeIds) => {
@@ -96,7 +97,7 @@ const ProductCategory = ({ product, actions, categories }) => {
       <CardContent>
         <ControlledTreeView
           data={categories}
-          categorySelected={product.categoryId}
+          product={product}
           actions={actions}
         />
       </CardContent>

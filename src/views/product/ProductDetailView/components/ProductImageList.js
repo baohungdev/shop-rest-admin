@@ -43,7 +43,8 @@ const useStyle = makeStyles(theme => ({
       outline: '1px solid slategrey'
     },
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)'
+    transform: 'translateZ(0)',
+    overflow: 'hidden'
   },
   gridListTile: {
     height: '100% !important',
