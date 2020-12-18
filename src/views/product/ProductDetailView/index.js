@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, useLocation } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Box, Container, Grid, makeStyles, colors } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Grid,
+  makeStyles,
+  colors,
+  Backdrop,
+  CircularProgress
+} from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import Page from 'src/components/Page';
@@ -27,10 +35,14 @@ const useStyles = makeStyles(theme => ({
   },
   productCard: {
     height: '100%'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff'
   }
 }));
 
-const ProductDetail = ({ actions, view, ...rest }) => {
+const ProductDetail = ({ actions, view, isUpdatingProductDetail, ...rest }) => {
   const queries = new URLSearchParams(useLocation().search);
   const productId = queries.get('id') || null;
 
@@ -42,6 +54,9 @@ const ProductDetail = ({ actions, view, ...rest }) => {
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
+        <Backdrop className={classes.backdrop} open={isUpdatingProductDetail}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <ProductToolbar />
         <Grid container spacing={2}>
           <Grid item lg={3}>

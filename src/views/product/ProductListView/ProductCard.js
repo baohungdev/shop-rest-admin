@@ -16,6 +16,7 @@ import {
   Button,
   IconButton
 } from '@material-ui/core';
+import NumberFormat from 'react-number-format';
 
 import {
   Tag as TagIcon,
@@ -72,7 +73,12 @@ const ProductCard = ({ className, product, ...rest }) => {
           {product.name}
         </Typography>
         <Typography align="center" color="textPrimary" variant="body1">
-          {product.description}
+          <NumberFormat
+            value={product.price}
+            displayType={'text'}
+            thousandSeparator={true}
+            suffix={'đ'}
+          />
         </Typography>
       </CardContent>
       <Box padding={1}>
