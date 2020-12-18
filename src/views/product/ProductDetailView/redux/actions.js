@@ -57,3 +57,11 @@ export const deleteVariant = createAction(CONST.HANDLE_DELETE_VARIANT);
 export const changeVariantProperty = createAction(
   CONST.HANDLE_CHANGE_VARIANT_PROPERTY
 );
+
+export const saveProduct = createAction(CONST.HANDLE_SAVE_PRODUCT);
+
+export const saveProductSuccess = createAction(
+  CONST.HANDLE_SAVE_PRODUCT_SUCCESS
+);
+
+export const saveProductFail = createAction(CONST.HANDLE_SAVE_PRODUCT_FAIL);

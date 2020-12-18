@@ -13,6 +13,9 @@ const initialStates = freeze({
   isUploadingProductImagesFail: false,
   isFetchingCategories: false,
   isFetchingCategoriesFail: false,
+  isUpdatingProductDetail: false,
+  isUpdateProductDetailFail: false,
+  updateProductDetailMessage: '',
   fetchCategoriesMessage: '',
   categories: [],
   uploadProductImagesMessage: '',
@@ -208,6 +211,7 @@ export default handleActions(
             ...state.view.children,
             {
               id: uuid(),
+              isNew: true,
               name: '',
               price: 0,
               cost: 0,
@@ -254,6 +258,32 @@ export default handleActions(
           ...state.view,
           children: newChildren
         }
+      });
+    },
+
+    [actions.saveProduct]: (state, action) => {
+      return freeze({
+        ...state,
+        isUpdatingProductDetail: true,
+        isUpdateProductDetailFail: false,
+        updateProductDetailMessage: ''
+      });
+    },
+
+    [actions.saveProductSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isUpdatingProductDetail: false,
+        isUpdateProductDetailFail: false,
+        updateProductDetailMessage: ''
+      });
+    },
+    [actions.saveProductFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isUpdatingProductDetail: false,
+        isUpdateProductDetailFail: true,
+        updateProductDetailMessage: action.payload.message
       });
     }
   },

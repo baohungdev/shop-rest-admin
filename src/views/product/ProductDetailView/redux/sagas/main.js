@@ -2,6 +2,23 @@ import { call, put } from 'redux-saga/effects';
 import * as actions from 'src/views/product/ProductDetailView/redux/actions';
 import * as API from 'src/apis/product';
 import { takeAction } from 'src/services/forkActionSagas';
+import { push } from 'connected-react-router';
+
+function* handleSaveProduct(action) {
+  try {
+    const response = yield call(API.updateProductDetail, action.payload);
+
+    if (!response.success) {
+      yield put(actions.saveProductFail(response));
+      return;
+    }
+
+    yield put(actions.saveProductSuccess(response));
+    yield put(push('/app/products'));
+  } catch (err) {
+    yield put(actions.saveProductFail(err));
+  }
+}
 
 function* handleFetchProductDetail(action) {
   try {
@@ -60,4 +77,13 @@ function* onUploadProductImages() {
   yield takeAction(actions.uploadImageBatch, handleUploadProductImages);
 }
 
-export default [onFetchProductDetail, onUploadProductImages, onFetchCategories];
+function* onSaveProduct() {
+  yield takeAction(actions.saveProduct, handleSaveProduct);
+}
+
+export default [
+  onFetchProductDetail,
+  onUploadProductImages,
+  onFetchCategories,
+  onSaveProduct
+];

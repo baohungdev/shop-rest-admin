@@ -4,6 +4,13 @@ import clsx from 'clsx';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  name,
+  actions as productDetailActions
+} from 'src/views/product/ProductDetailView/redux';
+
 const useStyles = makeStyles(theme => ({
   root: {},
   importButton: {
@@ -14,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Toolbar = ({ className, actions, ...rest }) => {
+const ProductToolbar = ({ className, view: product, actions, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -23,7 +30,11 @@ const Toolbar = ({ className, actions, ...rest }) => {
         <Button color="error" className={classes.exportButton}>
           Xoá sản phẩm
         </Button>
-        <Button color="secondary" variant="contained">
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={e => actions.saveProduct(product)}
+        >
           Lưu sản phẩm
         </Button>
       </Box>
@@ -32,8 +43,19 @@ const Toolbar = ({ className, actions, ...rest }) => {
   );
 };
 
-Toolbar.propTypes = {
+ProductToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default Toolbar;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...productDetailActions };
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductToolbar);

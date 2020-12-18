@@ -120,7 +120,7 @@ const ProductVariant = ({ actions, variant }) => {
                 actions.changeVariantProperty({
                   id: variant.id,
                   property: 'price',
-                  value: e.target.value
+                  value: Number(e.target.value)
                 })
               }
             />
@@ -135,7 +135,7 @@ const ProductVariant = ({ actions, variant }) => {
                 actions.changeVariantProperty({
                   id: variant.id,
                   property: 'cost',
-                  value: e.target.value
+                  value: Number(e.target.value)
                 })
               }
             />
@@ -150,7 +150,7 @@ const ProductVariant = ({ actions, variant }) => {
                 actions.changeVariantProperty({
                   id: variant.id,
                   property: 'quantity',
-                  value: e.target.value
+                  value: Number(e.target.value)
                 })
               }
             />

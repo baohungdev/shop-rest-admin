@@ -58,3 +58,20 @@ export const fetchCategories = async query => {
   });
   return response;
 };
+
+export const updateProductDetail = async updatePayload => {
+  const endpoint = `${baseEndpoint}/product`;
+
+  const clonePayload = JSON.parse(JSON.stringify(updatePayload));
+
+  clonePayload.children.map(variant => {
+    if (variant.isNew) variant.id = 0;
+  });
+
+  const response = await request({
+    endpoint,
+    method: 'PUT',
+    data: clonePayload
+  });
+  return response;
+};
