@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  name,
+  actions as productDetailActions
+} from 'src/views/product/ProductDetailView/redux';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import {
   Card,
@@ -20,7 +26,11 @@ import {
   FormLabel,
   Switch,
   Input,
-  colors
+  colors,
+  Fab,
+  AppBar,
+  Toolbar,
+  IconButton
 } from '@material-ui/core';
 
 import MUIRichTextEditor from 'mui-rte';
@@ -28,6 +38,10 @@ import ProductVariant from './ProductVariant';
 
 import textToMuiRteData from 'src/utils/textToMuiRteData';
 import editorStateToText from 'src/utils/editorStateToText';
+
+import AddIcon from '@material-ui/icons/Add';
+import MenuIcon from '@material-ui/icons/Menu';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 const muiRteTheme = createMuiTheme();
 
@@ -48,36 +62,11 @@ Object.assign(muiRteTheme, {
   }
 });
 
-const ProductInfo = ({ product, actions }) => {
-  const [productState, setProductState] = useState(product);
-
+const ProductInfo = ({ view: product, actions }) => {
   let _editorState = null;
 
-  const handleTextChange = e => {
-    setProductState(previous => {
-      return {
-        ...previous,
-        [e.target.name]: e.target.value
-      };
-    });
-  };
-
-  const handleCheckboxChange = e => {
-    setProductState(previous => {
-      return {
-        ...previous,
-        [e.target.name]: e.target.checked
-      };
-    });
-  };
-
   const handleDescriptionChange = () => {
-    setProductState(previous => {
-      return {
-        ...previous,
-        description: editorStateToText(_editorState)
-      };
-    });
+    actions.changeProductDescription(editorStateToText(_editorState));
   };
 
   return (
@@ -91,10 +80,10 @@ const ProductInfo = ({ product, actions }) => {
               fullWidth
               name="name"
               variant="outlined"
-              value={productState.name}
+              value={product.name}
               label="Tên sản phẩm"
               required
-              onChange={handleTextChange}
+              onChange={e => actions.changeProductName(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -102,7 +91,7 @@ const ProductInfo = ({ product, actions }) => {
               <MuiThemeProvider theme={muiRteTheme}>
                 <MUIRichTextEditor
                   label="Type something here..."
-                  defaultValue={textToMuiRteData(productState.description)}
+                  defaultValue={textToMuiRteData(product.description)}
                   onChange={state => {
                     _editorState = state;
                   }}
@@ -121,7 +110,7 @@ const ProductInfo = ({ product, actions }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={productState.price}
+                value={product.price}
                 type="number"
                 labelWidth={60}
                 required
@@ -129,7 +118,7 @@ const ProductInfo = ({ product, actions }) => {
                   <InputAdornment position="end">đồng</InputAdornment>
                 }
                 name="price"
-                onChange={handleTextChange}
+                onChange={e => actions.changeProductPrice(e.target.value)}
               />
             </FormControl>
           </Grid>
@@ -140,12 +129,12 @@ const ProductInfo = ({ product, actions }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={productState.cost}
+                value={product.cost}
                 labelWidth={60}
                 type="number"
                 required
                 name="cost"
-                onChange={handleTextChange}
+                onChange={e => actions.changeProductCost(e.target.value)}
                 endAdornment={
                   <InputAdornment position="end">đồng</InputAdornment>
                 }
@@ -159,12 +148,12 @@ const ProductInfo = ({ product, actions }) => {
               </InputLabel>
               <OutlinedInput
                 fullWidth
-                value={productState.quantity}
+                value={product.quantity}
                 labelWidth={60}
                 type="number"
                 required
                 name="quantity"
-                onChange={handleTextChange}
+                onChange={e => actions.changeProductQuantity(e.target.value)}
                 endAdornment={
                   <InputAdornment position="end">cái</InputAdornment>
                 }
@@ -180,8 +169,10 @@ const ProductInfo = ({ product, actions }) => {
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={productState.isManageVariant}
-                      onChange={handleCheckboxChange}
+                      checked={product.isManageVariant}
+                      onChange={e =>
+                        actions.changeProductManageVariant(e.target.checked)
+                      }
                       name="isManageVariant"
                       color="primary"
                     />
@@ -192,22 +183,32 @@ const ProductInfo = ({ product, actions }) => {
             </FormControl>
           </Grid>
         </Grid>
-        <Box mt={2} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <ProductVariant variant={productState} />
-          </Grid>
-        </Grid>
+        {product.isManageVariant ? (
+          <Box mt={2}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                {product.children.map(child => (
+                  <ProductVariant variant={child} />
+                ))}
+              </Grid>
+            </Grid>
+          </Box>
+        ) : null}
       </CardContent>
       <Box mt={3} />
-      <Divider />
-      <CardActions>
-        <Button color="primary" variant="contained">
-          Cập nhật
-        </Button>
-      </CardActions>
     </Card>
   );
 };
 
-export default ProductInfo;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...productDetailActions };
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);

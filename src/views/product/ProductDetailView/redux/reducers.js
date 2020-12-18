@@ -23,7 +23,9 @@ const initialStates = freeze({
     price: 0,
     quantity: 0,
     categoryId: null,
-    cost: 0
+    children: [],
+    cost: 0,
+    isManageVariant: false
   }
 });
 
@@ -130,6 +132,69 @@ export default handleActions(
         view: {
           ...state.view,
           categoryId: actions.payload
+        }
+      });
+    },
+    [actions.changeProductStatus]: (state, actions) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          status: Number(actions.payload)
+        }
+      });
+    },
+    [actions.changeProductName]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          name: action.payload
+        }
+      });
+    },
+    [actions.changeProductDescription]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          description: action.payload
+        }
+      });
+    },
+    [actions.changeProductPrice]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          price: Number(action.payload)
+        }
+      });
+    },
+    [actions.changeProductCost]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          cost: Number(action.payload)
+        }
+      });
+    },
+    [actions.changeProductQuantity]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          quantity: Number(action.payload)
+        }
+      });
+    },
+    [actions.changeProductManageVariant]: (state, action) => {
+      return freeze({
+        ...state,
+        view: {
+          ...state.view,
+          isManageVariant: Boolean(action.payload)
         }
       });
     }

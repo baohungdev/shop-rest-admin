@@ -10,6 +10,8 @@ import ProductImage from './components/ProductImage';
 import ProductImageList from './components/ProductImageList';
 import ProductInfo from './components/ProductInfo';
 import ProductCategory from './components/ProductCategory';
+import ProductToolbar from './components/ProductToolbar';
+import ProductStatus from './components/ProductStatus';
 
 import {
   name,
@@ -40,6 +42,7 @@ const ProductDetail = ({ actions, view, ...rest }) => {
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
+        <ProductToolbar />
         <Grid container spacing={2}>
           <Grid item lg={3}>
             <ProductImage actions={actions} {...rest} />
@@ -54,14 +57,21 @@ const ProductDetail = ({ actions, view, ...rest }) => {
         <Box mt={2} />
         <Grid container spacing={2}>
           <Grid item lg={8}>
-            <ProductInfo product={view} actions={actions} />
+            <ProductInfo />
           </Grid>
           <Grid item lg={4}>
-            <ProductCategory
-              product={view}
-              actions={actions}
-              categories={rest.categories}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <ProductCategory
+                  product={view}
+                  actions={actions}
+                  categories={rest.categories}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ProductStatus />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Container>

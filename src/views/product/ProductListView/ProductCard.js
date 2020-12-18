@@ -45,7 +45,10 @@ const ProductCard = ({ className, product, ...rest }) => {
 
   const statusToText = status => {
     if (status == 0) return { icon: EyeOffIcon, text: 'Ẩn' };
-    if (status == 1) return { icon: ShoppingCartIcon, text: 'Đang bán' };
+    if (status == 1) return { icon: ShoppingCartIcon, text: 'Hết hàng' };
+    if (status == 2) return { icon: ShoppingCartIcon, text: 'Đang bán' };
+    if (status == 3)
+      return { icon: ShoppingCartIcon, text: 'Ngừng kinh doanh' };
   };
 
   const status = statusToText(product.status);

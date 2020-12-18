@@ -25,7 +25,6 @@ const useStyle = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    overflow: 'hidden',
     backgroundColor: theme.palette.background.paper
   },
   gridList: {
@@ -43,8 +42,7 @@ const useStyle = makeStyles(theme => ({
       outline: '1px solid slategrey'
     },
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
-    overflow: 'hidden'
+    transform: 'translateZ(0)'
   },
   gridListTile: {
     height: '100% !important',

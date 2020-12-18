@@ -38,3 +38,15 @@ export const fetchCategoriesFail = createAction(
 );
 
 export const selectCategory = createAction(CONST.HANDLE_SELECT_CATEGORY);
+export const changeProductStatus = createAction(CONST.HANDLE_CHANGE_STATUS);
+
+export const changeProductName = createAction(CONST.HANDLE_CHANGE_NAME);
+export const changeProductDescription = createAction(
+  CONST.HANDLE_CHANGE_DESCRIPTION
+);
+export const changeProductPrice = createAction(CONST.HANDLE_CHANGE_PRICE);
+export const changeProductCost = createAction(CONST.HANDLE_CHANGE_COST);
+export const changeProductQuantity = createAction(CONST.HANDLE_CHANGE_QUANTITY);
+export const changeProductManageVariant = createAction(
+  CONST.HANDLE_CHANGE_MANAGE_VARIANT
+);

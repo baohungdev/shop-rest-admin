@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 const buildTreeDom = tree => {
   return _map(tree, item => {
     return (
-      <TreeItem nodeId={item.id} label={item.name}>
+      <TreeItem nodeId={item.id} key={item.id} label={item.name}>
         {buildTreeDom(item.children)}
       </TreeItem>
     );
@@ -55,12 +55,18 @@ const ControlledTreeView = ({ actions, data, product }) => {
   const classes = useStyles();
 
   const [expanded, setExpanded] = useState(
-    getPathToSelectedId(product.categoryId, data)
+    getPathToSelectedId(product.categoryId, data) || []
   );
 
   const selected = product.categoryId;
 
   const tree = buildHierachy(JSON.parse(JSON.stringify(data)));
+
+  let _expanded = expanded;
+
+  React.useEffect(() => {
+    _expanded = getPathToSelectedId(product.categoryId, data) || [];
+  }, []);
 
   const handleToggle = (event, nodeIds) => {
     setExpanded(prevousNodeIds => nodeIds);
@@ -75,7 +81,7 @@ const ControlledTreeView = ({ actions, data, product }) => {
       className={classes.root}
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
-      expanded={expanded}
+      expanded={_expanded}
       selected={selected}
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
