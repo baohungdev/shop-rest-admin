@@ -9,6 +9,9 @@ import Product, {
 import Account, {
   name as nameOfAccount
 } from 'src/views/account/AccountView/redux';
+import ProductDetail, {
+  name as nameOfProductDetail
+} from 'src/views/product/ProductDetailView/redux';
 
 export default (history, asyncReducers) =>
   combineReducers({
@@ -17,5 +20,6 @@ export default (history, asyncReducers) =>
     [nameOfLogin]: Login,
     [nameOfAccount]: Account,
     [nameOfProduct]: Product,
+    [nameOfProductDetail]: ProductDetail,
     loadingBar: loadingBarReducer
   });

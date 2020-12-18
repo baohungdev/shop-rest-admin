@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 import _get from 'lodash/get';
 import {
   Avatar,
@@ -12,16 +13,15 @@ import {
   Typography,
   makeStyles,
   Chip,
-  Button
+  Button,
+  IconButton
 } from '@material-ui/core';
-
-import { withStyles } from '@material-ui/core/styles';
-import { green, red, blue } from '@material-ui/core/colors';
 
 import {
   Tag as TagIcon,
   EyeOff as EyeOffIcon,
-  ShoppingCart as ShoppingCartIcon
+  ShoppingCart as ShoppingCartIcon,
+  Trash as TrashIcon
 } from 'react-feather';
 
 const useStyles = makeStyles(theme => ({
@@ -38,32 +38,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BlueButton = withStyles(theme => ({
-  root: {
-    color: theme.palette.getContrastText(blue[500]),
-    backgroundColor: blue[500],
-    '&:hover': {
-      backgroundColor: blue[700]
-    }
-  }
-}))(Button);
-
-const RedButton = withStyles(theme => ({
-  root: {
-    color: theme.palette.getContrastText(red[500]),
-    backgroundColor: red[500],
-    '&:hover': {
-      backgroundColor: red[700]
-    }
-  }
-}))(Button);
-
 const ProductCard = ({ className, product, ...rest }) => {
   const classes = useStyles();
 
+  const history = useHistory();
+
   const statusToText = status => {
     if (status == 0) return { icon: EyeOffIcon, text: 'Ẩn' };
-    if (status == 1) return { icon: ShoppingCartIcon, text: 'Đang bán' };
+    if (status == 1) return { icon: ShoppingCartIcon, text: 'Hết hàng' };
+    if (status == 2) return { icon: ShoppingCartIcon, text: 'Đang bán' };
+    if (status == 3)
+      return { icon: ShoppingCartIcon, text: 'Ngừng kinh doanh' };
   };
 
   const status = statusToText(product.status);
@@ -90,40 +75,54 @@ const ProductCard = ({ className, product, ...rest }) => {
           {product.description}
         </Typography>
       </CardContent>
-      <Box flexGrow={1} padding={1}>
-        <Chip
-          icon={<TagIcon scale={0.5} />}
-          color="primary"
-          variant="default"
-          label={product.categoryText}
-          size="small"
-          variant="outlined"
-        />
-        <Chip
-          icon={<status.icon />}
-          color="default"
-          variant="default"
-          label={status.text}
-          size="small"
-          variant="outlined"
-        />
+      <Box padding={1}>
+        <Grid spacing={1} container justify="center">
+          <Grid item>
+            <Chip
+              color="primary"
+              variant="default"
+              label={product.categoryText}
+              size="small"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item>
+            <Chip
+              color="default"
+              variant="default"
+              label={status.text}
+              size="small"
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
       </Box>
       <Divider />
       <Box p={2}>
         <Grid container justify="space-between" spacing={2}>
           <Grid className={classes.statsItem} item></Grid>
           <Grid className={classes.statsItem} item>
-            <BlueButton variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                history.push(
+                  `${history.location.pathname}/view?id=${product.id}`
+                )
+              }
+            >
               <Typography color="inherit" display="inline" variant="body2">
                 Cập nhật
               </Typography>
-            </BlueButton>
+            </Button>
             <Box m={1} />
-            <RedButton variant="contained" color="primary">
-              <Typography color="inherit" display="inline" variant="body2">
-                Xóa
-              </Typography>
-            </RedButton>
+            <IconButton
+              color="secondary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <TrashIcon />
+            </IconButton>
           </Grid>
         </Grid>
       </Box>
