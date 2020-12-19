@@ -26,6 +26,7 @@ function* handleFetchProductDetail(action) {
 
     if (!response.success) {
       yield put(actions.fetchProductDetailFail(response));
+      yield put(push('/error'));
       return;
     }
 

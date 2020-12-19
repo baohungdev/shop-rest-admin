@@ -140,7 +140,7 @@ export default handleActions(
         ...state,
         view: {
           ...state.view,
-          categoryId: actions.payload
+          categoryId: Number(actions.payload)
         }
       });
     },
