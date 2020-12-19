@@ -2,6 +2,7 @@ import freeze from 'deep-freeze';
 import { handleActions } from 'redux-actions';
 import { v4 as uuid } from 'uuid';
 import * as actions from './actions';
+import ApiErrorCode from 'src/constants/apiErrorCode';
 
 export const name = 'AddProductDetail';
 

@@ -53,7 +53,10 @@ const NewProductDetail = ({ actions, add, ...rest }) => {
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
-        <Backdrop className={classes.backdrop} open={false}>
+        <Backdrop
+          className={classes.backdrop}
+          open={rest.isAddingProductDetail}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
         <ProductToolbar />
