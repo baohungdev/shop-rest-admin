@@ -42,6 +42,7 @@ import editorStateToText from 'src/utils/editorStateToText';
 import AddIcon from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const muiRteTheme = createMuiTheme();
 
@@ -62,7 +63,7 @@ Object.assign(muiRteTheme, {
   }
 });
 
-const ProductInfo = ({ view: product, actions }) => {
+const ProductInfo = ({ view: product, actions, isFetchingProduct }) => {
   let _editorState = null;
 
   const handleDescriptionChange = () => {
@@ -74,137 +75,162 @@ const ProductInfo = ({ view: product, actions }) => {
       <CardHeader title="Thông tin sản phẩm"></CardHeader>
       <Divider />
       <CardContent>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              name="name"
-              variant="outlined"
-              value={product.name}
-              label="Tên sản phẩm"
-              required
-              onChange={e => actions.changeProductName(e.target.value)}
+        {isFetchingProduct ? (
+          <React.Fragment>
+            <Skeleton animation="wave" variant="rect" height={400} />
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Paper>
-              <MuiThemeProvider theme={muiRteTheme}>
-                <MUIRichTextEditor
-                  label="Type something here..."
-                  defaultValue={textToMuiRteData(product.description)}
-                  onChange={state => {
-                    _editorState = state;
-                  }}
-                  onSave={() => handleDescriptionChange()}
-                />
-              </MuiThemeProvider>
-            </Paper>
-          </Grid>
-        </Grid>
-        <Box mt={3} />
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-amount">
-                Giá bán
-              </InputLabel>
-              <OutlinedInput
-                fullWidth
-                value={product.price}
-                type="number"
-                labelWidth={60}
-                required
-                endAdornment={
-                  <InputAdornment position="end">đồng</InputAdornment>
-                }
-                name="price"
-                onChange={e => actions.changeProductPrice(e.target.value)}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-amount">
-                Giá vốn
-              </InputLabel>
-              <OutlinedInput
-                fullWidth
-                value={product.cost}
-                labelWidth={60}
-                type="number"
-                required
-                name="cost"
-                onChange={e => actions.changeProductCost(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">đồng</InputAdornment>
-                }
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-amount">
-                Số lượng
-              </InputLabel>
-              <OutlinedInput
-                fullWidth
-                value={product.quantity}
-                labelWidth={60}
-                type="number"
-                required
-                name="quantity"
-                onChange={e => actions.changeProductQuantity(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">cái</InputAdornment>
-                }
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Box mt={2} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={product.isManageVariant}
-                      onChange={e =>
-                        actions.changeProductManageVariant(e.target.checked)
-                      }
-                      name="isManageVariant"
-                      color="primary"
-                    />
-                  }
-                  label="Sản phẩm có biến thể"
-                />
-              </FormGroup>
-            </FormControl>
-          </Grid>
-        </Grid>
-        {product.isManageVariant ? (
-          <Box mt={2}>
-            <Grid container spacing={2}>
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
+            />
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
+            />
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
-                {product.children.map(child => (
-                  <ProductVariant key={child.id} variant={child} />
-                ))}
+                <TextField
+                  fullWidth
+                  name="name"
+                  variant="outlined"
+                  value={product.name}
+                  label="Tên sản phẩm"
+                  required
+                  onChange={e => actions.changeProductName(e.target.value)}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Box spacing={2} display="flex" justifyContent="flex-end">
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={() => actions.addNewVariant()}
-                  >
-                    <AddIcon /> Thêm biến thể
-                  </Button>
-                </Box>
+                <Paper>
+                  <MuiThemeProvider theme={muiRteTheme}>
+                    <MUIRichTextEditor
+                      label="Type something here..."
+                      defaultValue={textToMuiRteData(product.description)}
+                      onChange={state => {
+                        _editorState = state;
+                      }}
+                      onSave={() => handleDescriptionChange()}
+                    />
+                  </MuiThemeProvider>
+                </Paper>
               </Grid>
             </Grid>
-          </Box>
-        ) : null}
+            <Box mt={3} />
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-amount">
+                    Giá bán
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    value={product.price}
+                    type="number"
+                    labelWidth={60}
+                    required
+                    endAdornment={
+                      <InputAdornment position="end">đồng</InputAdornment>
+                    }
+                    name="price"
+                    onChange={e => actions.changeProductPrice(e.target.value)}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-amount">
+                    Giá vốn
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    value={product.cost}
+                    labelWidth={60}
+                    type="number"
+                    required
+                    name="cost"
+                    onChange={e => actions.changeProductCost(e.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">đồng</InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-amount">
+                    Số lượng
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    value={product.quantity}
+                    labelWidth={60}
+                    type="number"
+                    required
+                    name="quantity"
+                    onChange={e =>
+                      actions.changeProductQuantity(e.target.value)
+                    }
+                    endAdornment={
+                      <InputAdornment position="end">cái</InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+            <Box mt={2} />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FormControl component="fieldset">
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={product.isManageVariant}
+                          onChange={e =>
+                            actions.changeProductManageVariant(e.target.checked)
+                          }
+                          name="isManageVariant"
+                          color="primary"
+                        />
+                      }
+                      label="Sản phẩm có biến thể"
+                    />
+                  </FormGroup>
+                </FormControl>
+              </Grid>
+            </Grid>
+            {product.isManageVariant ? (
+              <Box mt={2}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    {product.children.map(child => (
+                      <ProductVariant key={child.id} variant={child} />
+                    ))}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Box spacing={2} display="flex" justifyContent="flex-end">
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() => actions.addNewVariant()}
+                      >
+                        <AddIcon /> Thêm biến thể
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            ) : null}
+          </React.Fragment>
+        )}
       </CardContent>
       <Box mt={3} />
     </Card>
