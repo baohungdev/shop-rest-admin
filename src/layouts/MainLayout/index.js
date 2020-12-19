@@ -5,6 +5,7 @@ import TopBar from './TopBar';
 import { store } from 'src/AppRenderer';
 import { name, sagas } from 'src/views/auth/redux';
 import LogoutView from 'src/views/auth/LogoutView';
+import NotFoundView from 'src/views/errors/NotFoundView';
 
 const LoginView = lazy(() =>
   import('src/views/auth/LoginView').then(module => {
@@ -51,6 +52,7 @@ const MainLayout = () => {
             <Switch>
               <LoginView path="/login" exact />
               <Route path="/logout" exact component={<LogoutView />} />
+              <Route path="/error" exact component={NotFoundView} />
               <Redirect path="/" exact to="/app/dashboard" />
             </Switch>
           </div>

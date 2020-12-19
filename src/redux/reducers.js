@@ -12,12 +12,22 @@ import Account, {
 import ProductDetail, {
   name as nameOfProductDetail
 } from 'src/views/product/ProductDetailView/redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+  key: 'Login',
+  storage,
+  whiteList: ['Login']
+};
+
+const persistedLoginReducer = persistReducer(persistConfig, Login);
 
 export default (history, asyncReducers) =>
   combineReducers({
     ...asyncReducers,
     router: connectRouter(history),
-    [nameOfLogin]: Login,
+    [nameOfLogin]: persistedLoginReducer,
     [nameOfAccount]: Account,
     [nameOfProduct]: Product,
     [nameOfProductDetail]: ProductDetail,

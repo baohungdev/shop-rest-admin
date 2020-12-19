@@ -11,10 +11,14 @@ const initialStates = freeze({
   fetchProductMessage: '',
   isUploadingProductImages: false,
   isUploadingProductImagesFail: false,
+  haveUpdatedProductSuccess: false,
   isFetchingCategories: false,
   isFetchingCategoriesFail: false,
   isUpdatingProductDetail: false,
   isUpdateProductDetailFail: false,
+  isDeletingProduct: false,
+  isDeleteProductFail: false,
+  deleteProductFailMessage: true,
   updateProductDetailMessage: '',
   fetchCategoriesMessage: '',
   categories: [],
@@ -26,7 +30,8 @@ const initialStates = freeze({
     description: 'Mô tả sản phẩm',
     price: 0,
     quantity: 0,
-    categoryId: null,
+    categoryId: 1,
+    status: 0,
     children: [],
     cost: 0,
     isManageVariant: false
@@ -135,7 +140,7 @@ export default handleActions(
         ...state,
         view: {
           ...state.view,
-          categoryId: actions.payload
+          categoryId: Number(actions.payload)
         }
       });
     },
@@ -266,7 +271,8 @@ export default handleActions(
         ...state,
         isUpdatingProductDetail: true,
         isUpdateProductDetailFail: false,
-        updateProductDetailMessage: ''
+        updateProductDetailMessage: '',
+        haveUpdatedProductSuccess: false
       });
     },
 
@@ -275,7 +281,8 @@ export default handleActions(
         ...state,
         isUpdatingProductDetail: false,
         isUpdateProductDetailFail: false,
-        updateProductDetailMessage: ''
+        updateProductDetailMessage: '',
+        haveUpdatedProductSuccess: true
       });
     },
     [actions.saveProductFail]: (state, action) => {
@@ -283,7 +290,32 @@ export default handleActions(
         ...state,
         isUpdatingProductDetail: false,
         isUpdateProductDetailFail: true,
-        updateProductDetailMessage: action.payload.message
+        updateProductDetailMessage: action.payload.message,
+        haveUpdatedProductSuccess: false
+      });
+    },
+    [actions.deleteProduct]: (state, action) => {
+      return freeze({
+        ...state,
+        isDeletingProduct: true,
+        isDeleteProductFail: false,
+        deleteProductFailMessage: ''
+      });
+    },
+    [actions.deleteProductFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isDeletingProduct: false,
+        isDeleteProductFail: true,
+        deleteProductFailMessage: action.payload.message
+      });
+    },
+    [actions.deleteProductSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isDeletingProduct: false,
+        isDeleteProductFail: false,
+        deleteProductFailMessage: ''
       });
     }
   },

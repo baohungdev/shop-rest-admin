@@ -75,3 +75,13 @@ export const updateProductDetail = async updatePayload => {
   });
   return response;
 };
+
+export const deleteProduct = async productId => {
+  const endpoint = `${baseEndpoint}/product/${productId}`;
+  const response = await request({
+    endpoint,
+    method: 'DELETE',
+    data: {}
+  });
+  return response;
+};

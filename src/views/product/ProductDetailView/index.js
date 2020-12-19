@@ -42,7 +42,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductDetail = ({ actions, view, isUpdatingProductDetail, ...rest }) => {
+const ProductDetail = ({
+  actions,
+  view,
+  isUpdatingProductDetail,
+  isDeletingProduct,
+  ...rest
+}) => {
   const queries = new URLSearchParams(useLocation().search);
   const productId = queries.get('id') || null;
 
@@ -54,7 +60,10 @@ const ProductDetail = ({ actions, view, isUpdatingProductDetail, ...rest }) => {
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
-        <Backdrop className={classes.backdrop} open={isUpdatingProductDetail}>
+        <Backdrop
+          className={classes.backdrop}
+          open={isUpdatingProductDetail || isDeletingProduct}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
         <ProductToolbar />

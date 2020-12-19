@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 const buildTreeDom = tree => {
   return _map(tree, item => {
     return (
-      <TreeItem nodeId={item.id} key={item.id} label={item.name}>
+      <TreeItem nodeId={`${item.id}`} key={item.id} label={item.name}>
         {buildTreeDom(item.children)}
       </TreeItem>
     );

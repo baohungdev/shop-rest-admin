@@ -11,23 +11,46 @@ import {
   actions as productDetailActions
 } from 'src/views/product/ProductDetailView/redux';
 
+import AlertDialog from 'src/components/AlertDialog';
+
 const useStyles = makeStyles(theme => ({
   root: {},
-  importButton: {
+  saveButton: {
     marginRight: theme.spacing(1)
   },
-  exportButton: {
+  deleteButton: {
     marginRight: theme.spacing(1)
   }
 }));
 
 const ProductToolbar = ({ className, view: product, actions, ...rest }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const onDeleteClick = () => {
+    setOpen(true);
+  };
+
   const classes = useStyles();
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
+      <AlertDialog
+        open={open}
+        title="Xác nhận xóa sản phẩm"
+        content="Đây là tác vụ không thể phục hồi, bạn có chắc muốn xóa sản phẩm này không?"
+        aggreeText="Xóa"
+        disagreeText="Hủy bỏ"
+        onAgreeClick={() => actions.deleteProduct(product.id)}
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
       <Box display="flex" justifyContent="flex-end">
-        <Button color="error" className={classes.exportButton}>
+        <Button
+          color="error"
+          className={classes.deleteButton}
+          onClick={onDeleteClick}
+        >
           Xoá sản phẩm
         </Button>
         <Button

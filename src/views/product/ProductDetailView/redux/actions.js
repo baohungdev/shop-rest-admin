@@ -65,3 +65,9 @@ export const saveProductSuccess = createAction(
 );
 
 export const saveProductFail = createAction(CONST.HANDLE_SAVE_PRODUCT_FAIL);
+
+export const deleteProduct = createAction(CONST.HANDLE_DELETE_PRODUCT);
+export const deleteProductSuccess = createAction(
+  CONST.HANDLE_DELETE_PRODUCT_SUCCESS
+);
+export const deleteProductFail = createAction(CONST.HANDLE_DELETE_PRODUCT_FAIL);
