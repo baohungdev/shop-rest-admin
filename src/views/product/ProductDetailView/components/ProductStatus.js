@@ -31,10 +31,10 @@ const ProductStatus = ({ view: product, actions }) => {
         <FormControl component="fieldset">
           <RadioGroup
             name="status"
-            value={product.status}
-            onChange={e => actions.changeProductStatus(e.target.value)}
+            value={product.status || 0}
+            onChange={e => actions.changeProductStatus(Number(e.target.value))}
           >
-            {productStatusOptions.map(option => {
+            {productStatusOptions.map((option, index) => {
               return (
                 <FormControlLabel
                   value={option.value}

@@ -3,8 +3,7 @@ import { routerMiddleware, connectRouter } from 'connected-react-router';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import createSagaMiddleware from 'redux-saga';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistStore } from 'redux-persist';
 import { createLogger } from 'redux-logger';
 
 import makeRootReducer from './reducers';
@@ -36,7 +35,7 @@ const createSagaInjector = (runSaga, rootSaga) => {
   // Create a dictionary to keep track of injected sagas
   const injectedSagas = new Map();
 
-  const isInjected = (key) => injectedSagas.has(key);
+  const isInjected = key => injectedSagas.has(key);
   const injectSaga = (key, saga) => {
     if (isInjected(key)) return;
     const task = runSaga(saga);
@@ -57,20 +56,17 @@ const composeEnhancers =
       })
     : compose;
 
-const rootReducer = connectRouter(history)(makeRootReducer(history));
+// const persistConfig = {
+//   key: 'Login',
+//   storage,
+//   whiteList: ['Login']
+// };
 
-const persistConfig = {
-  key: 'userInfo',
-  storage,
-  whiteList: ['Login'],
-  blackList: ['loadingBar']
-};
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const configureStore = (initialState) => {
+export const configureStore = initialState => {
   const store = createStore(
-    persistedReducer,
+    connectRouter(history)(makeRootReducer(history)),
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
