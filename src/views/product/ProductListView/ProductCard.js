@@ -121,14 +121,6 @@ const ProductCard = ({ className, product, ...rest }) => {
                 Cập nhật
               </Typography>
             </Button>
-            <Box m={1} />
-            <IconButton
-              color="secondary"
-              aria-label="upload picture"
-              component="span"
-            >
-              <TrashIcon />
-            </IconButton>
           </Grid>
         </Grid>
       </Box>
