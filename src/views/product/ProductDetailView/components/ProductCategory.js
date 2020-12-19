@@ -18,6 +18,14 @@ import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
+import Skeleton from '@material-ui/lab/Skeleton';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  name,
+  actions as productDetailActions
+} from 'src/views/product/ProductDetailView/redux';
 
 import buildHierachy from 'src/utils/buildHierachy';
 
@@ -91,7 +99,12 @@ const ControlledTreeView = ({ actions, data, product }) => {
   );
 };
 
-const ProductCategory = ({ product, actions, categories }) => {
+const ProductCategory = ({
+  view: product,
+  actions,
+  isFetchingCategories,
+  categories
+}) => {
   useEffect(() => {
     actions.fetchCategories();
   }, []);
@@ -101,14 +114,46 @@ const ProductCategory = ({ product, actions, categories }) => {
       <CardHeader title="Phân loại" />
       <Divider />
       <CardContent>
-        <ControlledTreeView
-          data={categories}
-          product={product}
-          actions={actions}
-        />
+        {isFetchingCategories ? (
+          <React.Fragment>
+            <Skeleton animation="wave" height={10} />
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
+            />
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
+            />
+            <Skeleton
+              animation="wave"
+              height={10}
+              style={{ marginBottom: 6 }}
+            />
+          </React.Fragment>
+        ) : (
+          <ControlledTreeView
+            data={categories}
+            product={product}
+            actions={actions}
+          />
+        )}
       </CardContent>
     </Card>
   );
 };
 
-export default ProductCategory;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...productDetailActions };
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory);

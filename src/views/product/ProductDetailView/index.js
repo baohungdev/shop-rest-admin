@@ -8,9 +8,12 @@ import {
   Grid,
   makeStyles,
   colors,
+  Card,
+  CardContent,
   Backdrop,
   CircularProgress
 } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import Page from 'src/components/Page';
@@ -45,6 +48,7 @@ const useStyles = makeStyles(theme => ({
 const ProductDetail = ({
   actions,
   view,
+  isFetchingProduct,
   isUpdatingProductDetail,
   isDeletingProduct,
   ...rest
@@ -86,11 +90,7 @@ const ProductDetail = ({
           <Grid item lg={4}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <ProductCategory
-                  product={view}
-                  actions={actions}
-                  categories={rest.categories}
-                />
+                <ProductCategory />
               </Grid>
               <Grid item xs={12}>
                 <ProductStatus />

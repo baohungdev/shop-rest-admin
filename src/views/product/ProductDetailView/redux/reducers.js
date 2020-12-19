@@ -30,7 +30,7 @@ const initialStates = freeze({
     description: 'Mô tả sản phẩm',
     price: 0,
     quantity: 0,
-    categoryId: 1,
+    categoryId: 0,
     status: 0,
     children: [],
     cost: 0,
