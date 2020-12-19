@@ -9,6 +9,8 @@ import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import ProductCard from './ProductCard';
+import SkeletonProductCard from './components/SkeletonProductCard';
+import NoProduct from './components/NoProduct';
 
 import {
   name,
@@ -27,7 +29,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductList = ({ actions, products, history, search, pagination }) => {
+const ProductList = ({
+  actions,
+  products,
+  history,
+  search,
+  pagination,
+  isLoadingProducts
+}) => {
   const perpage = 20;
   const classes = useStyles();
 
@@ -47,35 +56,50 @@ const ProductList = ({ actions, products, history, search, pagination }) => {
         <Toolbar actions={actions} search={search} pagination={pagination} />
         <Box mt={3}>
           <Grid container spacing={3}>
-            {products.map(product => (
-              <Grid item key={product.id} lg={4} md={6} xs={12}>
-                <ProductCard
-                  history={history}
-                  className={classes.productCard}
-                  product={product}
-                />
-              </Grid>
-            ))}
+            {isLoadingProducts ? (
+              <React.Fragment>
+                {[...Array(6)].map(n => (
+                  <Grid item key={n} lg={4} md={6} xs={12}>
+                    <SkeletonProductCard />
+                  </Grid>
+                ))}
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                {_isEmpty(products) ? <NoProduct /> : null}
+                {products.map(product => (
+                  <Grid item key={product.id} lg={4} md={6} xs={12}>
+                    <ProductCard
+                      history={history}
+                      className={classes.productCard}
+                      product={product}
+                    />
+                  </Grid>
+                ))}
+              </React.Fragment>
+            )}
           </Grid>
         </Box>
-        <Box mt={3} display="flex" justifyContent="center">
-          <Pagination
-            color="primary"
-            count={pagination.total}
-            page={pagination.current}
-            onChange={(e, page) => {
-              if (_isEmpty(search)) {
-                actions.fetchProductList({ fetchParams: { page, perpage } });
-              } else {
-                actions.searchProduct({
-                  search,
-                  fetchParams: { page, perpage }
-                });
-              }
-            }}
-            size="small"
-          />
-        </Box>
+        {_isEmpty(products) ? null : (
+          <Box mt={3} display="flex" justifyContent="center">
+            <Pagination
+              color="primary"
+              count={pagination.total}
+              page={pagination.current}
+              onChange={(e, page) => {
+                if (_isEmpty(search)) {
+                  actions.fetchProductList({ fetchParams: { page, perpage } });
+                } else {
+                  actions.searchProduct({
+                    search,
+                    fetchParams: { page, perpage }
+                  });
+                }
+              }}
+              size="small"
+            />
+          </Box>
+        )}
       </Container>
     </Page>
   );
