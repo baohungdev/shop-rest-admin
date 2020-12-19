@@ -12,6 +12,9 @@ import Account, {
 import ProductDetail, {
   name as nameOfProductDetail
 } from 'src/views/product/ProductDetailView/redux';
+import NewProductDetail, {
+  name as nameOfNewProductDetail
+} from 'src/views/product/NewProductDetailView/redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -31,5 +34,6 @@ export default (history, asyncReducers) =>
     [nameOfAccount]: Account,
     [nameOfProduct]: Product,
     [nameOfProductDetail]: ProductDetail,
+    [nameOfNewProductDetail]: NewProductDetail,
     loadingBar: loadingBarReducer
   });

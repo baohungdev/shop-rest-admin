@@ -10,26 +10,9 @@ import {
   sagas as accountSagas
 } from 'src/views/account/AccountView/redux';
 
-import {
-  name as nameOfProductDetail,
-  sagas as productDetailSagas
-} from 'src/views/product/ProductDetailView/redux';
-
-import {
-  name as nameOfProduct,
-  sagas as productSagas
-} from 'src/views/product/ProductListView/redux';
-
 const AccountView = lazy(() =>
   import('../../views/account/AccountView').then(module => {
     store.injectSaga(nameOfAccount, accountSagas);
-    return module;
-  })
-);
-
-const ProductDetailView = lazy(() =>
-  import('../../views/product/ProductDetailView').then(module => {
-    store.injectSaga(nameOfProductDetail, productDetailSagas);
     return module;
   })
 );
@@ -38,12 +21,7 @@ const CustomerListView = lazy(() =>
   import('src/views/customer/CustomerListView')
 );
 
-const ProductListView = lazy(() =>
-  import('../../views/product/ProductListView').then(module => {
-    store.injectSaga(nameOfProduct, productSagas);
-    return module;
-  })
-);
+const ProductContainerView = lazy(() => import('../../views/product'));
 
 const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
 const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
@@ -96,8 +74,7 @@ const DashboardLayout = () => {
                 <AccountView path="/app/account" exact />
                 <CustomerListView path="/app/customers" exact />
                 <DashboardView path="/app/dashboard" exact />
-                <ProductListView path="/app/products" exact />
-                <ProductDetailView path="/app/products/view" exact />
+                <ProductContainerView path="/app/products" />
                 <SettingsView path="/app/settings" exact />
                 <Redirect to="/app/dashboard" />
               </Switch>

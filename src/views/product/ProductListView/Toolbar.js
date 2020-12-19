@@ -35,7 +35,13 @@ const Toolbar = ({ className, actions, ...rest }) => {
       <Box display="flex" justifyContent="flex-end">
         <Button className={classes.importButton}>Nhập từ file</Button>
         <Button className={classes.exportButton}>Xuất từ file</Button>
-        <Button color="primary" variant="contained">
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            rest.history.push('/app/products/new');
+          }}
+        >
           Thêm sản phẩm
         </Button>
       </Box>

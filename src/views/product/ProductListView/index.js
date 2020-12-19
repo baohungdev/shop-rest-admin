@@ -53,7 +53,12 @@ const ProductList = ({
   return (
     <Page className={classes.root} title="Products">
       <Container maxWidth={false}>
-        <Toolbar actions={actions} search={search} pagination={pagination} />
+        <Toolbar
+          actions={actions}
+          search={search}
+          pagination={pagination}
+          history={history}
+        />
         <Box mt={3}>
           <Grid container spacing={3}>
             {isLoadingProducts ? (

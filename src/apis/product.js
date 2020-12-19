@@ -76,6 +76,23 @@ export const updateProductDetail = async updatePayload => {
   return response;
 };
 
+export const addProductDetail = async updatePayload => {
+  const endpoint = `${baseEndpoint}/product`;
+
+  const clonePayload = JSON.parse(JSON.stringify(updatePayload));
+
+  clonePayload.children.map(variant => {
+    if (variant.isNew) variant.id = 0;
+  });
+
+  const response = await request({
+    endpoint,
+    method: 'POST',
+    data: clonePayload
+  });
+  return response;
+};
+
 export const deleteProduct = async productId => {
   const endpoint = `${baseEndpoint}/product/${productId}`;
   const response = await request({
