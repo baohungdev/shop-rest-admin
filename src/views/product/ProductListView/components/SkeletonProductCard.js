@@ -47,20 +47,21 @@ const SkeletonProductCard = () => {
           <Skeleton animation="wave" />
         </Typography>
         <Typography align="center" color="textPrimary" variant="body1">
-          <Skeleton animation="wave" />
+          <Box display="flex" justifyContent="center">
+            <Skeleton animation="wave" width={100} />
+          </Box>
         </Typography>
       </CardContent>
       <Box padding={1}>
         <Grid spacing={1} container justify="center">
           <Grid item>
-            <Skeleton animation="wave" />
+            <Skeleton animation="wave" width={50} height={20} />
           </Grid>
           <Grid item>
-            <Skeleton animation="wave" />
+            <Skeleton animation="wave" width={50} height={20} />
           </Grid>
         </Grid>
       </Box>
-      <Divider />
       <Box p={2}>
         <Grid container justify="space-between" spacing={2}>
           <Grid className={classes.statsItem} item></Grid>

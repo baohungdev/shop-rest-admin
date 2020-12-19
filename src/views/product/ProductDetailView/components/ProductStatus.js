@@ -17,7 +17,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
 
-import productStatusOptions from 'src/views/product/ProductDetailView/data';
+import productStatusOptions from 'src/data/product';
 import {
   name,
   actions as productDetailActions
