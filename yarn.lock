@@ -7214,6 +7214,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+material-ui-collapse-menu@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/material-ui-collapse-menu/-/material-ui-collapse-menu-1.1.2.tgz#e1d0a80c6e53b2f95845dc1bf27b36bcf77c3f8f"
+  integrity sha512-aRzMjAeuoBTYUm3Tg2tO90VTatmyupwheUoyg4hpslTgSmUiJCok7ac8/zorYey1eFzrZxKl2hk/OqVjPUersQ==
+
 material-ui-dropzone@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/material-ui-dropzone/-/material-ui-dropzone-3.5.0.tgz#2d7f36032db96c24ce97b42e4d0053f94e91a9fc"
