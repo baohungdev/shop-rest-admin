@@ -44,6 +44,7 @@
         "history": "^4.7.2",
         "lodash": "^4.17.19",
         "lodash-es": "^4.17.15",
+        "material-ui-collapse-menu": "^1.1.2",
         "material-ui-dropzone": "^3.5.0",
         "moment": "^2.27.0",
         "mui-rte": "^1.26.2",

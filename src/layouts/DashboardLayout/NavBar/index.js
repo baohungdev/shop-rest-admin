@@ -24,42 +24,66 @@ import {
   Users as UsersIcon,
   Package as PackageIcon,
   Truck as TruckIcon,
-  Shield as ShieldIcon
+  Shield as ShieldIcon,
+  Database as DatabaseIcon,
+  FileText as FileTextIcon
 } from 'react-feather';
 import NavItem from './NavItem';
+import NavItemCollapse from './NavItemCollapse';
 
 const items = [
   {
+    type: 'simple',
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'Tổng quan'
   },
   {
+    type: 'simple',
     href: '/app/customers',
     icon: UsersIcon,
     title: 'Khách hàng'
   },
   {
+    type: 'simple',
     href: '/app/products',
     icon: PackageIcon,
     title: 'Sản phẩm'
   },
   {
-    href: '/app/warehouse',
+    type: 'collapse',
+    // href: '/app/warehouse',
     icon: TruckIcon,
-    title: 'Kho hàng'
+    title: 'Kho hàng',
+    children: [
+      {
+        type: 'simple',
+        href: '/app/warehouses/items',
+        icon: DatabaseIcon,
+        title: 'Mục kho'
+      },
+      {
+        type: 'simple',
+        icon: FileTextIcon,
+        href: '/app/warehouses/tickets',
+        title: 'Phiếu kho'
+      }
+    ]
   },
   {
+    type: 'simple',
     href: '/app/basket',
     icon: ShoppingBagIcon,
     title: 'Đơn hàng'
   },
   {
+    type: 'simple',
     href: '/app/admin',
     icon: ShieldIcon,
     title: 'Nâng cao'
   },
   {
+    type: 'simple',
     href: '/app/account',
     icon: UserIcon,
     title: 'Tài khoản'
@@ -112,14 +136,18 @@ const NavBar = ({ onMobileClose, openMobile, userInfo }) => {
       <Divider />
       <Box p={2}>
         <List>
-          {items.map(item => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
-            />
-          ))}
+          {items.map(item =>
+            item.type === 'simple' ? (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ) : (
+              <NavItemCollapse item={item} />
+            )
+          )}
         </List>
       </Box>
     </Box>

@@ -22,6 +22,7 @@ const CustomerListView = lazy(() =>
 );
 
 const ProductContainerView = lazy(() => import('../../views/product'));
+const WarehouseContainerView = lazy(() => import('../../views/warehouses'));
 
 const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
 const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
@@ -75,6 +76,7 @@ const DashboardLayout = () => {
                 <CustomerListView path="/app/customers" exact />
                 <DashboardView path="/app/dashboard" exact />
                 <ProductContainerView path="/app/products" />
+                <WarehouseContainerView path="/app/warehouses" />
                 <SettingsView path="/app/settings" exact />
                 <Redirect to="/app/dashboard" />
               </Switch>

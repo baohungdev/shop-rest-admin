@@ -40,7 +40,10 @@ const ProductToolbar = ({ className, view: product, actions, ...rest }) => {
         content="Đây là tác vụ không thể phục hồi, bạn có chắc muốn xóa sản phẩm này không?"
         aggreeText="Xóa"
         disagreeText="Hủy bỏ"
-        onAgreeClick={() => actions.deleteProduct(product.id)}
+        onAgreeClick={() => {
+          setOpen(false);
+          actions.deleteProduct(product.id);
+        }}
         onClose={() => {
           setOpen(false);
         }}

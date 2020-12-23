@@ -51,7 +51,7 @@ const ProductList = ({
   }, []);
 
   return (
-    <Page className={classes.root} title="Products">
+    <Page className={classes.root} title="Sản phẩm">
       <Container maxWidth={false}>
         <Toolbar
           actions={actions}
