@@ -54,7 +54,6 @@ const NavItemCollapse = ({ className, item }) => {
   return (
     <React.Fragment>
       <Button
-        activeClassName={classes.active}
         className={classes.button}
         component={RouterLink}
         to={item.href || '#'}

@@ -58,14 +58,14 @@ const items = [
     children: [
       {
         type: 'simple',
-        href: '/app/warehouse/items',
+        href: '/app/warehouses/items',
         icon: DatabaseIcon,
         title: 'Mục kho'
       },
       {
         type: 'simple',
         icon: FileTextIcon,
-        href: '/app/warehouse/tickets',
+        href: '/app/warehouses/tickets',
         title: 'Phiếu kho'
       }
     ]
