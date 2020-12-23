@@ -45,16 +45,6 @@ const WarehouseToolbar = ({
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
-      <Box display="flex" justifyContent="flex-end">
-        <Button
-          className={classes.createTiketButton}
-          color="secondary"
-          variant="contained"
-          onClick={e => {}}
-        >
-          Tạo phiếu kho
-        </Button>
-      </Box>
       <Box mt={3}>
         <Card>
           <CardContent>
@@ -73,15 +63,15 @@ const WarehouseToolbar = ({
                 value={searchForName}
                 placeholder="Tìm kiếm sản phẩm"
                 variant="outlined"
-                onChange={e =>
+                onChange={e => {
                   actions.setSearchForName({
                     name: e.target.value,
                     fetchParam: {
-                      page: tableDisplay.page,
+                      page: 0,
                       perpage: tableDisplay.limit
                     }
-                  })
-                }
+                  });
+                }}
               />
             </Box>
           </CardContent>
