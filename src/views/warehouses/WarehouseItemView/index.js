@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Container, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Result from './components/Result';
+import WarehouseToolbar from './components/WarehouseToolbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,6 +19,9 @@ const WarehouseItemView = () => {
   return (
     <Page className={classes.root} title="Kho">
       <Container maxWidth={false}>
+        <Box mt={3}>
+          <WarehouseToolbar />
+        </Box>
         <Box mt={3}>
           <Result />
         </Box>

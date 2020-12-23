@@ -1,7 +1,8 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, throttle } from 'redux-saga/effects';
 import * as actions from 'src/views/warehouses/WarehouseItemView/redux/actions';
 import * as API from 'src/apis/warehouseItem';
 import { takeAction } from 'src/services/forkActionSagas';
+import * as CONST from 'src/views/warehouses/WarehouseItemView/redux/constants';
 
 function* handleFetchWarehouseItems(action) {
   try {
@@ -18,8 +19,29 @@ function* handleFetchWarehouseItems(action) {
   }
 }
 
+function* onSearchWarehouseItems() {
+  yield throttle(
+    500,
+    CONST.HANDLE_SET_SEARCH_FOR_NAME,
+    handleFetchWarehouseItems
+  );
+}
+
+function* onSetLimit() {
+  yield takeAction(actions.setLimit, handleFetchWarehouseItems);
+}
+
+function* onSetPage() {
+  yield takeAction(actions.setPage, handleFetchWarehouseItems);
+}
+
 function* onFetchWarehouseItems() {
   yield takeAction(actions.fetchWarehouseItems, handleFetchWarehouseItems);
 }
 
-export default [onFetchWarehouseItems];
+export default [
+  onFetchWarehouseItems,
+  onSearchWarehouseItems,
+  onSetLimit,
+  onSetPage
+];

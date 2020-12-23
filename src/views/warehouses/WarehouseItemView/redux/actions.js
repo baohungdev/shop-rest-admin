@@ -12,3 +12,8 @@ export const fetchWarehouseItemsSuccess = createAction(
 export const fetchWarehouseItemsFail = createAction(
   CONST.HANDLE_FETCH_WAREHOUSE_ITEMS_FAIL
 );
+
+export const setLimit = createAction(CONST.HANDLE_SET_LIMIT);
+
+export const setPage = createAction(CONST.HANDLE_SET_PAGE);
+export const setSearchForName = createAction(CONST.HANDLE_SET_SEARCH_FOR_NAME);
