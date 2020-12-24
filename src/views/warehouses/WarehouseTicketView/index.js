@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Container, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Box from '@material-ui/core/Box';
+import makeStyles from '@material-ui/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import { FilePlus as FilePlusIcon } from 'react-feather';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,11 +20,39 @@ const useStyles = makeStyles(theme => ({
 
 const WarehouseTicketView = () => {
   const classes = useStyles();
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
-    <Page className={classes.root} title="Kho">
+    <Page className={classes.root} title="Phiếu Kho">
       <Container maxWidth={false}>
-        <Box mt={3}></Box>
+        <Box mt={3} display="flex" justifyContent="flex-end">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={null}
+            startIcon={<FilePlusIcon />}
+          >
+            Tạo mới
+          </Button>
+        </Box>
+        <Box mt={3}>
+          <Card>
+            <Tabs
+              value={value}
+              indicatorColor="primary"
+              textColor="primary"
+              onChange={handleChange}
+              aria-label="disabled tabs example"
+            >
+              <Tab label="Phiếu nhập kho" />
+              <Tab label="Phiếu xuất kho" />
+            </Tabs>
+          </Card>
+        </Box>
         <Box mt={3}></Box>
       </Container>
     </Page>
