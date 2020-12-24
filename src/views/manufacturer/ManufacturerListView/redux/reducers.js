@@ -5,6 +5,23 @@ import ApiErrorCode from 'src/constants/apiErrorCode';
 
 export const name = 'ManufacturerList';
 
+const makeInitialUpdateData = () => ({
+  id: '',
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+  representative: ''
+});
+
+const makeInitialCreateData = () => ({
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+  representative: ''
+});
+
 const initialStates = freeze({
   isFetchingManufacturer: false,
   isFetchManufacturerFail: false,
@@ -32,21 +49,8 @@ const initialStates = freeze({
   showManufacturerInfo: false,
   showWithFetchingId: null,
   usedFor: 'create',
-  newManufacturerInfo: {
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    representative: ''
-  },
-  updateManufacturerInfo: {
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    representative: ''
-  }
+  newManufacturerInfo: makeInitialCreateData(),
+  updateManufacturerInfo: makeInitialUpdateData()
 });
 
 export default handleActions(
@@ -230,7 +234,9 @@ export default handleActions(
         sendToServerFailMessage: '',
         isShowSnackbar: true,
         snackbarMessage: 'Thao tác thành công',
-        isSnackbarError: false
+        isSnackbarError: false,
+        updateManufacturerInfo: makeInitialUpdateData(),
+        newManufacturerInfo: makeInitialCreateData()
       });
     },
     [actions.saveOrUpdateManufacturerFail]: (state, action) => {
@@ -301,7 +307,8 @@ export default handleActions(
         isSendingToServer: false,
         isShowSnackbar: true,
         isSnackbarError: false,
-        snackbarMessage: 'Đã xóa nhà cung cấp'
+        snackbarMessage: 'Đã xóa nhà cung cấp',
+        showManufacturerInfo: false
       });
     }
   },
