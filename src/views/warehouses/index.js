@@ -8,9 +8,21 @@ import {
   sagas as warehouseItemSagas
 } from 'src/views/warehouses/WarehouseItemView/redux';
 
+import {
+  name as nameOfWarehouseTicket,
+  sagas as warehouseTicketSagas
+} from 'src/views/warehouses/WarehouseTicketView/redux';
+
 const WarehouseItemView = lazy(() =>
   import('./WarehouseItemView').then(module => {
     store.injectSaga(nameOfWarehouseItem, warehouseItemSagas);
+    return module;
+  })
+);
+
+const WarehousTicketView = lazy(() =>
+  import('./WarehouseTicketView').then(module => {
+    store.injectSaga(nameOfWarehouseTicket, warehouseTicketSagas);
     return module;
   })
 );
@@ -21,6 +33,7 @@ const WarehouseContainer = () => {
       {checkForLoggedIn() ? (
         <Switch>
           <WarehouseItemView path="/app/warehouses/items" exact />
+          <WarehousTicketView path="/app/warehouses/tickets" exact />
           <Redirect to="/app/dashboard" />
         </Switch>
       ) : (

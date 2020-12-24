@@ -40,15 +40,15 @@ const items = [
   },
   {
     type: 'simple',
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Khách hàng'
-  },
-  {
-    type: 'simple',
     href: '/app/products',
     icon: PackageIcon,
     title: 'Sản phẩm'
+  },
+  {
+    type: 'simple',
+    href: '/app/manufacturers',
+    icon: UsersIcon,
+    title: 'Nhà cung cấp'
   },
   {
     type: 'collapse',

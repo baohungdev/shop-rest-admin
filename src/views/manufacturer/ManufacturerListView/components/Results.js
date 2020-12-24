@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -13,26 +15,27 @@ import {
   TableCell,
   TableHead,
   TablePagination,
+  TableSortLabel,
   TableRow,
   Typography,
-  TableSortLabel,
-  makeStyles
+  makeStyles,
+  IconButton
 } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import {
-  name,
-  actions as warehouseItemActions
-} from 'src/views/warehouses/WarehouseItemView/redux';
-import _get from 'lodash/get';
-import _range from 'lodash/range';
-import { headCells } from 'src/views/warehouses/WarehouseItemView/data';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import {
   descendingComparator,
   getComparator,
   stableSort
 } from 'src/utils/sortInTable';
+import { headCells } from '../data';
+import _get from 'lodash/get';
+import _range from 'lodash/range';
+
+import {
+  name,
+  actions as manufacturerActions
+} from 'src/views/manufacturer/ManufacturerListView/redux';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -55,67 +58,15 @@ const useStyles = makeStyles(theme => ({
 const Results = ({
   className,
   actions,
-  warehouseItems,
+  manufacturers,
   tableDisplay,
   searchForName,
   ...rest
 }) => {
   const classes = useStyles();
-
-  const [selectedWarehouseItemIds, setSelectedWarehouseItemIds] = useState([]);
+  const [selectedManufacturerIds, setSelectedManufacturerIds] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('updatedAt');
-
-  useEffect(() => {
-    actions.fetchWarehouseItems({
-      name: searchForName,
-      fetchParam: {
-        page: tableDisplay.page,
-        perpage: tableDisplay.limit
-      }
-    });
-  }, []);
-
-  const handleSelectAll = event => {
-    let newSelectedWarehouseItemIds;
-
-    if (event.target.checked) {
-      newSelectedWarehouseItemIds = warehouseItems.map(
-        warehouseItem => warehouseItem.id
-      );
-    } else {
-      newSelectedWarehouseItemIds = [];
-    }
-
-    setSelectedWarehouseItemIds(newSelectedWarehouseItemIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedWarehouseItemIds.indexOf(id);
-    let newSelectedWarehouseItemIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedWarehouseItemIds = newSelectedWarehouseItemIds.concat(
-        selectedWarehouseItemIds,
-        id
-      );
-    } else if (selectedIndex === 0) {
-      newSelectedWarehouseItemIds = newSelectedWarehouseItemIds.concat(
-        selectedWarehouseItemIds.slice(1)
-      );
-    } else if (selectedIndex === selectedWarehouseItemIds.length - 1) {
-      newSelectedWarehouseItemIds = newSelectedWarehouseItemIds.concat(
-        selectedWarehouseItemIds.slice(0, -1)
-      );
-    } else if (selectedIndex > 0) {
-      newSelectedWarehouseItemIds = newSelectedWarehouseItemIds.concat(
-        selectedWarehouseItemIds.slice(0, selectedIndex),
-        selectedWarehouseItemIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedWarehouseItemIds(newSelectedWarehouseItemIds);
-  };
 
   const handleLimitChange = event => {
     let page = tableDisplay.page;
@@ -148,6 +99,16 @@ const Results = ({
     setOrderBy(property);
   };
 
+  useEffect(() => {
+    actions.fetchManufacturer({
+      name: searchForName,
+      fetchParam: {
+        page: tableDisplay.page,
+        perpage: tableDisplay.limit
+      }
+    });
+  }, []);
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <PerfectScrollbar>
@@ -155,19 +116,6 @@ const Results = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={
-                      selectedWarehouseItemIds.length === warehouseItems.length
-                    }
-                    color="primary"
-                    indeterminate={
-                      selectedWarehouseItemIds.length > 0 &&
-                      selectedWarehouseItemIds.length < warehouseItems.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
                 {headCells.map(headCell => (
                   <TableCell
                     key={headCell.id}
@@ -189,13 +137,17 @@ const Results = ({
                     </TableSortLabel>
                   </TableCell>
                 ))}
+                <TableCell>Chi tiết</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rest.isFetchingWarehouseItems ? (
+              {rest.isFetchingManufacturer ? (
                 <React.Fragment>
                   {_range(10).map(i => (
                     <TableRow>
+                      <TableCell>
+                        <Skeleton animation="wave" />
+                      </TableCell>
                       <TableCell>
                         <Skeleton animation="wave" />
                       </TableCell>
@@ -215,46 +167,43 @@ const Results = ({
                   ))}
                 </React.Fragment>
               ) : (
-                stableSort(warehouseItems, getComparator(order, orderBy))
+                stableSort(manufacturers, getComparator(order, orderBy))
                   .slice(0, tableDisplay.limit)
-                  .map(warehouseItem => (
+                  .map(manufacturer => (
                     <TableRow
                       hover
-                      key={warehouseItem.id}
+                      key={manufacturer.id}
                       selected={
-                        selectedWarehouseItemIds.indexOf(warehouseItem.id) !==
-                        -1
+                        selectedManufacturerIds.indexOf(manufacturer.id) !== -1
                       }
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={
-                            selectedWarehouseItemIds.indexOf(
-                              warehouseItem.id
-                            ) !== -1
-                          }
-                          onChange={event =>
-                            handleSelectOne(event, warehouseItem.id)
-                          }
-                          value="true"
-                        />
-                      </TableCell>
                       <TableCell>
                         <Box alignItems="center" display="flex">
-                          <Avatar
-                            className={classes.avatar}
-                            src={_get(warehouseItem, 'product.imageUrls.0')}
-                          >
-                            {_get(warehouseItem, 'product.name')}
-                          </Avatar>
                           <Typography color="textPrimary" variant="body1">
-                            {_get(warehouseItem, 'product.name')}
+                            {manufacturer.name}
                           </Typography>
                         </Box>
                       </TableCell>
-                      <TableCell>{warehouseItem.quantity}</TableCell>
-                      <TableCell>{warehouseItem.averageCost}</TableCell>
-                      <TableCell>{moment().format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{manufacturer.email}</TableCell>
+                      <TableCell>
+                        {`${manufacturer.address}, ${manufacturer.ward}, ${manufacturer.district}, ${manufacturer.province}`}
+                      </TableCell>
+                      <TableCell>{manufacturer.phone}</TableCell>
+                      <TableCell>{manufacturer.representative}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => {
+                            actions.showManufacturerInfo({
+                              show: true,
+                              usedFor: 'update',
+                              showWithFetchingId: manufacturer.id
+                            });
+                          }}
+                        >
+                          <OpenInNewIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   ))
               )}
@@ -264,14 +213,13 @@ const Results = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={warehouseItems.length}
+        count={tableDisplay.count}
         onChangePage={handlePageChange}
         onChangeRowsPerPage={handleLimitChange}
         page={tableDisplay.page}
         rowsPerPage={tableDisplay.limit}
-        count={tableDisplay.count}
-        labelRowsPerPage="Hiển thị"
         rowsPerPageOptions={[5, 10, 25]}
+        labelRowsPerPage="Hiển thị"
       />
     </Card>
   );
@@ -283,14 +231,11 @@ Results.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return {
-    ...state[name]
-  };
+  return { ...state[name] };
 };
 
 const mapDispatchToProps = dispatch => {
-  const actions = { ...warehouseItemActions };
-
+  const actions = { ...manufacturerActions };
   return { actions: bindActionCreators(actions, dispatch) };
 };
 
