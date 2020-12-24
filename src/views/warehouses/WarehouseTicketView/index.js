@@ -8,6 +8,13 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import { FilePlus as FilePlusIcon } from 'react-feather';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  name,
+  actions as warehouseTicketActions
+} from 'src/views/warehouses/WarehouseTicketView/redux';
+import WarehouseTransactionTable from './components/WarehouseTransactionTable';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,13 +25,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const WarehouseTicketView = () => {
+const WarehouseTicketView = ({ actions, selectedWarehouseTransactionType }) => {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <Page className={classes.root} title="Phiếu Kho">
@@ -42,11 +44,10 @@ const WarehouseTicketView = () => {
         <Box mt={3}>
           <Card>
             <Tabs
-              value={value}
+              value={selectedWarehouseTransactionType}
               indicatorColor="primary"
               textColor="primary"
-              onChange={handleChange}
-              aria-label="disabled tabs example"
+              onChange={(e, value) => actions.changeTabDisplay(value)}
             >
               <Tab label="Phiếu nhập kho" />
               <Tab label="Phiếu xuất kho" />
@@ -54,9 +55,23 @@ const WarehouseTicketView = () => {
           </Card>
         </Box>
         <Box mt={3}></Box>
+        <WarehouseTransactionTable />
       </Container>
     </Page>
   );
 };
 
-export default WarehouseTicketView;
+const mapStateToProps = state => {
+  return { ...state[name] };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = { ...warehouseTicketActions };
+
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WarehouseTicketView);
