@@ -21,6 +21,9 @@ import WarehouseItem, {
 import WarehouseTicket, {
   name as nameOfWarehouseTicket
 } from 'src/views/warehouses/WarehouseTicketView/redux';
+import Manufacturer, {
+  name as nameOfManufacturer
+} from 'src/views/manufacturer/ManufacturerListView/redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -43,5 +46,6 @@ export default (history, asyncReducers) =>
     [nameOfNewProductDetail]: NewProductDetail,
     [nameOfWarehouseItem]: WarehouseItem,
     [nameOfWarehouseTicket]: WarehouseTicket,
+    [nameOfManufacturer]: Manufacturer,
     loadingBar: loadingBarReducer
   });

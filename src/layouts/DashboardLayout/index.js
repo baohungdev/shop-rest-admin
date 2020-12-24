@@ -9,6 +9,10 @@ import {
   name as nameOfAccount,
   sagas as accountSagas
 } from 'src/views/account/AccountView/redux';
+import {
+  name as nameOfManufacturer,
+  sagas as manufacturerSagas
+} from 'src/views/manufacturer/ManufacturerListView/redux';
 
 const AccountView = lazy(() =>
   import('../../views/account/AccountView').then(module => {
@@ -17,8 +21,11 @@ const AccountView = lazy(() =>
   })
 );
 
-const CustomerListView = lazy(() =>
-  import('src/views/customer/CustomerListView')
+const ManufacturerListView = lazy(() =>
+  import('../../views/manufacturer/ManufacturerListView').then(module => {
+    store.injectSaga(nameOfManufacturer, manufacturerSagas);
+    return module;
+  })
 );
 
 const ProductContainerView = lazy(() => import('../../views/product'));
@@ -73,7 +80,7 @@ const DashboardLayout = () => {
             {checkForLoggedIn() ? (
               <Switch>
                 <AccountView path="/app/account" exact />
-                <CustomerListView path="/app/customers" exact />
+                <ManufacturerListView path="/app/manufacturers" exact />
                 <DashboardView path="/app/dashboard" exact />
                 <ProductContainerView path="/app/products" />
                 <WarehouseContainerView path="/app/warehouses" />
