@@ -18,9 +18,11 @@ import {
   TableSortLabel,
   TableRow,
   Typography,
-  makeStyles
+  makeStyles,
+  IconButton
 } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import {
   descendingComparator,
   getComparator,
@@ -65,45 +67,6 @@ const Results = ({
   const [selectedManufacturerIds, setSelectedManufacturerIds] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('updatedAt');
-
-  const handleSelectAll = event => {
-    let newSelectedManufacturerIds;
-
-    if (event.target.checked) {
-      newSelectedManufacturerIds = manufacturers.map(m => m.id);
-    } else {
-      newSelectedManufacturerIds = [];
-    }
-
-    setSelectedManufacturerIds(newSelectedManufacturerIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedManufacturerIds.indexOf(id);
-    let newSelectedManufacturerIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedManufacturerIds = newSelectedManufacturerIds.concat(
-        selectedManufacturerIds,
-        id
-      );
-    } else if (selectedIndex === 0) {
-      newSelectedManufacturerIds = newSelectedManufacturerIds.concat(
-        selectedManufacturerIds.slice(1)
-      );
-    } else if (selectedIndex === selectedManufacturerIds.length - 1) {
-      newSelectedManufacturerIds = newSelectedManufacturerIds.concat(
-        selectedManufacturerIds.slice(0, -1)
-      );
-    } else if (selectedIndex > 0) {
-      newSelectedManufacturerIds = newSelectedManufacturerIds.concat(
-        selectedManufacturerIds.slice(0, selectedIndex),
-        selectedManufacturerIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedManufacturerIds(newSelectedManufacturerIds);
-  };
 
   const handleLimitChange = event => {
     let page = tableDisplay.page;
@@ -153,19 +116,6 @@ const Results = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={
-                      selectedManufacturerIds.length === manufacturers.length
-                    }
-                    color="primary"
-                    indeterminate={
-                      selectedManufacturerIds.length > 0 &&
-                      selectedManufacturerIds.length < manufacturers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
                 {headCells.map(headCell => (
                   <TableCell
                     key={headCell.id}
@@ -187,6 +137,7 @@ const Results = ({
                     </TableSortLabel>
                   </TableCell>
                 ))}
+                <TableCell>Chi tiết</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -226,18 +177,6 @@ const Results = ({
                         selectedManufacturerIds.indexOf(manufacturer.id) !== -1
                       }
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={
-                            selectedManufacturerIds.indexOf(manufacturer.id) !==
-                            -1
-                          }
-                          onChange={event =>
-                            handleSelectOne(event, manufacturer.id)
-                          }
-                          value="true"
-                        />
-                      </TableCell>
                       <TableCell>
                         <Box alignItems="center" display="flex">
                           <Typography color="textPrimary" variant="body1">
@@ -251,6 +190,20 @@ const Results = ({
                       </TableCell>
                       <TableCell>{manufacturer.phone}</TableCell>
                       <TableCell>{manufacturer.representative}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => {
+                            actions.showManufacturerInfo({
+                              show: true,
+                              usedFor: 'update',
+                              showWithFetchingId: manufacturer.id
+                            });
+                          }}
+                        >
+                          <OpenInNewIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   ))
               )}

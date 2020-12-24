@@ -49,7 +49,16 @@ const Toolbar = ({
       <Box display="flex" justifyContent="flex-end">
         <Button className={classes.importButton}>Thêm từ file</Button>
         <Button className={classes.exportButton}>Xuất file</Button>
-        <Button color="primary" variant="contained">
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() =>
+            actions.showManufacturerInfo({
+              show: true,
+              usedFor: 'create'
+            })
+          }
+        >
           Thêm nhà cung cấp
         </Button>
       </Box>
