@@ -19,12 +19,46 @@ function* handleFetchWarehouseTransaction(action) {
   }
 }
 
+function* handleFetchManufactures(action) {
+  try {
+    const response = yield call(API.fetchManufacturers, action.payload);
+
+    if (!response.success) {
+      yield put(actions.fetchManufacturersFail(response));
+      return;
+    }
+
+    yield put(actions.fetchManufacturersSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchManufacturersFail(err));
+  }
+}
+
+function* handleFetchProducts(action) {
+  try {
+    const response = yield call(API.fetchProducts, action.payload);
+
+    if (!response.success) {
+      yield put(actions.fetchProductsFail(response));
+      return;
+    }
+
+    yield put(actions.fetchProductsSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchProductsFail(err));
+  }
+}
+
 function* onSearchManufacturer() {
   yield throttle(
     500,
-    CONST.HANDLE_SET_SEARCH_FOR_NAME,
-    handleFetchWarehouseTransaction
+    CONST.HANDLE_FETCH_MANUFACTURERS,
+    handleFetchManufactures
   );
+}
+
+function* onSearchProducts() {
+  yield throttle(500, CONST.HANDLE_FETCH_PRODUCTS, handleFetchProducts);
 }
 
 function* onSetLimit() {
@@ -42,9 +76,15 @@ function* onFetchWarehouseTransaction() {
   );
 }
 
+function* onChangeTabDisplay() {
+  yield takeAction(actions.changeTabDisplay, handleFetchWarehouseTransaction);
+}
+
 export default [
   onFetchWarehouseTransaction,
   onSearchManufacturer,
   onSetLimit,
-  onSetPage
+  onSetPage,
+  onChangeTabDisplay,
+  onSearchProducts
 ];
