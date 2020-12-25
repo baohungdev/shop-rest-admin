@@ -55,6 +55,39 @@ export default handleActions(
           count: action.payload.pagination.count
         }
       });
+    },
+    [actions.setPage]: (state, action) => {
+      return freeze({
+        ...state,
+        tableDisplay: {
+          ...state.tableDisplay,
+          page: action.payload.fetchParam.page
+        },
+        isFetchingWarehouseTransaction: true,
+        fetchWarehouseTransactionFail: false,
+        fetchWarehouseTransactionFailMessage: ''
+      });
+    },
+    [actions.setLimit]: (state, action) => {
+      return freeze({
+        ...state,
+        tableDisplay: {
+          ...state.tableDisplay,
+          limit: action.payload.fetchParam.perpage
+        },
+        isFetchingWarehouseTransaction: true,
+        fetchWarehouseTransactionFail: false,
+        fetchWarehouseTransactionFailMessage: ''
+      });
+    },
+    [actions.setSearchForName]: (state, action) => {
+      return freeze({
+        ...state,
+        searchForName: action.payload.name,
+        isFetchingWarehouseTransaction: true,
+        fetchWarehouseTransactionFail: false,
+        fetchWarehouseTransactionFailMessage: ''
+      });
     }
   },
   initialStates

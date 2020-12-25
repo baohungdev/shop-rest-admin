@@ -19,6 +19,22 @@ function* handleFetchWarehouseTransaction(action) {
   }
 }
 
+function* onSearchManufacturer() {
+  yield throttle(
+    500,
+    CONST.HANDLE_SET_SEARCH_FOR_NAME,
+    handleFetchWarehouseTransaction
+  );
+}
+
+function* onSetLimit() {
+  yield takeAction(actions.setLimit, handleFetchWarehouseTransaction);
+}
+
+function* onSetPage() {
+  yield takeAction(actions.setPage, handleFetchWarehouseTransaction);
+}
+
 function* onFetchWarehouseTransaction() {
   yield takeAction(
     actions.fetchWarehouseTransaction,
@@ -26,4 +42,9 @@ function* onFetchWarehouseTransaction() {
   );
 }
 
-export default [onFetchWarehouseTransaction];
+export default [
+  onFetchWarehouseTransaction,
+  onSearchManufacturer,
+  onSetLimit,
+  onSetPage
+];
