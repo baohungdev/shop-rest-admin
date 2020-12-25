@@ -1,6 +1,6 @@
-export const WarehouseTransactionHeadData = [
-  { label: 'Ngày nhập', numeric: false, id: 'product.name' },
-  { label: 'Tồn kho', numeric: true, id: 'quantity' },
-  { label: 'Giá vốn trung bình', numeric: true, id: 'averageCost' },
-  { label: 'Nhập lần cuối', numeric: false, id: 'updatedAt' }
+export const headCells = [
+  { label: 'Người tạo', numeric: false, id: 'createdBy' },
+  { label: 'Nhà cung cấp', numeric: false, id: 'manufacturer.name' },
+  { label: 'Trạng thái', numeric: false, id: 'status' },
+  { label: 'Ngày tạo', numeric: false, id: 'createdAt' }
 ];

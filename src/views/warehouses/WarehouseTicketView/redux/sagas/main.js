@@ -4,39 +4,47 @@ import * as API from 'src/apis/warehouseTicket';
 import { takeAction } from 'src/services/forkActionSagas';
 import * as CONST from 'src/views/warehouses/WarehouseTicketView/redux/constants';
 
-// function* handleFetchWarehouseItems(action) {
-//   try {
-//     const response = yield call(API.fetchWarehouseItems, action.payload);
+function* handleFetchWarehouseTransaction(action) {
+  try {
+    const response = yield call(API.fetchWarehouseTransactions, action.payload);
 
-//     if (!response.success) {
-//       yield put(actions.fetchWarehouseItemsFail(response));
-//       return;
-//     }
+    if (!response.success) {
+      yield put(actions.fetchWarehouseTransactionFail(response));
+      return;
+    }
 
-//     yield put(actions.fetchWarehouseItemsSuccess(response));
-//   } catch (err) {
-//     yield put(actions.fetchWarehouseItemsFail(err));
-//   }
-// }
+    yield put(actions.fetchWarehouseTransactionSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchWarehouseTransactionFail(err));
+  }
+}
 
-// function* onSearchWarehouseItems() {
-//   yield throttle(
-//     500,
-//     CONST.HANDLE_SET_SEARCH_FOR_NAME,
-//     handleFetchWarehouseItems
-//   );
-// }
+function* onSearchManufacturer() {
+  yield throttle(
+    500,
+    CONST.HANDLE_SET_SEARCH_FOR_NAME,
+    handleFetchWarehouseTransaction
+  );
+}
 
-// function* onSetLimit() {
-//   yield takeAction(actions.setLimit, handleFetchWarehouseItems);
-// }
+function* onSetLimit() {
+  yield takeAction(actions.setLimit, handleFetchWarehouseTransaction);
+}
 
-// function* onSetPage() {
-//   yield takeAction(actions.setPage, handleFetchWarehouseItems);
-// }
+function* onSetPage() {
+  yield takeAction(actions.setPage, handleFetchWarehouseTransaction);
+}
 
-// function* onFetchWarehouseItems() {
-//   yield takeAction(actions.fetchWarehouseItems, handleFetchWarehouseItems);
-// }
+function* onFetchWarehouseTransaction() {
+  yield takeAction(
+    actions.fetchWarehouseTransaction,
+    handleFetchWarehouseTransaction
+  );
+}
 
-export default [];
+export default [
+  onFetchWarehouseTransaction,
+  onSearchManufacturer,
+  onSetLimit,
+  onSetPage
+];
