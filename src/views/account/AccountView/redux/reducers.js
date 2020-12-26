@@ -1,6 +1,7 @@
 import freeze from 'deep-freeze';
 import { handleActions } from 'redux-actions';
 import * as actions from './actions';
+import moment from 'moment';
 
 export const name = 'Account';
 
@@ -130,13 +131,57 @@ export default handleActions(
         updateMessage: action.payload.message
       });
     },
-
     [actions.closeSnackbar]: (state, action) => {
       return freeze({
         ...state,
         updateFinish: false,
         updateError: false,
         updateMessage: ''
+      });
+    },
+    [actions.changeName]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          name: action.payload
+        }
+      });
+    },
+    [actions.changeAddress]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          address: action.payload
+        }
+      });
+    },
+    [actions.changeBirthDate]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          birthDate: moment(action.payload).toDate()
+        }
+      });
+    },
+    [actions.changePhone]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          phone: action.payload
+        }
+      });
+    },
+    [actions.changeGender]: (state, action) => {
+      return freeze({
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          gender: action.payload
+        }
       });
     }
   },

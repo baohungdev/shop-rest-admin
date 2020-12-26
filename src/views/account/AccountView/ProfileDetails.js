@@ -20,6 +20,7 @@ import {
   Snackbar
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import Skeleton from '@material-ui/lab/Skeleton';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -44,18 +45,6 @@ const ProfileDetails = ({
 }) => {
   const classes = useStyles();
 
-  const [birthDate, changeBirthDate] = useState(
-    moment(userInfo.birthDate).toDate()
-  );
-
-  const [name, changeName] = useState(userInfo.name);
-
-  const [phone, changePhone] = useState(userInfo.phone);
-
-  const [address, changeAddress] = useState(userInfo.address);
-
-  const [gender, changeGender] = useState(userInfo.gender);
-
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <form
@@ -72,88 +61,104 @@ const ProfileDetails = ({
           <Divider />
           <CardContent>
             <Grid container spacing={3}>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  helperText="Vui lòng điền tên đầy đủ"
-                  label="Họ và tên"
-                  name="fullName"
-                  onChange={event => changeName(event.target.value)}
-                  required
-                  value={name}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <KeyboardDatePicker
-                  fullWidth
-                  disableToolbar
-                  variant="inline"
-                  inputVariant="outlined"
-                  format="dd/MM/yyyy"
-                  id="date-picker-inline"
-                  label="Ngày sinh"
-                  onChange={date => changeBirthDate(date)}
-                  value={birthDate}
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  disabled={true}
-                  required
-                  value={userInfo.email}
-                  variant="outlined"
-                  helperText="Email không thể được thay đổi"
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Số điện thoại"
-                  name="phone"
-                  onChange={event => changePhone(event.target.value)}
-                  value={phone}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Địa chỉ"
-                  name="address"
-                  onChange={event => changeAddress(event.target.value)}
-                  required
-                  value={address}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Giới tính"
-                  name="gender"
-                  onChange={event => {
-                    changeGender(event.target.value);
-                  }}
-                  select
-                  SelectProps={{ native: false }}
-                  value={gender}
-                  variant="outlined"
-                >
-                  {[
-                    { value: 0, text: 'Nam' },
-                    { value: 1, text: 'Nữ' },
-                    { value: 2, text: 'Khác' }
-                  ].map(option => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.text}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
+              {isLoading ? (
+                <Grid item xs={12}>
+                  <Skeleton
+                    animation="wave"
+                    variant="rect"
+                    style={{ height: '300px' }}
+                  />
+                </Grid>
+              ) : (
+                <React.Fragment>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      helperText="Vui lòng điền tên đầy đủ"
+                      label="Họ và tên"
+                      name="fullName"
+                      onChange={event => actions.changeName(event.target.value)}
+                      required
+                      value={userInfo.name}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <KeyboardDatePicker
+                      fullWidth
+                      disableToolbar
+                      variant="inline"
+                      inputVariant="outlined"
+                      format="dd/MM/yyyy"
+                      id="date-picker-inline"
+                      label="Ngày sinh"
+                      onChange={date => actions.changeBirthDate(date)}
+                      value={userInfo.birthDate}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      disabled={true}
+                      required
+                      value={userInfo.email}
+                      variant="outlined"
+                      helperText="Email không thể được thay đổi"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Số điện thoại"
+                      name="phone"
+                      onChange={event =>
+                        actions.changePhone(event.target.value)
+                      }
+                      value={userInfo.phone}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Địa chỉ"
+                      name="address"
+                      onChange={event =>
+                        actions.changeAddress(event.target.value)
+                      }
+                      required
+                      value={userInfo.address}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Giới tính"
+                      name="gender"
+                      onChange={event => {
+                        actions.changeGender(event.target.value);
+                      }}
+                      select
+                      SelectProps={{ native: false }}
+                      value={userInfo.gender}
+                      variant="outlined"
+                    >
+                      {[
+                        { value: 0, text: 'Nam' },
+                        { value: 1, text: 'Nữ' },
+                        { value: 2, text: 'Khác' }
+                      ].map(option => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.text}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </React.Fragment>
+              )}
             </Grid>
           </CardContent>
           <Divider />
@@ -165,12 +170,7 @@ const ProfileDetails = ({
               onClick={() =>
                 actions.updateUserInfo({
                   data: {
-                    name,
-                    birthDate,
-                    gender,
-                    address,
-                    phone,
-                    avatar: userInfo.avatar
+                    ...userInfo
                   }
                 })
               }
