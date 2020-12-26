@@ -3,6 +3,7 @@ import * as actions from 'src/views/warehouses/WarehouseTicketView/redux/actions
 import * as API from 'src/apis/warehouseTicket';
 import { takeAction } from 'src/services/forkActionSagas';
 import * as CONST from 'src/views/warehouses/WarehouseTicketView/redux/constants';
+import { push } from 'connected-react-router';
 
 function* handleFetchWarehouseTransaction(action) {
   try {
@@ -49,6 +50,32 @@ function* handleFetchProducts(action) {
   }
 }
 
+function* handleCreateNewWarehouseTransaction(action) {
+  try {
+    const response = yield call(
+      API.createNewWarehouseTransaction,
+      action.payload
+    );
+
+    if (!response.success) {
+      yield put(actions.createNewWarehouseTransactionFail(response));
+      return;
+    }
+
+    yield put(actions.createNewWarehouseTransactionSuccess(response));
+    yield put(push('/app/warehouses/tickets'));
+  } catch (err) {
+    yield put(actions.createNewWarehouseTransactionFail(err));
+  }
+}
+
+function* onCreateNewWarehouseTransaction() {
+  yield takeAction(
+    actions.createNewWarehouseTransaction,
+    handleCreateNewWarehouseTransaction
+  );
+}
+
 function* onSearchManufacturer() {
   yield throttle(
     500,
@@ -86,5 +113,6 @@ export default [
   onSetLimit,
   onSetPage,
   onChangeTabDisplay,
-  onSearchProducts
+  onSearchProducts,
+  onCreateNewWarehouseTransaction
 ];

@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import Page from 'src/components/Page';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import makeStyles from '@material-ui/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +13,9 @@ import Divider from '@material-ui/core/Divider';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
+import SaveIcon from '@material-ui/icons/Save';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import SelectProduct from './components/SelectProduct';
 import ProductList from './components/ProductList';
 import ManufacturerCard from './components/ManufacturerCard';
@@ -31,6 +33,10 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff'
+  },
   cancelButton: {
     marginRight: theme.spacing(1)
   }
@@ -43,7 +49,9 @@ const getSteps = () => {
 const NewWarehouseTicketView = ({
   actions,
   selectedWarehouseTransactionType,
-  manufacturers
+  manufacturers,
+  newWarehouseTransaction,
+  ...rest
 }) => {
   const classes = useStyles();
   const steps = getSteps();
@@ -63,6 +71,9 @@ const NewWarehouseTicketView = ({
   return (
     <Page className={classes.root} title={pageTitle}>
       <Container maxWidth={false}>
+        <Backdrop className={classes.backdrop} open={rest.isSendingToServer}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Box mt={3} display="flex" justifyContent="flex-end">
           <Button
             className={classes.cancelButton}
@@ -70,7 +81,17 @@ const NewWarehouseTicketView = ({
           >
             Huỷ bỏ
           </Button>
-          <Button color="primary" variant="contained">
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={() => {
+              actions.createNewWarehouseTransaction({
+                ...newWarehouseTransaction,
+                type: selectedWarehouseTransactionType
+              });
+            }}
+          >
             Lưu
           </Button>
         </Box>

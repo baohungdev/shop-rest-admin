@@ -35,3 +35,13 @@ export const fetchProducts = async () => {
   });
   return response;
 };
+
+export const createNewWarehouseTransaction = async newWarehouseTransaction => {
+  const endpoint = `${baseEndpoint}`;
+  const response = await request({
+    endpoint,
+    method: 'POST',
+    data: newWarehouseTransaction
+  });
+  return response;
+};

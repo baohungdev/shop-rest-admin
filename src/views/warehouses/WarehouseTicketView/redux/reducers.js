@@ -33,6 +33,9 @@ const initialStates = freeze({
   fetchWarehouseTransactionFailMessage: '',
   manufacturers: [],
   products: [],
+  isSendingToServer: false,
+  isSendingToServerFail: false,
+  sendToServerFailMessage: '',
   ...makeInitialState()
 });
 
@@ -323,6 +326,30 @@ export default handleActions(
       return freeze({
         ...state,
         ...makeInitialState()
+      });
+    },
+    [actions.createNewWarehouseTransaction]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: true,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false
+      });
+    },
+    [actions.createNewWarehouseTransactionSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false
+      });
+    },
+    [actions.createNewWarehouseTransactionFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: action.payload.message,
+        isSendingToServerFail: true
       });
     }
   },
