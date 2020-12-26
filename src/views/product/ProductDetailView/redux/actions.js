@@ -71,3 +71,10 @@ export const deleteProductSuccess = createAction(
   CONST.HANDLE_DELETE_PRODUCT_SUCCESS
 );
 export const deleteProductFail = createAction(CONST.HANDLE_DELETE_PRODUCT_FAIL);
+export const createCategory = createAction(CONST.HANDLE_CREATE_CATEGORY);
+export const createCategoryFail = createAction(
+  CONST.HANDLE_CREATE_CATEGORY_FAIL
+);
+export const createCategorySuccess = createAction(
+  CONST.HANDLE_CREATE_CATEGORY_SUCCESS
+);

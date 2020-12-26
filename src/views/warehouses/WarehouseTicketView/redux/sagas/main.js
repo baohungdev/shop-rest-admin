@@ -87,6 +87,55 @@ function* handleCreateNewWarehouseTransaction(action) {
   }
 }
 
+function* handleConfirmWarehouseTransaction(action) {
+  try {
+    const response = yield call(
+      API.confirmWarehouseTransaction,
+      action.payload
+    );
+
+    if (!response.success) {
+      yield put(actions.confirmWarehouseTransactionFail(response));
+      return;
+    }
+
+    yield put(actions.confirmWarehouseTransactionSuccess(response));
+    yield put(push('/app/warehouses/tickets'));
+  } catch (err) {
+    yield put(actions.confirmWarehouseTransactionFail(err));
+  }
+}
+
+function* onConfirmWarehouseTransaction() {
+  yield takeAction(
+    actions.confirmWarehouseTransaction,
+    handleConfirmWarehouseTransaction
+  );
+}
+
+function* handleCancelWarehouseTransaction(action) {
+  try {
+    const response = yield call(API.cancelWarehouseTransaction, action.payload);
+
+    if (!response.success) {
+      yield put(actions.cancelWarehouseTransactionFail(response));
+      return;
+    }
+
+    yield put(actions.cancelWarehouseTransactionSuccess(response));
+    yield put(push('/app/warehouses/tickets'));
+  } catch (err) {
+    yield put(actions.cancelWarehouseTransactionFail(err));
+  }
+}
+
+function* onCancelWarehouseTransaction() {
+  yield takeAction(
+    actions.cancelWarehouseTransaction,
+    handleCancelWarehouseTransaction
+  );
+}
+
 function* onFetchDetailWarehouseTransaction() {
   yield takeAction(
     actions.fetchDetailWarehouseTransaction,
@@ -140,5 +189,7 @@ export default [
   onChangeTabDisplay,
   onSearchProducts,
   onCreateNewWarehouseTransaction,
-  onFetchDetailWarehouseTransaction
+  onFetchDetailWarehouseTransaction,
+  onConfirmWarehouseTransaction,
+  onCancelWarehouseTransaction
 ];

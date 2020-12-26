@@ -102,3 +102,18 @@ export const deleteProduct = async productId => {
   });
   return response;
 };
+
+export const createCategory = async newCategory => {
+  const endpoint = `${baseEndpoint}/categories`;
+
+  if (newCategory.parentId === 0) {
+    delete newCategory.parentId;
+  }
+
+  const response = await request({
+    endpoint,
+    method: 'POST',
+    data: newCategory
+  });
+  return response;
+};

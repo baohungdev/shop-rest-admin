@@ -6,6 +6,7 @@ import _unionBy from 'lodash/unionBy';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import _findIndex from 'lodash/findIndex';
+import _isEmpty from 'lodash/isEmpty';
 
 export const name = 'WarehouseTicket';
 
@@ -60,7 +61,12 @@ export default handleActions(
         selectedWarehouseTransactionType: action.payload.type,
         isFetchingWarehouseTransaction: true,
         fetchingWarehouseTransactionFail: false,
-        fetchWarehouseTransactionFailMessage: ''
+        fetchWarehouseTransactionFailMessage: '',
+        tableDisplay: {
+          ...state.tableDisplay,
+          limit: action.payload.fetchParam.perpage,
+          page: action.payload.fetchParam.page
+        }
       });
     },
     [actions.fetchWarehouseTransaction]: (state, action) => {
@@ -145,19 +151,40 @@ export default handleActions(
       });
     },
     [actions.clearManufacturers]: (state, action) => {
+      const selectedManufacturerId =
+        state.newWarehouseTransaction.manufacturerId;
       return freeze({
         ...state,
-        manufacturers: []
+        manufacturers: state.manufacturers.filter(
+          m => m.id === selectedManufacturerId
+        )
       });
     },
     [actions.selectManufacturer]: (state, action) => {
-      return freeze({
-        ...state,
-        newWarehouseTransaction: {
-          ...state.newWarehouseTransaction,
-          manufacturerId: action.payload
-        }
-      });
+      if (_isEmpty(action.payload)) {
+        return freeze({
+          ...state,
+          manufacturers: [],
+          newWarehouseTransaction: {
+            ...state.newWarehouseTransaction,
+            manufacturer: null,
+            manufacturerId: 0
+          }
+        });
+      } else {
+        const selectedManufacturer = _find(
+          _get(state, 'manufacturers', []),
+          m => m.id === action.payload.id
+        );
+        return freeze({
+          ...state,
+          newWarehouseTransaction: {
+            ...state.newWarehouseTransaction,
+            manufacturer: selectedManufacturer,
+            manufacturerId: action.payload.id
+          }
+        });
+      }
     },
     [actions.changeDescription]: (state, action) => {
       return freeze({
@@ -389,6 +416,56 @@ export default handleActions(
         fetchingDetailWarehouseTransactionFail: false,
         fetchDetailWarehouseTransactionFailMessage: '',
         warehouseTransaction: action.payload.data
+      });
+    },
+    [actions.confirmWarehouseTransaction]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: true,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false
+      });
+    },
+    [actions.confirmWarehouseTransactionFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: action.payload.message,
+        isSendingToServerFail: true
+      });
+    },
+    [actions.confirmWarehouseTransactionSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false,
+        warehouseTransaction: action.payload.data
+      });
+    },
+    [actions.cancelWarehouseTransaction]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: true,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false
+      });
+    },
+    [actions.cancelWarehouseTransactionFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: action.payload.message,
+        isSendingToServerFail: true
+      });
+    },
+    [actions.cancelWarehouseTransactionSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        sendToServerFailMessage: '',
+        isSendingToServerFail: false,
+        warehouseTransaction: {}
       });
     }
   },

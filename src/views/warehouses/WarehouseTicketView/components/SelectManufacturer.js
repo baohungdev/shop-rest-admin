@@ -13,8 +13,10 @@ const SelectManufacturer = ({
   actions,
   manufacturers,
   view,
-  warehouseTransaction
+  warehouseTransaction,
+  newWarehouseTransaction
 }) => {
+  const info = view ? warehouseTransaction : newWarehouseTransaction;
   const [openOptionManufacturers, setOpenOptionManufacturers] = React.useState(
     false
   );
@@ -48,7 +50,7 @@ const SelectManufacturer = ({
       getOptionLabel={option => option.name}
       fullWidth
       disabled={view}
-      value={warehouseTransaction.manufacturer}
+      value={info.manufacturer}
       renderInput={params => (
         <TextField
           {...params}
@@ -78,7 +80,7 @@ const SelectManufacturer = ({
       getOptionLabel={option => option.name}
       loading={loading}
       onChange={(event, newValue) => {
-        actions.selectManufacturer(newValue.id);
+        actions.selectManufacturer(newValue);
       }}
     />
   );

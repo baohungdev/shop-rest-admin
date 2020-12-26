@@ -93,6 +93,7 @@ const WarehouseTransactionTable = ({
     }
 
     actions.setLimit({
+      type: selectedWarehouseTransactionType,
       name: searchForName,
       fetchParam: {
         page,
@@ -103,6 +104,7 @@ const WarehouseTransactionTable = ({
 
   const handlePageChange = (event, newPage) => {
     actions.setPage({
+      type: selectedWarehouseTransactionType,
       name: searchForName,
       fetchParam: {
         page: newPage,

@@ -57,8 +57,8 @@ const WarehouseTicketView = ({
                 actions.changeTabDisplay({
                   type: value,
                   fetchParam: {
-                    page: tableDisplay.page,
-                    perpage: tableDisplay.limit
+                    page: 0,
+                    perpage: 10
                   }
                 })
               }

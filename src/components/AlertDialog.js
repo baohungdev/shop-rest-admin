@@ -30,7 +30,7 @@ export default function AlertDialog({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary" autofocus>
+          <Button onClick={onClose} autofocus>
             {disagreeText}
           </Button>
           <Button

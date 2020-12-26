@@ -50,6 +50,26 @@ function* handleFetchCategories(action) {
   }
 }
 
+function* handleCreateCategory(action) {
+  try {
+    const response = yield call(API.createCategory, action.payload);
+
+    if (!response.success) {
+      yield put(actions.createCategoryFail(response));
+      return;
+    }
+
+    yield put(actions.createCategorySuccess(response));
+    yield put(actions.fetchCategories());
+  } catch (err) {
+    yield put(actions.createCategoryFail(err));
+  }
+}
+
+function* onCreateCategory() {
+  yield takeAction(actions.createCategory, handleCreateCategory);
+}
+
 function* onFetchCategories() {
   yield takeAction(actions.fetchCategories, handleFetchCategories);
 }
@@ -62,4 +82,9 @@ function* onAddProduct() {
   yield takeAction(actions.addProduct, handleAddProduct);
 }
 
-export default [onUploadProductImages, onFetchCategories, onAddProduct];
+export default [
+  onUploadProductImages,
+  onFetchCategories,
+  onAddProduct,
+  onCreateCategory
+];

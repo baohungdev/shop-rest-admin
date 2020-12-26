@@ -21,6 +21,7 @@ import SelectProduct from './components/SelectProduct';
 import ProductList from './components/ProductList';
 import ManufacturerCard from './components/ManufacturerCard';
 import { bindActionCreators } from 'redux';
+import AlertDialog from 'src/components/AlertDialog';
 import { connect } from 'react-redux';
 import {
   name,
@@ -50,6 +51,7 @@ const WarehouseTicketDetailView = ({
 }) => {
   const queries = new URLSearchParams(useLocation().search);
   const transactionId = queries.get('id') || null;
+  const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const classes = useStyles();
   const steps = getSteps();
   const pageTitle =
@@ -62,29 +64,52 @@ const WarehouseTicketDetailView = ({
     actions.fetchDetailWarehouseTransaction({ id: transactionId });
   }, []);
 
+  const activeStep = [1, 2].includes(warehouseTransaction.status) ? 2 : 1;
+  const displayToolbar = ![1, 2].includes(warehouseTransaction.status);
+
   return (
     <Page className={classes.root} title={pageTitle}>
       <Container maxWidth={false}>
+        <AlertDialog
+          open={openConfirmDeleteDialog}
+          title="Xác nhận xóa phiếu kho?"
+          content="Đây là tác vụ không thể phục hồi, bạn có chắc muốn xóa phiếu kho này không?"
+          aggreeText="Xóa"
+          disagreeText="Hủy bỏ"
+          onAgreeClick={() => {
+            setOpenConfirmDeleteDialog(false);
+            actions.cancelWarehouseTransaction({ id: transactionId });
+          }}
+          onClose={() => {
+            setOpenConfirmDeleteDialog(false);
+          }}
+        />
         <Backdrop className={classes.backdrop} open={rest.isSendingToServer}>
           <CircularProgress color="inherit" />
         </Backdrop>
-        <Box mt={3} display="flex" justifyContent="flex-end">
-          <Button
-            className={classes.cancelButton}
-            onClick={e => history.push('/app/warehouses/tickets')}
-          >
-            Huỷ phiếu
-          </Button>
-          <Button color="primary" variant="contained" startIcon={<CheckIcon />}>
-            Xác nhận
-          </Button>
-        </Box>
+        {displayToolbar && (
+          <Box mt={3} display="flex" justifyContent="flex-end">
+            <Button
+              className={classes.cancelButton}
+              onClick={() => setOpenConfirmDeleteDialog(true)}
+            >
+              Huỷ phiếu
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<CheckIcon />}
+              onClick={() => {
+                actions.confirmWarehouseTransaction({ id: transactionId });
+              }}
+            >
+              Xác nhận
+            </Button>
+          </Box>
+        )}
         <Box mt={3} />
         <Box>
-          <Stepper
-            activeStep={[1, 2].includes(warehouseTransaction.status) ? 2 : 1}
-            alternativeLabel
-          >
+          <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map(label => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>

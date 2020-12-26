@@ -54,3 +54,23 @@ export const createNewWarehouseTransaction = async newWarehouseTransaction => {
   });
   return response;
 };
+
+export const confirmWarehouseTransaction = async ({ id }) => {
+  const endpoint = `${baseEndpoint}/${id}`;
+  const response = await request({
+    endpoint,
+    method: 'PUT',
+    data: 2
+  });
+  return response;
+};
+
+export const cancelWarehouseTransaction = async ({ id }) => {
+  const endpoint = `${baseEndpoint}/${id}`;
+  const response = await request({
+    endpoint,
+    method: 'PUT',
+    data: 1
+  });
+  return response;
+};

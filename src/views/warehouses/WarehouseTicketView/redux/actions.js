@@ -68,3 +68,27 @@ export const createNewWarehouseTransactionFail = createAction(
 export const createNewWarehouseTransactionSuccess = createAction(
   CONST.HANDLE_CREATE_NEW_WAREHOUSE_TRANSACTION_SUCCESS
 );
+
+export const confirmWarehouseTransaction = createAction(
+  CONST.HANDLE_CONFIRM_WAREHOUSE_TRANSACTION
+);
+
+export const confirmWarehouseTransactionFail = createAction(
+  CONST.HANDLE_CONFIRM_WAREHOUSE_TRANSACTION_FAIL
+);
+
+export const confirmWarehouseTransactionSuccess = createAction(
+  CONST.HANDLE_CONFIRM_WAREHOUSE_TRANSACTION_SUCCESS
+);
+
+export const cancelWarehouseTransaction = createAction(
+  CONST.HANDLE_CANCEL_WAREHOUSE_TRANSACTION
+);
+
+export const cancelWarehouseTransactionFail = createAction(
+  CONST.HANDLE_CANCEL_WAREHOUSE_TRANSACTION_FAIL
+);
+
+export const cancelWarehouseTransactionSuccess = createAction(
+  CONST.HANDLE_CANCEL_WAREHOUSE_TRANSACTION_SUCCESS
+);
