@@ -175,7 +175,11 @@ const WarehouseTransactionTable = ({
                           <Avatar
                             src={_get(warehouseTransaction, 'createdBy.avatar')}
                           />
-                          <Typography color="textPrimary" variant="body1">
+                          <Typography
+                            color="textPrimary"
+                            variant="body1"
+                            style={{ marginLeft: '10px' }}
+                          >
                             {_get(warehouseTransaction, 'createdBy.name')}
                           </Typography>
                         </Box>

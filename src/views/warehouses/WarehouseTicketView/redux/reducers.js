@@ -189,7 +189,7 @@ export default handleActions(
           existedProduct => existedProduct.id === p.id
         );
         if (existedProduct) {
-          p.quantity = existedProduct.quantity;
+          p.quantity = Number(existedProduct.quantity);
           p.cost = existedProduct.cost;
         } else {
           p.quantity = 1;
@@ -252,7 +252,7 @@ export default handleActions(
         JSON.stringify(existedProducts[existedProductIndex])
       );
       modifiedProduct.quantity =
-        action.payload.quantity < 1 ? 1 : action.payload.quantity;
+        Number(action.payload.quantity < 1 ? 1 : action.payload.quantity);
 
       let newProducts;
 

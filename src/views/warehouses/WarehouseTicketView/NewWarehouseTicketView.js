@@ -88,7 +88,15 @@ const NewWarehouseTicketView = ({
             onClick={() => {
               actions.createNewWarehouseTransaction({
                 ...newWarehouseTransaction,
-                type: selectedWarehouseTransactionType
+                warehouseTransactionItems: newWarehouseTransaction.warehouseTransactionItems.map(
+                  item => {
+                    return {
+                      ...item,
+                      productId: item.id
+                    };
+                  }
+                ),
+                transactionType: selectedWarehouseTransactionType
               });
             }}
           >
