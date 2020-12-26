@@ -17,6 +17,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import { Image } from '@material-ui/icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { DropzoneDialog } from 'material-ui-dropzone';
 
 import * as accountActions from 'src/views/account/AccountView/redux/actions';
@@ -30,7 +31,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, userInfo, actions, ...rest }) => {
+const Profile = ({ className, userInfo, isLoading, actions, ...rest }) => {
   const classes = useStyles();
   const [isOpenModalUpload, setOpenModalUpload] = useState(false);
 
@@ -60,20 +61,43 @@ const Profile = ({ className, userInfo, actions, ...rest }) => {
         />
 
         <Box alignItems="center" display="flex" flexDirection="column">
-          <Avatar className={classes.avatar} src={userInfo.avatar} />
-          <Typography color="textPrimary" gutterBottom variant="h3">
-            {userInfo.name}
-          </Typography>
-          <Typography color="textSecondary" variant="body1">
-            {`${userInfo.email} ${userInfo.roles}`}
-          </Typography>
-          <Typography
-            className={classes.dateText}
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${moment(userInfo.birthDate).format('l')}`}
-          </Typography>
+          {isLoading ? (
+            <Skeleton
+              animation="wave"
+              variant="circle"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <Avatar className={classes.avatar} src={userInfo.avatar} />
+          )}
+          {isLoading ? (
+            <Skeleton animation="wave" height={30} width={240} />
+          ) : (
+            <Typography color="textPrimary" gutterBottom variant="h3">
+              {userInfo.name}
+            </Typography>
+          )}
+
+          {isLoading ? (
+            <Skeleton animation="wave" height={30} width={240} />
+          ) : (
+            <Typography color="textSecondary" variant="body1">
+              {`${userInfo.email} ${userInfo.roles}`}
+            </Typography>
+          )}
+
+          {isLoading ? (
+            <Skeleton animation="wave" height={30} width={240} />
+          ) : (
+            <Typography
+              className={classes.dateText}
+              color="textSecondary"
+              variant="body1"
+            >
+              {`${moment(userInfo.birthDate).format('l')}`}
+            </Typography>
+          )}
         </Box>
       </CardContent>
       <Divider />
@@ -82,6 +106,7 @@ const Profile = ({ className, userInfo, actions, ...rest }) => {
           color="primary"
           fullWidth
           variant="text"
+          disabled={isLoading}
           onClick={null}
           onClick={() => setOpenModalUpload(true)}
         >

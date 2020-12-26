@@ -24,7 +24,13 @@ const useStyles = makeStyles({
   root: {}
 });
 
-const Password = ({ className, isPasswordLoading, actions, ...rest }) => {
+const Password = ({
+  className,
+  isPasswordLoading,
+  isLoading,
+  actions,
+  ...rest
+}) => {
   const classes = useStyles();
 
   const [isPasswordMismatch, setPasswordMismatch] = useState(false);
@@ -117,7 +123,7 @@ const Password = ({ className, isPasswordLoading, actions, ...rest }) => {
           <Button
             color="primary"
             variant="contained"
-            disabled={isPasswordLoading}
+            disabled={isPasswordLoading || isLoading}
             onClick={() => actions.updatePassword(values)}
           >
             {isPasswordLoading ? 'Đang cập nhật' : 'Cập nhật'}
