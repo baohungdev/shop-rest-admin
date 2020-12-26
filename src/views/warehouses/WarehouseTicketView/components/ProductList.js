@@ -6,9 +6,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -61,6 +58,7 @@ const ProductList = ({
                       <TextField
                         value={item.quantity}
                         type="number"
+                        disabled={view}
                         onChange={e =>
                           actions.changeItemQuantity({
                             quantity: e.target.value,
@@ -73,6 +71,7 @@ const ProductList = ({
                       <TextField
                         value={item.cost}
                         type="number"
+                        disabled={view}
                         onChange={e =>
                           actions.changeItemCost({
                             cost: e.target.value,
