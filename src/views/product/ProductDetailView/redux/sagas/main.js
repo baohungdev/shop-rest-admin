@@ -82,6 +82,26 @@ function* handleDeleteProduct(action) {
   }
 }
 
+function* handleCreateCategory(action) {
+  try {
+    const response = yield call(API.createCategory, action.payload);
+
+    if (!response.success) {
+      yield put(actions.createCategoryFail(response));
+      return;
+    }
+
+    yield put(actions.createCategorySuccess(response));
+    yield put(actions.fetchCategories());
+  } catch (err) {
+    yield put(actions.createCategoryFail(err));
+  }
+}
+
+function* onCreateCategory() {
+  yield takeAction(actions.createCategory, handleCreateCategory);
+}
+
 function* onFetchProductDetail() {
   yield takeAction(actions.fetchProductDetail, handleFetchProductDetail);
 }
@@ -107,5 +127,6 @@ export default [
   onUploadProductImages,
   onFetchCategories,
   onSaveProduct,
-  onDeleteProduct
+  onDeleteProduct,
+  onCreateCategory
 ];
