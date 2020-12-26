@@ -11,7 +11,7 @@ import {
   actions as warehouseTicketActions
 } from 'src/views/warehouses/WarehouseTicketView/redux';
 
-const SelectProduct = ({ actions, products }) => {
+const SelectProduct = ({ actions, products, view }) => {
   const [openOptionProducts, setOpenOptionProducts] = React.useState(false);
   const loading = openOptionProducts && products.length === 0;
 
@@ -43,6 +43,7 @@ const SelectProduct = ({ actions, products }) => {
       getOptionLabel={option => option.name}
       fullWidth
       multiple
+      disabled={view}
       renderOption={option => (
         <React.Fragment>
           <Avatar src={option.avatar} />

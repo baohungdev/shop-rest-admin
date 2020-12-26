@@ -14,7 +14,8 @@ import {
   makeStyles,
   Chip,
   Button,
-  IconButton
+  IconButton,
+  colors
 } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 
@@ -36,6 +37,22 @@ const useStyles = makeStyles(theme => ({
   },
   statsIcon: {
     marginRight: theme.spacing(1)
+  },
+  status0: {
+    backgroundColor: colors.grey.A400,
+    color: colors.common.white
+  },
+  status1: {
+    backgroundColor: colors.yellow[700],
+    color: colors.common.white
+  },
+  status2: {
+    backgroundColor: colors.green[700],
+    color: colors.common.white
+  },
+  status3: {
+    backgroundColor: colors.red.A400,
+    color: colors.common.white
   }
 }));
 
@@ -94,11 +111,9 @@ const ProductCard = ({ className, product, ...rest }) => {
           </Grid>
           <Grid item>
             <Chip
-              color="default"
-              variant="default"
+              className={classes[`status${product.status}`]}
               label={status.text}
               size="small"
-              variant="outlined"
             />
           </Grid>
         </Grid>

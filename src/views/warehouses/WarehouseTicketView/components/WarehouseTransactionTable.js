@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
+import * as colors from '@material-ui/core/colors';
+import Chip from '@material-ui/core/Chip';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
+import 'moment/locale/vi';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -53,6 +57,18 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: 20,
     width: 1
+  },
+  status0: {
+    backgroundColor: colors.yellow.A700,
+    color: colors.deepOrange[900]
+  },
+  status1: {
+    backgroundColor: colors.red.A700,
+    color: colors.common.white
+  },
+  status2: {
+    backgroundColor: colors.green.A700,
+    color: colors.common.white
   }
 }));
 
@@ -65,6 +81,7 @@ const WarehouseTransactionTable = ({
   tableDisplay,
   ...rest
 }) => {
+  const history = useHistory();
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('createdAt');
@@ -188,15 +205,31 @@ const WarehouseTransactionTable = ({
                         {_get(warehouseTransaction, 'manufacturer.name')}
                       </TableCell>
                       <TableCell>
-                        {mapStatusCodeToText(
-                          _get(warehouseTransaction, 'status')
-                        )}
+                        <Chip
+                          className={
+                            classes[
+                              `status${_get(warehouseTransaction, 'status')}`
+                            ]
+                          }
+                          label={mapStatusCodeToText(
+                            _get(warehouseTransaction, 'status')
+                          )}
+                        />
                       </TableCell>
                       <TableCell>
-                        {moment(warehouseTransaction.createdAt).format('L')}
+                        {moment(warehouseTransaction.createdAt)
+                          .locale('vi')
+                          .format('LL')}
                       </TableCell>
                       <TableCell>
-                        <IconButton color="primary">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            history.push(
+                              `/app/warehouses/tickets/view?id=${warehouseTransaction.id}`
+                            )
+                          }
+                        >
                           <OpenInNewIcon />
                         </IconButton>
                       </TableCell>
