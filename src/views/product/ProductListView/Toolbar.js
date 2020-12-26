@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
 import { Search as SearchIcon } from 'react-feather';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -48,36 +49,41 @@ const Toolbar = ({ className, actions, ...rest }) => {
       <Box mt={3}>
         <Card>
           <CardContent>
-            <Box maxWidth={500}>
-              <TextField
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon fontSize="small" color="action">
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
-                value={search}
-                placeholder="Tìm kiếm sản phẩm"
-                variant="outlined"
-                onChange={e => {
-                  setSearch(e.target.value);
-                  if (_isEmpty(search)) {
-                    actions.fetchProductList({
-                      fetchParams: { ...pagination },
-                      isVariant: false
-                    });
-                  } else {
-                    actions.searchProduct({
-                      search: e.target.value,
-                      isVariant: false
-                    });
-                  }
-                }}
-              />
+            <Box display="flex">
+              <Box maxWidth={500} marginRight={3}>
+                <TextField
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SvgIcon fontSize="small" color="action">
+                          <SearchIcon />
+                        </SvgIcon>
+                      </InputAdornment>
+                    )
+                  }}
+                  value={search}
+                  placeholder="Tìm kiếm sản phẩm"
+                  variant="outlined"
+                  onChange={e => {
+                    setSearch(e.target.value);
+                    if (_isEmpty(search)) {
+                      actions.fetchProductList({
+                        fetchParams: { ...pagination },
+                        isVariant: false
+                      });
+                    } else {
+                      actions.searchProduct({
+                        search: e.target.value,
+                        isVariant: false
+                      });
+                    }
+                  }}
+                />
+              </Box>
+              <Button startIcon={<FilterListIcon />} variant="outlined">
+                Thêm bộ lọc
+              </Button>
             </Box>
           </CardContent>
         </Card>
