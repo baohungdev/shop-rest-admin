@@ -20,7 +20,13 @@ import _reduce from 'lodash/reduce';
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 
-const ProductList = ({ actions, newWarehouseTransaction }) => {
+const ProductList = ({
+  actions,
+  newWarehouseTransaction,
+  view,
+  warehouseTransaction
+}) => {
+  const info = view ? warehouseTransaction : newWarehouseTransaction;
   return (
     <Table>
       <TableHead>
@@ -31,9 +37,7 @@ const ProductList = ({ actions, newWarehouseTransaction }) => {
         <TableCell>Thành tiền</TableCell>
       </TableHead>
       <TableBody>
-        {_isEmpty(
-          _get(newWarehouseTransaction, 'warehouseTransactionItems', [])
-        ) ? (
+        {_isEmpty(_get(info, 'warehouseTransactionItems', [])) ? (
           <TableRow>
             <TableCell colSpan={5}>
               <Box textAlign="center">
@@ -47,7 +51,7 @@ const ProductList = ({ actions, newWarehouseTransaction }) => {
         ) : (
           <React.Fragment>
             {_map(
-              _get(newWarehouseTransaction, 'warehouseTransactionItems', []),
+              _get(info, 'warehouseTransactionItems', []),
               (item, index) => {
                 return (
                   <TableRow>
@@ -93,7 +97,7 @@ const ProductList = ({ actions, newWarehouseTransaction }) => {
           </TableCell>
           <TableCell>
             {_reduce(
-              _get(newWarehouseTransaction, 'warehouseTransactionItems', []),
+              _get(info, 'warehouseTransactionItems', []),
               (carry, current) => {
                 carry += current.cost * current.quantity;
                 return carry;

@@ -18,6 +18,15 @@ export const fetchWarehouseTransactions = async ({ fetchParam, ...query }) => {
   return response;
 };
 
+export const fetchDetailWarehouseTransaction = async ({ id }) => {
+  const endpoint = `${baseEndpoint}/${id}`;
+  const response = await request({
+    endpoint,
+    method: 'GET'
+  });
+  return response;
+};
+
 export const fetchManufacturers = async () => {
   const endpoint = `${baseEndpoint}/manufacturers`;
   const response = await request({

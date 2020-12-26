@@ -35,6 +35,24 @@ function* handleFetchManufactures(action) {
   }
 }
 
+function* handleFetchDetailWarehouseTransaction(action) {
+  try {
+    const response = yield call(
+      API.fetchDetailWarehouseTransaction,
+      action.payload
+    );
+
+    if (!response.success) {
+      yield put(actions.fetchDetailWarehouseTransactionFail(response));
+      return;
+    }
+
+    yield put(actions.fetchDetailWarehouseTransactionSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchDetailWarehouseTransactionFail(err));
+  }
+}
+
 function* handleFetchProducts(action) {
   try {
     const response = yield call(API.fetchProducts, action.payload);
@@ -67,6 +85,13 @@ function* handleCreateNewWarehouseTransaction(action) {
   } catch (err) {
     yield put(actions.createNewWarehouseTransactionFail(err));
   }
+}
+
+function* onFetchDetailWarehouseTransaction() {
+  yield takeAction(
+    actions.fetchDetailWarehouseTransaction,
+    handleFetchDetailWarehouseTransaction
+  );
 }
 
 function* onCreateNewWarehouseTransaction() {
@@ -114,5 +139,6 @@ export default [
   onSetPage,
   onChangeTabDisplay,
   onSearchProducts,
-  onCreateNewWarehouseTransaction
+  onCreateNewWarehouseTransaction,
+  onFetchDetailWarehouseTransaction
 ];

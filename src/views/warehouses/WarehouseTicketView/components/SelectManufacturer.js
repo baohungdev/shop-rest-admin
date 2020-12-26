@@ -9,7 +9,12 @@ import {
   actions as warehouseTicketActions
 } from 'src/views/warehouses/WarehouseTicketView/redux';
 
-const SelectManufacturer = ({ actions, manufacturers }) => {
+const SelectManufacturer = ({
+  actions,
+  manufacturers,
+  view,
+  warehouseTransaction
+}) => {
   const [openOptionManufacturers, setOpenOptionManufacturers] = React.useState(
     false
   );
@@ -42,6 +47,8 @@ const SelectManufacturer = ({ actions, manufacturers }) => {
       options={manufacturers}
       getOptionLabel={option => option.name}
       fullWidth
+      disabled={view}
+      value={warehouseTransaction.manufacturer}
       renderInput={params => (
         <TextField
           {...params}

@@ -14,7 +14,14 @@ import {
   actions as warehouseTicketActions
 } from 'src/views/warehouses/WarehouseTicketView/redux';
 
-const ManufacturerCard = ({ actions, newWarehouseTransaction }) => {
+const ManufacturerCard = ({
+  actions,
+  newWarehouseTransaction,
+  view,
+  warehouseTransaction
+}) => {
+  const info = view ? warehouseTransaction : newWarehouseTransaction;
+
   return (
     <Card>
       <CardHeader title="Nhà cung cấp" />
@@ -22,14 +29,15 @@ const ManufacturerCard = ({ actions, newWarehouseTransaction }) => {
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <SelectManufacturer />
+            <SelectManufacturer view={view} />
           </Grid>
           <Grid item xs={12}>
             <TextField
               label="Ghi chú"
               variant="outlined"
               fullWidth
-              value={newWarehouseTransaction.description}
+              value={info.description}
+              disabled={view}
               onChange={e => actions.changeDescription(e.target.value)}
             />
           </Grid>

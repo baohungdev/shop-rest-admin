@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import WarehouseTicketView from './List';
 import NewWarehouseTicketView from './NewWarehouseTicketView';
+import WarehouseTicketDetailView from './WarehouseTicketDetailView';
 import {
   name,
   actions as warehouseTicketActions
@@ -16,6 +17,11 @@ const WarehouseTicketContainer = ({ actions }) => {
         path="/app/warehouses/tickets/new"
         exact
         component={NewWarehouseTicketView}
+      />
+      <Route
+        path="/app/warehouses/tickets/view"
+        exact
+        component={WarehouseTicketDetailView}
       />
       <Route
         path="/app/warehouses/tickets"

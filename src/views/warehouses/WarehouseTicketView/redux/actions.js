@@ -12,6 +12,16 @@ export const fetchWarehouseTransactionSuccess = createAction(
   CONST.HANDLE_FETCH_WAREHOUSE_TRANSACTION_SUCCESS
 );
 
+export const fetchDetailWarehouseTransaction = createAction(
+  CONST.HANDLE_FETCH_DETAIL_WAREHOUSE_TRANSACTION
+);
+export const fetchDetailWarehouseTransactionFail = createAction(
+  CONST.HANDLE_FETCH_DETAIL_WAREHOUSE_TRANSACTION_FAIL
+);
+export const fetchDetailWarehouseTransactionSuccess = createAction(
+  CONST.HANDLE_FETCH_DETAIL_WAREHOUSE_TRANSACTION_SUCCESS
+);
+
 export const setPage = createAction(CONST.HANDLE_SET_PAGE);
 export const setLimit = createAction(CONST.HANDLE_SET_LIMIT);
 export const setSearchForName = createAction(CONST.HANDLE_SET_SEARCH_FOR_NAME);

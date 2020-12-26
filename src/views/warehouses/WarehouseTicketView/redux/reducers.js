@@ -31,11 +31,24 @@ const initialStates = freeze({
   isFetchingWarehouseTransaction: false,
   fetchingWarehouseTransactionFail: false,
   fetchWarehouseTransactionFailMessage: '',
+  isFetchingDetailWarehouseTransaction: false,
+  fetchingDetailWarehouseTransactionFail: false,
+  fetchDetailWarehouseTransactionFailMessage: '',
   manufacturers: [],
   products: [],
   isSendingToServer: false,
   isSendingToServerFail: false,
   sendToServerFailMessage: '',
+  warehouseTransaction: {
+    id: 0,
+    transactionType: 0,
+    createdAt: '2020-12-26T05:52:53.9385622',
+    status: 0,
+    createdBy: {},
+    description: '',
+    manufacturer: {},
+    warehouseTransactionItems: []
+  },
   ...makeInitialState()
 });
 
@@ -251,8 +264,9 @@ export default handleActions(
       const modifiedProduct = JSON.parse(
         JSON.stringify(existedProducts[existedProductIndex])
       );
-      modifiedProduct.quantity =
-        Number(action.payload.quantity < 1 ? 1 : action.payload.quantity);
+      modifiedProduct.quantity = Number(
+        action.payload.quantity < 1 ? 1 : action.payload.quantity
+      );
 
       let newProducts;
 
@@ -350,6 +364,31 @@ export default handleActions(
         isSendingToServer: false,
         sendToServerFailMessage: action.payload.message,
         isSendingToServerFail: true
+      });
+    },
+    [actions.fetchDetailWarehouseTransaction]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingDetailWarehouseTransaction: true,
+        fetchingDetailWarehouseTransactionFail: false,
+        fetchDetailWarehouseTransactionFailMessage: ''
+      });
+    },
+    [actions.fetchDetailWarehouseTransactionFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingDetailWarehouseTransaction: false,
+        fetchingDetailWarehouseTransactionFail: true,
+        fetchDetailWarehouseTransactionFailMessage: action.payload.message
+      });
+    },
+    [actions.fetchDetailWarehouseTransactionSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingDetailWarehouseTransaction: false,
+        fetchingDetailWarehouseTransactionFail: false,
+        fetchDetailWarehouseTransactionFailMessage: '',
+        warehouseTransaction: action.payload.data
       });
     }
   },

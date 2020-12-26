@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Page from 'src/components/Page';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -13,13 +13,13 @@ import Divider from '@material-ui/core/Divider';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import SaveIcon from '@material-ui/icons/Save';
+import CheckIcon from '@material-ui/icons/Check';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import getSteps from './utils/getSteps';
 import SelectProduct from './components/SelectProduct';
 import ProductList from './components/ProductList';
 import ManufacturerCard from './components/ManufacturerCard';
-import getSteps from './utils/getSteps';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -43,27 +43,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NewWarehouseTicketView = ({
+const WarehouseTicketDetailView = ({
   actions,
-  selectedWarehouseTransactionType,
-  manufacturers,
-  newWarehouseTransaction,
+  warehouseTransaction,
   ...rest
 }) => {
+  const queries = new URLSearchParams(useLocation().search);
+  const transactionId = queries.get('id') || null;
   const classes = useStyles();
   const steps = getSteps();
   const pageTitle =
-    selectedWarehouseTransactionType === 0
-      ? 'Tạo phiếu nhập kho'
-      : 'Tạo phiếu xuất kho';
+    warehouseTransaction.transactionType === 0
+      ? 'Chi tiết phiếu nhập kho'
+      : 'Chi tiết phiếu xuất kho';
   const history = useHistory();
 
-  React.useEffect(
-    () => () => {
-      actions.clearNewData();
-    },
-    []
-  );
+  React.useEffect(() => {
+    actions.fetchDetailWarehouseTransaction({ id: transactionId });
+  }, []);
 
   return (
     <Page className={classes.root} title={pageTitle}>
@@ -76,33 +73,18 @@ const NewWarehouseTicketView = ({
             className={classes.cancelButton}
             onClick={e => history.push('/app/warehouses/tickets')}
           >
-            Huỷ bỏ
+            Huỷ phiếu
           </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<SaveIcon />}
-            onClick={() => {
-              actions.createNewWarehouseTransaction({
-                ...newWarehouseTransaction,
-                warehouseTransactionItems: newWarehouseTransaction.warehouseTransactionItems.map(
-                  item => {
-                    return {
-                      ...item,
-                      productId: item.id
-                    };
-                  }
-                ),
-                transactionType: selectedWarehouseTransactionType
-              });
-            }}
-          >
-            Lưu
+          <Button color="primary" variant="contained" startIcon={<CheckIcon />}>
+            Xác nhận
           </Button>
         </Box>
         <Box mt={3} />
         <Box>
-          <Stepper activeStep={0} alternativeLabel>
+          <Stepper
+            activeStep={[1, 2].includes(warehouseTransaction.status) ? 2 : 1}
+            alternativeLabel
+          >
             {steps.map(label => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -113,20 +95,22 @@ const NewWarehouseTicketView = ({
         <Box mt={3} />
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            {selectedWarehouseTransactionType === 0 && <ManufacturerCard />}
+            {warehouseTransaction.transactionType === 0 && (
+              <ManufacturerCard view={true} />
+            )}
           </Grid>
-          <Grid item xs={selectedWarehouseTransactionType === 0 ? 8 : 12}>
+          <Grid item xs={warehouseTransaction.transactionType === 0 ? 8 : 12}>
             <Card>
               <CardHeader title="Sản phẩm" />
               <Divider />
               <CardContent>
                 <Grid container spacing={1}>
                   <Grid item xs={12}>
-                    <SelectProduct />
+                    <SelectProduct view={true} />
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                  <ProductList />
+                  <ProductList view={true} />
                 </Grid>
               </CardContent>
             </Card>
@@ -150,4 +134,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NewWarehouseTicketView);
+)(WarehouseTicketDetailView);
