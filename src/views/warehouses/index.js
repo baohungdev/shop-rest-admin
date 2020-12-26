@@ -33,7 +33,7 @@ const WarehouseContainer = () => {
       {checkForLoggedIn() ? (
         <Switch>
           <WarehouseItemView path="/app/warehouses/items" exact />
-          <WarehousTicketView path="/app/warehouses/tickets" exact />
+          <WarehousTicketView path="/app/warehouses/tickets" />
           <Redirect to="/app/dashboard" />
         </Switch>
       ) : (
