@@ -9,6 +9,16 @@ import _findIndex from 'lodash/findIndex';
 
 export const name = 'WarehouseTicket';
 
+const makeInitialState = () => {
+  return {
+    newWarehouseTransaction: {
+      manufacturerId: 0,
+      warehouseTransactionItems: [],
+      description: ''
+    }
+  };
+};
+
 const initialStates = freeze({
   tableDisplay: {
     limit: 10,
@@ -23,10 +33,7 @@ const initialStates = freeze({
   fetchWarehouseTransactionFailMessage: '',
   manufacturers: [],
   products: [],
-  newWarehouseTransaction: {
-    manufacturerId: 0,
-    warehouseTransactionItems: []
-  }
+  ...makeInitialState()
 });
 
 export default handleActions(
@@ -136,7 +143,15 @@ export default handleActions(
         }
       });
     },
-
+    [actions.changeDescription]: (state, action) => {
+      return freeze({
+        ...state,
+        newWarehouseTransaction: {
+          ...state.newWarehouseTransaction,
+          description: action.payload
+        }
+      });
+    },
     [actions.fetchProducts]: (state, action) => {
       return freeze({
         ...state,
@@ -302,6 +317,12 @@ export default handleActions(
           ...state.newWarehouseTransaction,
           warehouseTransactionItems: newProducts
         }
+      });
+    },
+    [actions.clearNewData]: (state, action) => {
+      return freeze({
+        ...state,
+        ...makeInitialState()
       });
     }
   },

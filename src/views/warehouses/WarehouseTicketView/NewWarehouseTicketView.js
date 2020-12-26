@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Page from 'src/components/Page';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -10,9 +11,12 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
-import SelectManufacturer from './components/SelectManufacturer';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import SelectProduct from './components/SelectProduct';
 import ProductList from './components/ProductList';
+import ManufacturerCard from './components/ManufacturerCard';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -32,43 +36,58 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const getSteps = () => {
+  return ['Chọn sản phẩm/nhà cung cấp', 'Tạo phiếu kho', 'Hoàn tất'];
+};
+
 const NewWarehouseTicketView = ({
   actions,
   selectedWarehouseTransactionType,
   manufacturers
 }) => {
   const classes = useStyles();
+  const steps = getSteps();
   const pageTitle =
     selectedWarehouseTransactionType === 0
       ? 'Tạo phiếu nhập kho'
       : 'Tạo phiếu xuất kho';
+  const history = useHistory();
+
+  React.useEffect(
+    () => () => {
+      actions.clearNewData();
+    },
+    []
+  );
 
   return (
     <Page className={classes.root} title={pageTitle}>
       <Container maxWidth={false}>
         <Box mt={3} display="flex" justifyContent="flex-end">
-          <Button className={classes.cancelButton}>Huỷ bỏ</Button>
+          <Button
+            className={classes.cancelButton}
+            onClick={e => history.push('/app/warehouses/tickets')}
+          >
+            Huỷ bỏ
+          </Button>
           <Button color="primary" variant="contained">
             Lưu
           </Button>
         </Box>
         <Box mt={3} />
+        <Box>
+          <Stepper activeStep={0} alternativeLabel>
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+        <Box mt={3} />
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Card>
-              <CardHeader title="Nhà cung cấp" />
-              <Divider />
-              <CardContent>
-                <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                    <SelectManufacturer />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField label="Ghi chú" variant="outlined" fullWidth />
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+            <ManufacturerCard />
           </Grid>
           <Grid item xs={8}>
             <Card>

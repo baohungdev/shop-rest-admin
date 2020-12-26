@@ -45,3 +45,5 @@ export const changeItemQuantity = createAction(
 );
 export const deleteItem = createAction(CONST.HANDLE_DELETE_ITEM);
 export const changeItemCost = createAction(CONST.HANDLE_CHANGE_ITEM_COST);
+export const changeDescription = createAction(CONST.HANDLE_CHANGE_DESCRIPTION);
+export const clearNewData = createAction(CONST.HANDLE_CLEAR_NEW_DATA);
