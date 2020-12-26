@@ -5,6 +5,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { bindActionCreators } from 'redux';
@@ -14,7 +16,9 @@ import {
   actions as warehouseTicketActions
 } from 'src/views/warehouses/WarehouseTicketView/redux';
 import _map from 'lodash/map';
+import _reduce from 'lodash/reduce';
 import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 
 const ProductList = ({ actions, newWarehouseTransaction }) => {
   return (
@@ -23,39 +27,81 @@ const ProductList = ({ actions, newWarehouseTransaction }) => {
         <TableCell>STT</TableCell>
         <TableCell>Tên sản phẩm</TableCell>
         <TableCell>Số lượng</TableCell>
-        <TableCell>Xóa</TableCell>
+        <TableCell>Đơn giá</TableCell>
+        <TableCell>Thành tiền</TableCell>
       </TableHead>
       <TableBody>
-        {_map(
-          _get(newWarehouseTransaction, 'warehouseTransactionItems', []),
-          (item, index) => {
-            return (
-              <TableRow>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>
-                  <TextField
-                    value={item.quantity}
-                    type="number"
-                    onChange={e =>
-                      actions.changeItemQuantity({
-                        quantity: e.target.value,
-                        id: item.id
-                      })
-                    }
-                  />
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    onClick={() => actions.deleteItem({ id: item.id })}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            );
-          }
+        {_isEmpty(
+          _get(newWarehouseTransaction, 'warehouseTransactionItems', [])
+        ) ? (
+          <TableRow>
+            <TableCell colSpan={5}>
+              <Box textAlign="center">
+                <img src="/static/images/empty-box-64.png" />
+              </Box>
+              <Box fontWeight="600" textAlign="center">
+                Bạn chưa có sản phẩm
+              </Box>
+            </TableCell>
+          </TableRow>
+        ) : (
+          <React.Fragment>
+            {_map(
+              _get(newWarehouseTransaction, 'warehouseTransactionItems', []),
+              (item, index) => {
+                return (
+                  <TableRow>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>
+                      <TextField
+                        value={item.quantity}
+                        type="number"
+                        onChange={e =>
+                          actions.changeItemQuantity({
+                            quantity: e.target.value,
+                            id: item.id
+                          })
+                        }
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        value={item.cost}
+                        type="number"
+                        onChange={e =>
+                          actions.changeItemCost({
+                            cost: e.target.value,
+                            id: item.id
+                          })
+                        }
+                      />
+                    </TableCell>
+                    <TableCell>{item.cost * item.quantity}</TableCell>
+                  </TableRow>
+                );
+              }
+            )}
+          </React.Fragment>
         )}
+        <TableRow>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell>
+            <Box fontWeight="fontWeightBold">Tổng cộng</Box>
+          </TableCell>
+          <TableCell>
+            {_reduce(
+              _get(newWarehouseTransaction, 'warehouseTransactionItems', []),
+              (carry, current) => {
+                carry += current.cost * current.quantity;
+                return carry;
+              },
+              0
+            )}
+          </TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );

@@ -172,6 +172,7 @@ export default handleActions(
         );
         if (existedProduct) {
           p.quantity = existedProduct.quantity;
+          p.cost = existedProduct.cost;
         } else {
           p.quantity = 1;
         }
@@ -234,6 +235,48 @@ export default handleActions(
       );
       modifiedProduct.quantity =
         action.payload.quantity < 1 ? 1 : action.payload.quantity;
+
+      let newProducts;
+
+      if (existedProductIndex === existedProducts.length - 1) {
+        newProducts = [
+          ...existedProducts.slice(0, existedProductIndex),
+          modifiedProduct
+        ];
+      } else {
+        newProducts = [
+          ...existedProducts.slice(0, existedProductIndex),
+          modifiedProduct,
+          ...existedProducts.slice(
+            existedProductIndex + 1,
+            existedProducts.length
+          )
+        ];
+      }
+
+      return freeze({
+        ...state,
+        newWarehouseTransaction: {
+          ...state.newWarehouseTransaction,
+          warehouseTransactionItems: newProducts
+        }
+      });
+    },
+    [actions.changeItemCost]: (state, action) => {
+      const existedProducts = _get(
+        state,
+        'newWarehouseTransaction.warehouseTransactionItems',
+        []
+      );
+      const existedProductIndex = _findIndex(
+        existedProducts,
+        existedProduct => existedProduct.id === action.payload.id
+      );
+
+      const modifiedProduct = JSON.parse(
+        JSON.stringify(existedProducts[existedProductIndex])
+      );
+      modifiedProduct.cost = action.payload.cost < 0 ? 0 : action.payload.cost;
 
       let newProducts;
 
