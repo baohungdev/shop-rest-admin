@@ -265,6 +265,30 @@ export default handleActions(
     },
     [actions.clearProductData]: (state, action) => {
       return freeze(makeInitialStates());
+    },
+    [actions.createCategory]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCategories: true,
+        isFetchingCategoriesFail: false,
+        fetchCategoriesMessage: ''
+      });
+    },
+    [actions.createCategorySuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCategories: false,
+        isFetchingCategoriesFail: false,
+        fetchCategoriesMessage: ''
+      });
+    },
+    [actions.createCategoryFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCategories: false,
+        isFetchingCategoriesFail: true,
+        fetchCategoriesMessage: action.payload.message
+      });
     }
   },
   initialStates
