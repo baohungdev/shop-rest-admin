@@ -135,7 +135,8 @@ export const request = async ({
   method,
   data,
   headerInput,
-  accessToken = null
+  accessToken = null,
+  ...fetchOptions
 }) => {
   try {
     if (`${method}`.toUpperCase() === 'GET') {
@@ -159,7 +160,8 @@ export const request = async ({
       url: endpoint,
       headers: getHeaders(headerInput),
       data: method !== 'GET' ? data : null,
-      params: method === 'GET' ? data : null
+      params: method === 'GET' ? data : null,
+      ...fetchOptions
     };
 
     if (endpoint.includes('download')) {
@@ -187,7 +189,8 @@ export const request = async ({
       endpoint,
       method,
       data,
-      headerInput
+      headerInput,
+      ...fetchOptions
     });
   } finally {
     store.dispatch(hideLoading());

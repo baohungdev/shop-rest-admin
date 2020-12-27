@@ -2,7 +2,7 @@ export const filterOptions = {
   variants: [
     {
       label: 'Không áp dụng',
-      value: '{ }'
+      value: '{ "isVariant": false }'
     },
     {
       label: 'Có biến thể',
