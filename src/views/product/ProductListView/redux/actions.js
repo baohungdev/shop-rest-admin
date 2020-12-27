@@ -14,3 +14,19 @@ export const searchProductSuccess = createAction(
   CONST.HANDLE_SEARCH_PRODUCT_SUCCESS
 );
 export const searchProductFail = createAction(CONST.HANDLE_SEARCH_PRODUCT_FAIL);
+export const fetchCategories = createAction(CONST.HANDLE_FETCH_CATEGORIES);
+export const fetchCategoriesSuccess = createAction(
+  CONST.HANDLE_FETCH_CATEGORIES_SUCCESS
+);
+export const fetchCategoriesFail = createAction(
+  CONST.HANDLE_FETCH_CATEGORIES_FAIL
+);
+export const selectFilterCategories = createAction(
+  CONST.HANDLE_SELECT_FILTER_CATEGORIES
+);
+
+export const applyFilter = createAction(CONST.HANDLE_APPLY_FILTERS);
+export const applyFilterFail = createAction(CONST.HANDLE_APPLY_FILTERS_FAIL);
+export const applyFilterSuccess = createAction(
+  CONST.HANDLE_APPLY_FILTERS_SUCCESS
+);

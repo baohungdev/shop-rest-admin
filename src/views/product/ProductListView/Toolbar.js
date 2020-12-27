@@ -14,6 +14,7 @@ import {
 import _isEmpty from 'lodash/isEmpty';
 import { Search as SearchIcon } from 'react-feather';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterProductDialog from './components/FilterProductDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -30,9 +31,14 @@ const Toolbar = ({ className, actions, ...rest }) => {
 
   const [pagination, setPagination] = useState(rest.pagination);
   const [search, setSearch] = useState(rest.search);
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
+      <FilterProductDialog
+        open={openFilterDialog}
+        onClose={() => setOpenFilterDialog(false)}
+      />
       <Box display="flex" justifyContent="flex-end">
         <Button className={classes.importButton}>Nhập từ file</Button>
         <Button className={classes.exportButton}>Xuất từ file</Button>
@@ -81,7 +87,12 @@ const Toolbar = ({ className, actions, ...rest }) => {
                   }}
                 />
               </Box>
-              <Button startIcon={<FilterListIcon />} variant="outlined">
+              <Button
+                startIcon={<FilterListIcon />}
+                variant="outlined"
+                onClick={() => setOpenFilterDialog(true)}
+                disabled={rest.isLoadingProducts}
+              >
                 Thêm bộ lọc
               </Button>
             </Box>
