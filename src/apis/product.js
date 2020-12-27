@@ -1,6 +1,7 @@
 import config from '../config';
 import { request } from '../services/api';
 import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 
 const baseEndpoint = `${config.apiBaseURL}`;
 
@@ -16,7 +17,7 @@ export const searchProduct = async ({ search, fetchParam, ...query }) => {
     endpoint,
     method: 'GET',
     data: {
-      name: search,
+      ...(_isEmpty(search) ? {} : { name: search } ),
       page: _get(fetchParam, 'page', 1),
       perpage: _get(fetchParam, 'perpage', 20),
       ...query

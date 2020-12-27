@@ -34,6 +34,29 @@ function* handleSearchProduct(action) {
   }
 }
 
+function* handleFetchCategories(action) {
+  try {
+    const response = yield call(API.fetchCategories, action.payload);
+
+    if (!response.success) {
+      yield put(actions.fetchCategoriesFail(response));
+      return;
+    }
+
+    yield put(actions.fetchCategoriesSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchCategoriesFail(err));
+  }
+}
+
+function* onApplyFilters() {
+  yield takeAction(actions.applyFilter, handleSearchProduct);
+}
+
+function* onFetchCategories() {
+  yield takeAction(actions.fetchCategories, handleFetchCategories);
+}
+
 function* onSearchProduct() {
   yield throttle(500, CONST.HANDLE_SEARCH_PRODUCT, handleSearchProduct);
 }
@@ -42,4 +65,9 @@ function* onFetchProductList() {
   yield takeAction(actions.fetchProductList, handleFetchProductList);
 }
 
-export default [onFetchProductList, onSearchProduct];
+export default [
+  onFetchProductList,
+  onSearchProduct,
+  onFetchCategories,
+  onApplyFilters
+];
