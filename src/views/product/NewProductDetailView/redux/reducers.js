@@ -32,7 +32,15 @@ const makeInitialStates = () => ({
     status: 0,
     children: [],
     cost: 0,
-    isManageVariant: false
+    isManageVariant: false,
+    tags: [],
+    features: [],
+    isDiscount: false,
+    priceBeforeDiscount: 0,
+    height: 0,
+    weight: 0,
+    width: 0,
+    length: 0
   }
 });
 
@@ -288,6 +296,15 @@ export default handleActions(
         isFetchingCategories: false,
         isFetchingCategoriesFail: true,
         fetchCategoriesMessage: action.payload.message
+      });
+    },
+    [actions.changeDimension]: (state, action) => {
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          [action.payload.property]: action.payload.value
+        }
       });
     }
   },

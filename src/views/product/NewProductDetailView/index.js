@@ -19,6 +19,7 @@ import ProductInfo from './components/ProductInfo';
 import ProductCategory from './components/ProductCategory';
 import ProductToolbar from './components/ProductToolbar';
 import ProductStatus from './components/ProductStatus';
+import ProductDimension from './components/ProductDimesion';
 
 import {
   name,
@@ -72,6 +73,8 @@ const NewProductDetail = ({ actions, add, ...rest }) => {
         <Grid container spacing={2}>
           <Grid item lg={8}>
             <ProductInfo />
+            <Box mt={3} />
+            <ProductDimension />
           </Grid>
           <Grid item lg={4}>
             <Grid container spacing={2}>
