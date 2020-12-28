@@ -387,7 +387,7 @@ export default handleActions(
         ...state,
         add: {
           ...state.add,
-          priceBeforeDiscount: action.payload
+          priceBeforeDiscount: Number(action.payload)
         }
       };
     }
