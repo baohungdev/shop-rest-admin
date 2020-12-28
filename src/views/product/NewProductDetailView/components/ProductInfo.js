@@ -159,6 +159,41 @@ const ProductInfo = ({ add: product, actions }) => {
                 <FormControlLabel
                   control={
                     <Switch
+                      checked={product.isDiscount}
+                      onChange={e =>
+                        actions.toggleProductDiscount(e.target.checked)
+                      }
+                      name="isDiscount"
+                      color="primary"
+                    />
+                  }
+                  label="Sản phẩm đang giảm giá?"
+                />
+              </FormGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+        {product.isDiscount && (
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <TextField
+                value={product.priceBeforeDiscount}
+                label="Giá trước khi giảm giá"
+                variant="outlined"
+                fullWidth
+                onChange={e => actions.changeProductDiscount(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+        )}
+        <Box mt={2} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
                       checked={product.isManageVariant}
                       onChange={e =>
                         actions.changeProductManageVariant(e.target.checked)

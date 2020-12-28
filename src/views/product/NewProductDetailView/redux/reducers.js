@@ -32,7 +32,15 @@ const makeInitialStates = () => ({
     status: 0,
     children: [],
     cost: 0,
-    isManageVariant: false
+    isManageVariant: false,
+    tags: [],
+    features: [],
+    isDiscount: false,
+    priceBeforeDiscount: 0,
+    height: 0,
+    weight: 0,
+    width: 0,
+    length: 0
   }
 });
 
@@ -289,6 +297,99 @@ export default handleActions(
         isFetchingCategoriesFail: true,
         fetchCategoriesMessage: action.payload.message
       });
+    },
+    [actions.changeDimension]: (state, action) => {
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          [action.payload.property]: Number(action.payload.value)
+        }
+      });
+    },
+    [actions.changeTags]: (state, action) => {
+      let tags = [...state.add.tags];
+
+      if (action.payload.type === 'add') {
+        tags.push(action.payload.value);
+      }
+
+      if (action.payload.type === 'remove') {
+        tags = tags.filter((tag, index) => index !== action.payload.index);
+      }
+
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          tags
+        }
+      });
+    },
+    [actions.createFeature]: (state, action) => {
+      let features = [...state.add.features, ''];
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features
+        }
+      });
+    },
+    [actions.removeFeature]: (state, action) => {
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features: state.add.features.filter((f, i) => i !== action.payload)
+        }
+      });
+    },
+    [actions.changeFeature]: (state, action) => {
+      let features = [];
+      const { index, value } = action.payload;
+      if (index === -1) {
+        features = [value];
+      }
+
+      features = state.add.features.filter((f, i) => i !== index);
+
+      // check if last index
+      if (index === features.length) {
+        features.push(value);
+      } else {
+        features = [
+          ...features.slice(0, index),
+          value,
+          ...features.slice(index, features.length)
+        ];
+      }
+
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features
+        }
+      });
+    },
+    [actions.toggleProductDiscount]: (state, action) => {
+      return {
+        ...state,
+        add: {
+          ...state.add,
+          isDiscount: action.payload
+        }
+      };
+    },
+    [actions.changeProductDiscount]: (state, action) => {
+      return {
+        ...state,
+        add: {
+          ...state.add,
+          priceBeforeDiscount: Number(action.payload)
+        }
+      };
     }
   },
   initialStates
