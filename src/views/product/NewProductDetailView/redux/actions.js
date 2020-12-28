@@ -82,3 +82,9 @@ export const changeTags = createAction(CONST.HANDLE_CHANGE_TAGS);
 export const createFeature = createAction(CONST.HANDLE_CREATE_FEATURE);
 export const changeFeature = createAction(CONST.HANDLE_CHANGE_FEATURE);
 export const removeFeature = createAction(CONST.HANDLE_REMOVE_FEATURE);
+export const toggleProductDiscount = createAction(
+  CONST.HANDLE_TOGGLE_PRODUCT_DISCOUNT
+);
+export const changeProductDiscount = createAction(
+  CONST.HANDLE_CHANGE_PRODUCT_DISCOUNT
+);

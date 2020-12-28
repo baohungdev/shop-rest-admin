@@ -372,6 +372,24 @@ export default handleActions(
           features
         }
       });
+    },
+    [actions.toggleProductDiscount]: (state, action) => {
+      return {
+        ...state,
+        add: {
+          ...state.add,
+          isDiscount: action.payload
+        }
+      };
+    },
+    [actions.changeProductDiscount]: (state, action) => {
+      return {
+        ...state,
+        add: {
+          ...state.add,
+          priceBeforeDiscount: action.payload
+        }
+      };
     }
   },
   initialStates
