@@ -78,3 +78,4 @@ export const createCategorySuccess = createAction(
   CONST.HANDLE_CREATE_CATEGORY_SUCCESS
 );
 export const changeDimension = createAction(CONST.HANDLE_CHANGE_DIMENSION);
+export const changeTags = createAction(CONST.HANDLE_CHANGE_TAGS);

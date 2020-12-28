@@ -20,6 +20,7 @@ import ProductCategory from './components/ProductCategory';
 import ProductToolbar from './components/ProductToolbar';
 import ProductStatus from './components/ProductStatus';
 import ProductDimension from './components/ProductDimesion';
+import ProductTags from './components/ProductTags';
 
 import {
   name,
@@ -83,6 +84,9 @@ const NewProductDetail = ({ actions, add, ...rest }) => {
               </Grid>
               <Grid item xs={12}>
                 <ProductStatus />
+              </Grid>
+              <Grid item xs={12}>
+                <ProductTags />
               </Grid>
             </Grid>
           </Grid>

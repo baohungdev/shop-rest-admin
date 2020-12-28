@@ -306,6 +306,25 @@ export default handleActions(
           [action.payload.property]: action.payload.value
         }
       });
+    },
+    [actions.changeTags]: (state, action) => {
+      let tags = [...state.add.tags];
+
+      if (action.payload.type === 'add') {
+        tags.push(action.payload.value);
+      }
+
+      if (action.payload.type === 'remove') {
+        tags = tags.filter((tag, index) => index !== action.payload.index);
+      }
+
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          tags
+        }
+      });
     }
   },
   initialStates
