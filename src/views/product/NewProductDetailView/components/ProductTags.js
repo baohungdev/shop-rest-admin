@@ -16,11 +16,11 @@ import { name, actions } from '../redux';
 
 const ProductTags = ({ actions, add: product }) => {
   const handleAddChip = chip => {
-    actions.changeProductTags({ type: 'add', value: chip });
+    actions.changeTags({ type: 'add', value: chip });
   };
 
   const handleDeleteChip = (chip, index) => {
-    actions.changeProductTags({ type: 'remove', value: chip, index });
+    actions.changeTags({ type: 'remove', value: chip, index });
   };
 
   return (
@@ -34,7 +34,7 @@ const ProductTags = ({ actions, add: product }) => {
               fullWidth
               label="Thẻ sản phẩm"
               variant="outlined"
-              defaultValue={product.tags}
+              value={product.tags}
               onAdd={chip => handleAddChip(chip)}
               onDelete={(chip, index) => handleDeleteChip(chip, index)}
             />

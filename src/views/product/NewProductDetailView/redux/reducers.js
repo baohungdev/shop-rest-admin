@@ -303,7 +303,7 @@ export default handleActions(
         ...state,
         add: {
           ...state.add,
-          [action.payload.property]: action.payload.value
+          [action.payload.property]: Number(action.payload.value)
         }
       });
     },
@@ -323,6 +323,53 @@ export default handleActions(
         add: {
           ...state.add,
           tags
+        }
+      });
+    },
+    [actions.createFeature]: (state, action) => {
+      let features = [...state.add.features, ''];
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features
+        }
+      });
+    },
+    [actions.removeFeature]: (state, action) => {
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features: state.add.features.filter((f, i) => i !== action.payload)
+        }
+      });
+    },
+    [actions.changeFeature]: (state, action) => {
+      let features = [];
+      const { index, value } = action.payload;
+      if (index === -1) {
+        features = [value];
+      }
+
+      features = state.add.features.filter((f, i) => i !== index);
+
+      // check if last index
+      if (index === features.length) {
+        features.push(value);
+      } else {
+        features = [
+          ...features.slice(0, index),
+          value,
+          ...features.slice(index, features.length)
+        ];
+      }
+
+      return freeze({
+        ...state,
+        add: {
+          ...state.add,
+          features
         }
       });
     }
