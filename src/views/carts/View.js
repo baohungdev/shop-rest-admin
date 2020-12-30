@@ -6,6 +6,9 @@ import Page from 'src/components/Page';
 import { useLocation, useHistory } from 'react-router-dom';
 import { name, actions } from './redux';
 import CustomerCard from './components/CustomerCard';
+import TimeLine from './components/Timeline';
+import ProductCard from './components/ProductCard';
+import CartDetailToolbar from './components/CartDetailToolbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,8 +37,16 @@ const DetailOrderView = ({ actions, singleCart }) => {
     <Page className={classes.root} title="Xem đơn hàng">
       <Container maxWidth={false}>
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <CartDetailToolbar />
+          </Grid>
           <Grid item xs={8}>
-            <CustomerCard customerInfo={singleCart.customer} cart={singleCart} />
+            <CustomerCard />
+            <Box mt={3} />
+            <ProductCard />
+          </Grid>
+          <Grid item xs={4}>
+            <TimeLine />
           </Grid>
         </Grid>
       </Container>

@@ -4,12 +4,17 @@ import * as actions from './actions';
 
 const initialStats = freeze({
   cartList: [],
+  isSendingToServer: false,
+  isSendingToServerFail: false,
+  isSendingToServerFailMessage: '',
+  showSnackbar: false,
+  snackbarShowMessage: '',
   isFetchingCartList: false,
   isFetchingCartListFail: false,
   fetchCartListFailMessage: '',
   singleCart: {
     customer: {
-      adresseses: [{}]
+      addresses: [{}]
     },
     customerAddressIndex: 0
   },
@@ -109,6 +114,38 @@ export default handleActions(
         isFetchingCart: false,
         isFetchingCartFail: false,
         fetchCartFailMessage: action.payload.message
+      });
+    },
+    [actions.updateCartStatus]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: true
+      });
+    },
+    [actions.updateCartStatusSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        isSendingToServerFail: false,
+        showSnackbar: true,
+        snackbarShowMessage: 'Đã cập nhật trạng thái đơn hàng'
+      });
+    },
+    [actions.updateCartStatusFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isSendingToServer: false,
+        isSendingToServerFail: true,
+        isSendingToServerFailMessage: action.payload.message,
+        showSnackbar: true,
+        snackbarShowMessage: action.payload.message
+      });
+    },
+    [actions.closeSnackbar]: (state, action) => {
+      return freeze({
+        ...state,
+        showSnackbar: false,
+        snackbarShowMessage: ''
       });
     }
   },

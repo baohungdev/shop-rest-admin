@@ -36,6 +36,22 @@ function* fetchCartDetailSaga(action) {
   }
 }
 
+function* updateCartStatusSaga(action) {
+  try {
+    const response = yield call(API.updateCartStatus, action.payload);
+
+    if (!response.success) {
+      yield put(actions.updateCartStatusFail(response));
+      return;
+    }
+
+    yield put(actions.updateCartStatusSuccess(response));
+    yield put(push('/app/carts'));
+  } catch (err) {
+    yield put(actions.updateCartStatusFail(err));
+  }
+}
+
 function* onFetchCart() {
   yield takeEvery(CONST.HANDLE_FETCH_CART, fetchCartsSaga);
 }
@@ -52,4 +68,14 @@ function* onSetPage() {
   yield takeAction(actions.setPage, fetchCartsSaga);
 }
 
-export default [onFetchCart, onSetLimit, onSetPage, onFetchCartDetail];
+function* onUpdateCartStatusSaga() {
+  yield takeAction(actions.updateCartStatus, updateCartStatusSaga);
+}
+
+export default [
+  onFetchCart,
+  onSetLimit,
+  onSetPage,
+  onFetchCartDetail,
+  onUpdateCartStatusSaga
+];

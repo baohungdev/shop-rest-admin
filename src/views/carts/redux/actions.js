@@ -16,3 +16,12 @@ export const fetchCartDetailFail = createAction(
 export const setLimit = createAction(CONST.HANDLE_SET_LIMIT);
 
 export const setPage = createAction(CONST.HANDLE_SET_PAGE);
+export const updateCartStatus = createAction(CONST.HANDLE_UPDATE_STATUS);
+export const updateCartStatusSuccess = createAction(
+  CONST.HANDLE_UPDATE_STATUS_SUCCESS
+);
+export const updateCartStatusFail = createAction(
+  CONST.HANDLE_UPDATE_STATUS_FAIL
+);
+
+export const closeSnackbar = createAction(CONST.HANDLE_CLOSE_SNACKBAR);

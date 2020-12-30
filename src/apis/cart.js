@@ -28,3 +28,13 @@ export const getCartDetail = async ({ id }) => {
   });
   return response;
 };
+
+export const updateCartStatus = async ({ id, status }) => {
+  const endpoint = `${baseEndpoint}/baskets`;
+  const response = await request({
+    endpoint,
+    method: 'PUT',
+    data: { id, status }
+  });
+  return response;
+};
