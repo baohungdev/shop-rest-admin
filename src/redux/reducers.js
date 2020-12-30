@@ -24,6 +24,7 @@ import WarehouseTicket, {
 import Manufacturer, {
   name as nameOfManufacturer
 } from 'src/views/manufacturer/ManufacturerListView/redux';
+import Cart, { name as nameOfCart } from 'src/views/carts/redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -44,6 +45,7 @@ export default (history, asyncReducers) =>
     [nameOfProduct]: Product,
     [nameOfProductDetail]: ProductDetail,
     [nameOfNewProductDetail]: NewProductDetail,
+    [nameOfCart]: Cart,
     [nameOfWarehouseItem]: WarehouseItem,
     [nameOfWarehouseTicket]: WarehouseTicket,
     [nameOfManufacturer]: Manufacturer,

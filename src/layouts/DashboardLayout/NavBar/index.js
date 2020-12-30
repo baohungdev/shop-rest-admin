@@ -72,7 +72,7 @@ const items = [
   },
   {
     type: 'simple',
-    href: '/app/basket',
+    href: '/app/carts',
     icon: ShoppingBagIcon,
     title: 'Đơn hàng'
   },
