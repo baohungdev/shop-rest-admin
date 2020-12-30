@@ -37,3 +37,4 @@ export const changeBirthDate = createAction(CONST.HANDLE_CHANGE_BIRTHDATE);
 export const changeAddress = createAction(CONST.HANDLE_CHANGE_ADDRESS);
 export const changePhone = createAction(CONST.HANDLE_CHANGE_PHONE);
 export const changeGender = createAction(CONST.HANDLE_CHANGE_GENDER);
+export const logout = createAction(CONST.HANDLE_LOGOUT);

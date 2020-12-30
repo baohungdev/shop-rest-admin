@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+import { name, actions } from 'src/views/carts/redux';
+import mapping from 'src/views/carts/utils/mapStatusCodeToText';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import {
@@ -22,69 +27,6 @@ import {
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-const data = [
-  {
-    id: uuid(),
-    ref: 'CDD1049',
-    amount: 30.5,
-    customer: {
-      name: 'Ekaterina Tankova'
-    },
-    createdAt: 1555016400000,
-    status: 'pending'
-  },
-  {
-    id: uuid(),
-    ref: 'CDD1048',
-    amount: 25.1,
-    customer: {
-      name: 'Cao Yu'
-    },
-    createdAt: 1555016400000,
-    status: 'delivered'
-  },
-  {
-    id: uuid(),
-    ref: 'CDD1047',
-    amount: 10.99,
-    customer: {
-      name: 'Alexa Richardson'
-    },
-    createdAt: 1554930000000,
-    status: 'refunded'
-  },
-  {
-    id: uuid(),
-    ref: 'CDD1046',
-    amount: 96.43,
-    customer: {
-      name: 'Anje Keizer'
-    },
-    createdAt: 1554757200000,
-    status: 'pending'
-  },
-  {
-    id: uuid(),
-    ref: 'CDD1045',
-    amount: 32.54,
-    customer: {
-      name: 'Clarke Gillebert'
-    },
-    createdAt: 1554670800000,
-    status: 'delivered'
-  },
-  {
-    id: uuid(),
-    ref: 'CDD1044',
-    amount: 16.76,
-    customer: {
-      name: 'Adam Denisov'
-    },
-    createdAt: 1554670800000,
-    status: 'delivered'
-  }
-];
-
 const useStyles = makeStyles(() => ({
   root: {},
   actions: {
@@ -92,65 +34,64 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const LatestOrders = ({ className, ...rest }) => {
+const LatestOrders = ({
+  className,
+  actions,
+  isFetchingCartList,
+  cartList,
+  ...rest
+}) => {
   const classes = useStyles();
-  const [orders] = useState(data);
+
+  React.useEffect(() => {
+    actions.fetchCarts({
+      fetchParam: {
+        page: 0,
+        perpage: 10
+      },
+      status: 0,
+      from: moment()
+        .startOf('week')
+        .toDate(),
+      to: moment()
+        .endOf('week')
+        .toDate()
+    });
+  }, []);
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
-      <CardHeader title="Latest Orders" />
+    <Card className={clsx(classes.root, className)} {...rest}>
+      <CardHeader title="Đơn hàng trong tuần" />
       <Divider />
       <PerfectScrollbar>
         <Box minWidth={800}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  Order Ref
-                </TableCell>
-                <TableCell>
-                  Customer
-                </TableCell>
+                <TableCell>Mã đơn</TableCell>
+                <TableCell>Khách hàng</TableCell>
                 <TableCell sortDirection="desc">
-                  <Tooltip
-                    enterDelay={300}
-                    title="Sort"
-                  >
-                    <TableSortLabel
-                      active
-                      direction="desc"
-                    >
-                      Date
+                  <Tooltip enterDelay={300} title="Sort">
+                    <TableSortLabel active direction="desc">
+                      Ngày
                     </TableSortLabel>
                   </Tooltip>
                 </TableCell>
-                <TableCell>
-                  Status
-                </TableCell>
+                <TableCell>Trạng thái</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow
-                  hover
-                  key={order.id}
-                >
+              {cartList.map(cart => (
+                <TableRow hover key={cart.id}>
+                  <TableCell>{cart.id}</TableCell>
+                  <TableCell>{cart.customer.fullName}</TableCell>
                   <TableCell>
-                    {order.ref}
-                  </TableCell>
-                  <TableCell>
-                    {order.customer.name}
-                  </TableCell>
-                  <TableCell>
-                    {moment(order.createdAt).format('DD/MM/YYYY')}
+                    {moment(cart.updatedAt).format('DD/MM/YYYY')}
                   </TableCell>
                   <TableCell>
                     <Chip
                       color="primary"
-                      label={order.status}
+                      label={mapping(cart.status)}
                       size="small"
                     />
                   </TableCell>
@@ -160,19 +101,17 @@ const LatestOrders = ({ className, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        p={2}
-      >
-        <Button
-          color="primary"
-          endIcon={<ArrowRightIcon />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button>
+      <Box display="flex" justifyContent="flex-end" p={2}>
+        <Link to="/app/carts/">
+          <Button
+            color="primary"
+            endIcon={<ArrowRightIcon />}
+            size="small"
+            variant="text"
+          >
+            Xem tất cả
+          </Button>
+        </Link>
       </Box>
     </Card>
   );
@@ -182,4 +121,12 @@ LatestOrders.propTypes = {
   className: PropTypes.string
 };
 
-export default LatestOrders;
+const mapStateToProps = state => {
+  return { ...state[name] };
+};
+
+const mapDispatchToProps = dispatch => {
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LatestOrders);

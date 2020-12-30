@@ -1,6 +1,6 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { save } from 'src/services/localStoredService';
+import { save, clearAll } from 'src/services/localStoredService';
 import * as actions from 'src/views/account/AccountView/redux/actions';
 import * as CONST from 'src/views/account/AccountView/redux/constants';
 import * as API from 'src/apis/account';
@@ -35,6 +35,13 @@ function* handleUpdateUserInfo(action) {
   } catch (err) {
     yield put(actions.updateUserInfoFail(err));
   }
+}
+
+function* handleLogout(action) {
+  try {
+    yield call(clearAll);
+    yield put(push('/login'));
+  } catch (err) {}
 }
 
 function* handleUploadImage(action) {
@@ -97,9 +104,14 @@ function* onUpdatePassword() {
   yield takeEvery(CONST.HANDLE_UPDATE_PASSWORD, handleUpdatePassword);
 }
 
+function* onLogout() {
+  yield takeEvery(CONST.HANDLE_LOGOUT, handleLogout);
+}
+
 export default [
   onFetchUserInfo,
   onUpdateUserInfo,
   onUploadImage,
-  onUpdatePassword
+  onUpdatePassword,
+  onLogout
 ];

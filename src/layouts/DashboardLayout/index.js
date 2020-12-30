@@ -2,13 +2,18 @@ import React, { useState, lazy } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
-import TopBar from './TopBar';
 import checkForLoggedIn from 'src/utils/checkForLoggedIn';
 import { store } from 'src/AppRenderer';
 import {
   name as nameOfAccount,
   sagas as accountSagas
 } from 'src/views/account/AccountView/redux';
+
+import {
+  name as nameOfProduct,
+  sagas as productSagas
+} from 'src/views/product/ProductListView/redux';
+
 import {
   name as nameOfManufacturer,
   sagas as manufacturerSagas
@@ -40,7 +45,20 @@ const ProductContainerView = lazy(() => import('../../views/product'));
 const WarehouseContainerView = lazy(() => import('../../views/warehouses'));
 
 const SettingsView = lazy(() => import('src/views/settings/SettingsView'));
-const DashboardView = lazy(() => import('src/views/reports/DashboardView'));
+const DashboardView = lazy(() =>
+  import('../../views/reports/DashboardView').then(module => {
+    store.injectSaga(nameOfProduct, productSagas);
+    store.injectSaga(nameOfCart, cartSagas);
+    return module;
+  })
+);
+
+const TopBar = lazy(() =>
+  import('./TopBar').then(module => {
+    store.injectSaga(nameOfAccount, accountSagas);
+    return module;
+  })
+);
 
 const useStyles = makeStyles(theme => ({
   root: {

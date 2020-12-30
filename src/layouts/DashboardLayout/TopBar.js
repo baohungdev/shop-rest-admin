@@ -17,6 +17,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Logo from 'src/components/Logo';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as accountActions from 'src/views/account/AccountView/redux/actions';
+import { name } from 'src/views/account/AccountView/redux';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -26,7 +30,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
+const TopBar = ({ className, actions, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
   const history = useHistory();
@@ -40,11 +44,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton
-            color="inherit"
-            onClick={null}
-            onClick={() => history.push('/logout')}
-          >
+          <IconButton color="inherit" onClick={() => actions.logout()}>
             <ExitToAppIcon />
           </IconButton>
         </Hidden>
@@ -63,4 +63,19 @@ TopBar.propTypes = {
   onMobileNavOpen: PropTypes.func
 };
 
-export default TopBar;
+const mapStateToProps = state => {
+  return {
+    ...state[name]
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  const actions = {
+    ...accountActions
+  };
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);
