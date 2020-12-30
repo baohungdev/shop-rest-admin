@@ -16,7 +16,7 @@ import RepeatIcon from '@material-ui/icons/Repeat';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { name, actions as cartActions } from 'src/views/carts/redux';
-import mapper from 'src/views/carts/utils/mapStatusCodeToText';
+import { toTimeLine } from 'src/views/carts/utils/mapStatusCodeToText';
 import _reverse from 'lodash/reverse';
 import moment from 'moment';
 
@@ -35,32 +35,42 @@ const CustomizedTimeline = ({ singleCart }) => {
 
   return (
     <Timeline align="alternate">
-      {logs.map(log => (
-        <TimelineItem>
-          <TimelineOppositeContent>
-            <Typography variant="body2" color="textSecondary">
-              {moment(log.createdAt).format('L')}
-            </Typography>
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot color="primary">
-              <FastfoodIcon />
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Paper elevation={3} className={classes.paper}>
-              <Typography variant="h6" component="h1">
-                {mapper(log.status)}
+      {logs.map(log => {
+        const style = toTimeLine(log.status);
+        const { Icon } = style;
+
+        return (
+          <TimelineItem>
+            <TimelineOppositeContent>
+              <Typography variant="body2" color="textSecondary">
+                {moment(log.createdAt).format('L')}
               </Typography>
-              <Typography>{`Đơn hàng đã được cập nhật sang trạng thái ${mapper(log.status)}`}</Typography>
-            </Paper>
-          </TimelineContent>
-        </TimelineItem>
-      ))}
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot
+                style={{
+                  backgroundColor: style.backgroundColor,
+                  color: '#fff'
+                }}
+              >
+                <Icon />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent>
+              <Paper elevation={3} className={classes.paper}>
+                <Typography variant="h6" component="h1">
+                  {style.label}
+                </Typography>
+                <Typography>{`Đơn hàng đã được cập nhật sang trạng thái ${style.label}`}</Typography>
+              </Paper>
+            </TimelineContent>
+          </TimelineItem>
+        );
+      })}
     </Timeline>
   );
-}
+};
 
 const mapStateToProps = state => {
   return { ...state[name] };

@@ -78,12 +78,6 @@ const items = [
   },
   {
     type: 'simple',
-    href: '/app/admin',
-    icon: ShieldIcon,
-    title: 'Nâng cao'
-  },
-  {
-    type: 'simple',
     href: '/app/account',
     icon: UserIcon,
     title: 'Tài khoản'
