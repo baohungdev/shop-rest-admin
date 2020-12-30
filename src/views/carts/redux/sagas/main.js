@@ -21,6 +21,21 @@ function* fetchCartsSaga(action) {
   }
 }
 
+function* fetchCartDetailSaga(action) {
+  try {
+    const response = yield call(API.getCartDetail, action.payload);
+
+    if (!response.success) {
+      yield put(actions.fetchCartDetailFail(response));
+      return;
+    }
+
+    yield put(actions.fetchCartDetailSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchCartDetailFail(err));
+  }
+}
+
 function* onFetchCart() {
   yield takeEvery(CONST.HANDLE_FETCH_CART, fetchCartsSaga);
 }
@@ -29,8 +44,12 @@ function* onSetLimit() {
   yield takeAction(actions.setLimit, fetchCartsSaga);
 }
 
+function* onFetchCartDetail() {
+  yield takeAction(actions.fetchCartDetail, fetchCartDetailSaga);
+}
+
 function* onSetPage() {
   yield takeAction(actions.setPage, fetchCartsSaga);
 }
 
-export default [onFetchCart, onSetLimit, onSetPage];
+export default [onFetchCart, onSetLimit, onSetPage, onFetchCartDetail];

@@ -7,6 +7,15 @@ const initialStats = freeze({
   isFetchingCartList: false,
   isFetchingCartListFail: false,
   fetchCartListFailMessage: '',
+  singleCart: {
+    customer: {
+      adresseses: [{}]
+    },
+    customerAddressIndex: 0
+  },
+  isFetchingCart: false,
+  isFetchingCartFail: false,
+  fetchCartFailMessage: '',
   tableDisplay: {
     limit: 10,
     page: 0,
@@ -75,6 +84,31 @@ export default handleActions(
         isFetchingCartList: true,
         isFetchingCartListFail: false,
         fetchCartListFailMessage: ''
+      });
+    },
+    [actions.fetchCartDetail]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCart: true,
+        isFetchingCartFail: false,
+        fetchCartFailMessage: ''
+      });
+    },
+    [actions.fetchCartDetailSuccess]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCart: false,
+        isFetchingCartFail: false,
+        fetchCartFailMessage: '',
+        singleCart: action.payload.data
+      });
+    },
+    [actions.fetchCartDetailFail]: (state, action) => {
+      return freeze({
+        ...state,
+        isFetchingCart: false,
+        isFetchingCartFail: false,
+        fetchCartFailMessage: action.payload.message
       });
     }
   },

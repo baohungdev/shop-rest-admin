@@ -19,3 +19,12 @@ export const getAllCarts = async ({ fetchParam, ...query }) => {
   });
   return response;
 };
+
+export const getCartDetail = async ({ id }) => {
+  const endpoint = `${baseEndpoint}/baskets/${id}`;
+  const response = await request({
+    endpoint,
+    method: 'GET'
+  });
+  return response;
+};
